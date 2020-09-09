@@ -1,5 +1,4 @@
 **/__pycache__/
 /dist
 /build
-/pioneer_das_api.egg-info/
-/pioneer.das.api.egg-info/
+
