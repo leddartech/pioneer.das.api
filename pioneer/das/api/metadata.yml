@@ -1,0 +1,32 @@
+
+
+deepen_worthy:
+  description: 'Scale from 0 to 10, where 0 means not worthy an 10 means perfection for deep learning.'
+  values: [0,1,2,3,4,5,6,7,8,9,10]
+deepen_select:
+  description: 'To be sent to Deepen for annotation.'
+  values: [False,True]
+  default: False
+
+location:
+  description: 'Descriptive keyword for the environnement.'
+  values: ['highway','boulevard','suburban','downtown','parking_lot','other']
+time:
+  description: 'Descriptive keyword for the time of the day.'
+  values: ['day','night','sunrise','sunset','twilight']
+
+rain:
+  description: 'Scale from 0 to 5, where 0 means no rain and 5 means heavy rain.'
+  values: [0,1,2,3,4,5]
+clouds:
+  description: 'Scale from 0 to 5, where 0 means no clouds and 5 means no visible sky.'
+  values: [0,1,2,3,4,5]
+snow:
+  description: 'Scale from 0 to 5, where 0 means no snow and 5 means a lot.'
+  values: [0,1,2,3,4,5]
+fog:
+  description: 'Scale from 0 to 5, where 0 means no fog and 5 means no visibility.'
+  values: [0,1,2,3,4,5]
+
+keywords:
+  description: 'Anything noteworthy in the form of a keyword.'

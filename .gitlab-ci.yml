@@ -1,0 +1,13 @@
+
+build-package:
+  stage: deploy
+  image: registry.svleddar-gitlab.leddartech.local/devopsadmin/common_docker_images/gcc-cmake-py3:v1.1
+  script:
+    - export REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+    - cat $PYPIRC > /tmp/.pypirc
+    - pip3 install twine
+    - pip3 install --upgrade keyrings.alt 
+    - python3 setup.py bdist_wheel
+    - python3 -m twine upload --repository gitlab dist/pioneer_das_api-${CI_COMMIT_TAG}-py3-none-any.whl --config-file /tmp/.pypirc
+  only:
+    - tags

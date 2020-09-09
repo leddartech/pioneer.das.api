@@ -1,0 +1,5 @@
+**/__pycache__/
+/dist
+/build
+/leddartech_das_api.egg-info/
+/leddartech.das.api.egg-info/
