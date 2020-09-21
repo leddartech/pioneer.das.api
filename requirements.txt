@@ -1,5 +1,4 @@
-
-cv2
+opencv-python
 folium
 numpy
 open3d
@@ -7,3 +6,4 @@ pyquaternion
 pytorch3d
 pytorch
 transforms3d
+pioneer-common -i https://__token__:dvYfAtsUs_K2ThbaM7Af@svleddar-gitlab/api/v4/projects/481/packages/pypi/simple

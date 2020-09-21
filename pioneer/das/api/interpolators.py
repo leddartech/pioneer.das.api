@@ -16,7 +16,6 @@ def _angles_linear_interpolate_helper(t, from_val, to_val):
         return t * to_val + (1 - t) * (from_val+2.0*np.pi)
     else:
         return t * to_val + (1 - t) * from_val
-    
 
 
 def linear_ndarray_interpolator(datasource, float_index):

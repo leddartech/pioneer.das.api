@@ -316,7 +316,7 @@ class Platform(object):
 class Synchronized(object):
     """Synchronized view over a Platform"""
 
-    def __init__(self, pf:Platform, sync_labels:List[str], interp_labels:List[str], tolerance_us:Union[float, int], fifo:int):
+    def __init__(self, platform:Platform, sync_labels:List[str], interp_labels:List[str], tolerance_us:Union[float, int], fifo:int):
         """Constructor
 
             Args:
@@ -332,7 +332,7 @@ class Synchronized(object):
                                 Incomplete 'synchronized tuples' are discarded.
                 fifo:           For future use (live datasources)
         """
-        self.pf = pf
+        self.platform = platform
         self.sync_labels = sync_labels
         self.interp_labels = interp_labels
         self.tolerance_us = tolerance_us
@@ -340,7 +340,7 @@ class Synchronized(object):
         self.sync_indices = None
         self.ref_index = 0
 
-        if not self.pf.is_live():
+        if not self.platform.is_live():
             self.mappings = self._synchronize_offline_sensor_data()
             self.sync_indices = self.mappings[(self.mappings != -1).all(axis=1), :]
 
@@ -353,12 +353,12 @@ class Synchronized(object):
            datasource in the list will be considered the 'reference datasource' 
         """
         
-        self.all_ts = [(c, self.pf[c].timestamps) for c in self.sync_labels]
+        self.all_ts = [(c, self.platform[c].timestamps) for c in self.sync_labels]
         self.ref_ts = dict(self.all_ts)[self.ref_ds_name]
 
         mappings = []
 
-        all_ts_tqdm = tqdm.tqdm(self.all_ts) if self.pf.progress_bar else self.all_ts
+        all_ts_tqdm = tqdm.tqdm(self.all_ts) if self.platform.progress_bar else self.all_ts
         for name, sensor_ts in all_ts_tqdm:
             # compute the difference between all ref_sensor and other sensor's
             # timestamps using broadcasting
@@ -409,9 +409,9 @@ class Synchronized(object):
                         i_ds = self.interp_labels.index(ds_name)
                     except:
                         raise RuntimeError(f"Unexpected label {ds_name}")
-                    return self.pf[ds_name].get_at_timestamp(self.ref_ts[data_indices[self.ref_index]])
+                    return self.platform[ds_name].get_at_timestamp(self.ref_ts[data_indices[self.ref_index]])
 
-                return self.pf[ds_name][data_indices[i_ds]]
+                return self.platform[ds_name][data_indices[i_ds]]
 
             raise KeyError("Unsupported key type: {}".format(index))
     
@@ -476,7 +476,7 @@ class Synchronized(object):
 
         ts = []
         for source_i, sample_i in enumerate(self.sync_indices[index, :]):
-            source = self.pf[self.sync_labels[source_i]]
+            source = self.platform[self.sync_labels[source_i]]
             ts.append(source.timestamps[sample_i])
         return np.array(ts)
 
@@ -484,7 +484,7 @@ class Synchronized(object):
         """Returns indices for all datasources for a given synchronized index"""
         interp_indices = []
         for ds in self.interp_labels:
-            interp_indices.append(self.pf[ds].to_float_index(self.ref_ts[self.sync_indices[index][self.ref_index]]))
+            interp_indices.append(self.platform[ds].to_float_index(self.ref_ts[self.sync_indices[index][self.ref_index]]))
         return list(self.sync_indices[index]) + interp_indices
 
     def sliced(self, intervals:List[Tuple[int, int]]):
@@ -697,21 +697,21 @@ class Sensors(object):
             platform: the platform that holds this Sensors instance
             yml: the YAML database
         """
-        self.pf = pf
+        self.platform = pf
         self._sensors = {}
         self._ordered_names = []
         self._egomotion_provider = None
 
-        yml_items_tqdm = tqdm.tqdm(yml.items()) if self.pf.progress_bar else yml.items()
+        yml_items_tqdm = tqdm.tqdm(yml.items()) if self.platform.progress_bar else yml.items()
         for name, value in yml_items_tqdm:
             if name == 'ignore':
                 continue
 
 
             sensor_type, _ = platform_utils.parse_sensor_name(name)
-            self._sensors[name] = SENSOR_FACTORY[sensor_type](name, self.pf)
+            self._sensors[name] = SENSOR_FACTORY[sensor_type](name, self.platform)
             self._ordered_names.append(name)
-            # if self.pf.is_live():
+            # if self.platform.is_live():
             #     self._load_online_datasources(name, yml)
             # else:
             #     self._load_offline_datasources(name)
@@ -760,7 +760,7 @@ class Sensors(object):
            only if the intrinsics config is a string.
         """
         if isinstance(intrinsics_config, six.string_types):
-            intrinsics_config = self.pf.to_nas_path(intrinsics_config)
+            intrinsics_config = self.platform.to_nas_path(intrinsics_config)
         self._sensors[name].load_intrinsics(intrinsics_config)
 
     def _load_extrinsics(self, name, extrinsics_folder):
@@ -801,14 +801,14 @@ class Sensors(object):
                 name: the sensor name (e.g. 'lca2_bfl')
         """
 
-        files = glob.glob(os.path.join(self.pf.dataset, name + '_*.zip'))
+        files = glob.glob(os.path.join(self.platform.dataset, name + '_*.zip'))
 
         for filename in [os.path.basename(f) for f in files]:
             # remove the .zip and extracts the 'datasource' suffix:
             ds_name = os.path.splitext(filename)[0].split('_')[-1]
             try:
-                ds = ZipFileSource(os.path.join(self.pf.dataset, filename))
-                self._sensors[name].add_datasource(ds, ds_name, cache_size = self.pf.default_cache_size)
+                ds = ZipFileSource(os.path.join(self.platform.dataset, filename))
+                self._sensors[name].add_datasource(ds, ds_name, cache_size = self.platform.default_cache_size)
             except:
                 LoggingManager.instance().warning(f'Zip file for {name}_{ds_name} could not be loaded.')
                 continue

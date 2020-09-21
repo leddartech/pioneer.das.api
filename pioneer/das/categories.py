@@ -1,4 +1,3 @@
-
 CATEGORIES = {}
 
 def get_name_color(source:str, category_number:int):

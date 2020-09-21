@@ -5,8 +5,8 @@
 
 from __future__ import division, print_function
 
-from pioneer.das.api import chessboard, filesource, platform
-
+from pioneer.das.api import chessboard, platform
+from pioneer.das.api.sources import filesource
 import argparse
 import copy
 import glob
