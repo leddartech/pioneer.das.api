@@ -16,6 +16,7 @@ class VirtualDatasource(AbstractDatasource):
             timestamps_source: datasource used as timestamps, If None first one dependencies used
         """
         super(VirtualDatasource, self).__init__(None, ds_type)
+        self.ds_type = ds_type
         self.dependencies = dependencies
         self.datasources = None #will be configured during call to _set_sensor 
         self.callback = callback
@@ -26,7 +27,7 @@ class VirtualDatasource(AbstractDatasource):
         pass
 
     def _set_sensor(self, sensor:'Sensor'):
-        """Sets this datasource's sensor (this method will be called by Sensor.add_virtual_datasource())"""
+        """Sets this datasource's sensor"""
         self.sensor = sensor
         self.datasources = {dep:self.sensor.platform[dep] for dep in self.dependencies}
 

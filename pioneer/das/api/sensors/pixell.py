@@ -1,12 +1,80 @@
 from pioneer.common import banks, clouds, constants
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.sensors.lcax import LCAx
-from pioneer.das.api import pixell_referential_transforms as prt
 
 from enum import Enum
 from typing import Callable, Union, Optional, List, Dict, Tuple, Any
 
 import numpy as np
+
+
+
+
+def from_spherical_to_cartesian(distance, elevation, azimut):
+    l = distance * np.cos(elevation)
+    return (
+        l * np.cos(azimut), 
+        l * np.sin(azimut),
+        distance * np.sin(elevation) 
+    )
+
+def referential_transform(distance, elevation, azimut, a, b, c):
+    '''Return mappeds (distance, elevation, azimut) in a new referential.
+        The parameters (a,b,c) are some constants.
+    '''
+    x_, y_, z_ = from_spherical_to_cartesian(distance, elevation, azimut)
+    x_ += a
+    y_ += b
+    z_ += c
+    return (
+        (x_**2 + y_**2 + z_**2)**0.5,
+        np.arctan2(z_, (x_**2 + y_**2)**0.5),
+        np.arctan2(y_, x_)
+    )
+
+def from_calibration_jig_to_sensor(pitch, yaw, pivot):
+    '''Input data from the calibration jig are converted to sensor data at 
+        universal point referential (elevation, azimut)
+    '''
+    return (
+        np.arctan2(np.sin(pitch) * np.cos(yaw - pivot) , (np.sin(yaw - pivot)**2 + np.cos(pitch)**2 * np.cos(yaw - pivot)**2)**0.5),
+        np.arctan2(np.tan(yaw) , np.cos(pitch))
+    )
+
+def from_sensor_to_lcas(distance, elevation, azimut, dz_elevation, dx_azimut, dy_azimut):
+    '''Convert a coordinate (distance, elevation, azimut) from universal
+        sensor point to lcas sub-module.
+        
+        Constants:
+            dz_elevation: is the distance on the z-axis (or along elevation) between sensor point and lcas point
+            dx_azimut: distance on the x-axis between referentials
+            dy_azimut: distance on the y-axis between referentials
+    '''
+    return referential_transform(distance, elevation, azimut, -dx_azimut, -dy_azimut, -dz_elevation)
+
+def from_lcas_to_sensor(distance, elevation, azimut, dz_elevation, dx_azimut, dy_azimut):
+    '''Convert a coordinate (distance, elevation, azimut) from submodule
+        lcas point to unviversal sensor point.
+
+        Constans: (see: from_sensor_to_lcas)
+    '''
+    return referential_transform(distance, elevation, azimut, dx_azimut, dy_azimut, dz_elevation)
+
+def sensor_angles_from_lcas_angles(distance, elevation, azimut, dx_azimut, dy_azimut):
+    '''Compute (elevation, azimut) in sensor referential from
+            distance: from sensor referential
+            elevation: from lcas referential
+            azimut: from lcas referential
+        and
+        Constants: (see from_sensor_to_lcas)
+    '''
+    gamma_ = np.cos(elevation) * (dy_azimut * np.sin(azimut) + dx_azimut * np.cos(azimut))
+    distance_ = - gamma_ + (gamma_**2  + distance**2 - dx_azimut**2 - dy_azimut**2)**0.5
+    _, elevation_, azimut_ = from_lcas_to_sensor(distance_, elevation, azimut, 0, dx_azimut, dy_azimut)
+    return elevation_, azimut_
+
+
+
 
 class Pixell(LCAx):
     class IntrinsicMode(Enum):
@@ -130,7 +198,7 @@ class Pixell(LCAx):
 
                 elevation, azimut = self.get_sensor_projection_data(Pixell.CALIB_TARGET_DISTANCE[Pixell.SensorAngles.Azimut], 
                                                                         cache_['angles'], cache_['lcas_offsets'])
-                d_lcas_true, _, _ = prt.from_sensor_to_lcas(Pixell.CALIB_TARGET_DISTANCE[Pixell.SensorAngles.Azimut], 
+                d_lcas_true, _, _ = from_sensor_to_lcas(Pixell.CALIB_TARGET_DISTANCE[Pixell.SensorAngles.Azimut], 
                                                                 elevation, azimut, 0, cache_['lcas_offsets'][:,0], cache_['lcas_offsets'][:,1]
                                                                 )
                 for mu in Pixell.FastTraceType:
@@ -146,7 +214,6 @@ class Pixell(LCAx):
     def cache(self, specs):
         """ Derivation of cache for Pixell sensor  
         """
-        print([(k,specs[k]) for k in ['v', 'h', 'v_fov', 'h_fov']])
         hashable = frozenset([(k,specs[k]) for k in ['v', 'h', 'v_fov', 'h_fov']])
         if not hashable in self._cache:
             cache = super(Pixell, self).cache(specs)
@@ -181,12 +248,12 @@ class Pixell(LCAx):
             azimut = self.modules_angles[Pixell.CalibJigAngles.Yaw]
             return np.c_[elevation, azimut].astype(np.float)
 
-        phi, theta = prt.from_calibration_jig_to_sensor(self.modules_angles[Pixell.CalibJigAngles.Pitch],
+        phi, theta = from_calibration_jig_to_sensor(self.modules_angles[Pixell.CalibJigAngles.Pitch],
                                                         self.modules_angles[Pixell.CalibJigAngles.Yaw],
                                                         self.modules_angles[Pixell.CalibJigAngles.Pivot])
-        _, elevation, _ = prt.from_sensor_to_lcas(Pixell.CALIB_TARGET_DISTANCE[Pixell.SensorAngles.Elevation], 
+        _, elevation, _ = from_sensor_to_lcas(Pixell.CALIB_TARGET_DISTANCE[Pixell.SensorAngles.Elevation], 
                                                   phi, theta, offsets[:,2], offsets[:,0], offsets[:,1])
-        _, _, azimut = prt.from_sensor_to_lcas(Pixell.CALIB_TARGET_DISTANCE[Pixell.SensorAngles.Azimut], 
+        _, _, azimut = from_sensor_to_lcas(Pixell.CALIB_TARGET_DISTANCE[Pixell.SensorAngles.Azimut], 
                                                phi, theta, offsets[:,2], offsets[:,0], offsets[:,1])
         return np.c_[elevation, azimut].astype(np.float)
 
@@ -221,7 +288,7 @@ class Pixell(LCAx):
         '''Compute (elevation, azimut) in the sensor referential from
             the distance at sensor referential
         '''
-        return prt.sensor_angles_from_lcas_angles(distances, angles[:,0], angles[:,1], offsets[:,0], offsets[:,1])
+        return sensor_angles_from_lcas_angles(distances, angles[:,0], angles[:,1], offsets[:,0], offsets[:,1])
 
     def get_corrected_cloud(self, timestamp, cache, type, indices, distances, amplitudes=None, dtype=np.float64):
         

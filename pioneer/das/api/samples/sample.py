@@ -2,6 +2,7 @@ from pioneer.common import platform, linalg
 from pioneer.common.logging_manager import LoggingManager
 
 import numpy as np
+from numpy import rot90, flipud, fliplr #for use with Sample.LUT
 import pprint
 import six
 
@@ -120,7 +121,7 @@ class Sample(object):
     def sensor_type(self):
         return platform.parse_datasource_name(self.datasource.label)[0]
 
-    def compute_transform(self, referential_or_ds:str=None, ignore_orientation:bool=False, reference_ts:int = -1, dtype = np.float32) -> np.ndarray:
+    def compute_transform(self, referential_or_ds:str=None, ignore_orientation:bool=False, reference_ts:int = -1, dtype = np.float64) -> np.ndarray:
         """Compute the transform from this Sample sensor to another sensor
         referential.
 
@@ -150,7 +151,7 @@ class Sample(object):
             if isinstance(referential_or_ds, six.string_types) and self.datasource.sensor.name != referential_or_ds:
                 
                 referential = platform.referential_name(referential_or_ds)
-               
+
                 if referential == 'world':
 
                     warn_if_less_than_64bit(dtype)
@@ -170,10 +171,9 @@ class Sample(object):
         if self.orientation is not None and not ignore_orientation:
             tf_TargetRef_from_Local[:3, :3] = tf_TargetRef_from_Local[:3, :3] @ self.orientation
         
-    
         return tf_TargetRef_from_Local
 
-    def transform(self, pts:np.ndarray, referential_or_ds:str, ignore_orientation:bool=False, reference_ts:int = -1, dtype = np.float32) -> np.ndarray:
+    def transform(self, pts:np.ndarray, referential_or_ds:str, ignore_orientation:bool=False, reference_ts:int = -1, reverse:bool=False, dtype = np.float64) -> np.ndarray:
         """Transform 3D points from this Sample sensor to another sensor
         referential.
 
@@ -182,12 +182,16 @@ class Sample(object):
             referential_or_ds: The target sensor referential or full datasource name
             ignore_orientation: Ignore the source sensor orientation (default: {False})
             reference_ts: refer to compute_transform()'s doc (only used if referential_or_ds == 'world')
+            reverse: apply the reverse transformation
             dtype: the output numpy data type
 
         Returns:
             The transformed points
         """
         r = self.compute_transform(referential_or_ds, ignore_orientation=ignore_orientation, reference_ts=reference_ts, dtype=dtype)
+
+        if reverse:
+            r = linalg.tf_inv(r)
 
         if r is not None:
             return Sample.transform_pts(r, pts)

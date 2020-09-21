@@ -59,3 +59,10 @@ def datasource_xyzit_float_intensity():
 
 def rad():
     return np.dtype([('x','f4'),('y','f4'),('v','f4'),('i','f4'),('t','u8')])
+
+def lane():
+    """
+    vertices: (N,3) numpy array of the 3D coordinates
+    type: number to identify the type of lane (see das/lane_type.py)
+    """
+    return np.dtype([('vertices','O'),('type','u4')])

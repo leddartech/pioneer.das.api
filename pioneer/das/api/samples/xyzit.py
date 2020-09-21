@@ -15,6 +15,10 @@ class XYZIT(Sample):
     def amplitudes(self):
         return self.raw['i'].astype('f4')
 
+    @property
+    def distances(self):
+        return (self.raw['x']**2 + self.raw['y']**2 + self.raw['z']**2)**0.5
+
     def get_cloud( self
                  , referential = None
                  , ignore_orientation=False

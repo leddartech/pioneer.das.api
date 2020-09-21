@@ -29,40 +29,8 @@ class Echoes_from_Traces(VirtualDatasource):
             ])
 
 
-    @staticmethod
-    def add_all_combinations_to_platform(pf:'Platform', nb_detections_max:int=3) -> list:
-        try:
-            trr_dss = pf.expand_wildcards(["*_trr*","*_ftrr*"]) # look for all leddar with traces
-            virtual_ds_list = []
-
-            for trr_ds_name_full_name in trr_dss:
-                
-                trr_ds_name, trr_pos, ds_type = parse_datasource_name(trr_ds_name_full_name)
-                sensor = pf[f"{trr_ds_name}_{trr_pos}"]
-                virtual_ds_type = f"ech-{ds_type}"
-
-                try:
-                    vds = Echoes_from_Traces(
-                            ds_type = virtual_ds_type,
-                            trr_ds_name = trr_ds_name_full_name,
-                            sensor = sensor,
-                            nb_detections_max = nb_detections_max,
-                    )
-                    sensor.add_virtual_datasource(vds)
-                    virtual_ds_list.append(f"{trr_ds_name}_{trr_pos}_{virtual_ds_type}")
-                except Exception as e:
-                    print(e)
-                    print(f"vitual datasource {trr_ds_name}_{trr_pos}_{virtual_ds_type} was not added")
-                
-            return virtual_ds_list
-        except Exception as e:
-            print(e)
-            print("Issue during try to add virtual datasources Echoes_from_Traces.")
-
-
     def initialize_local_cache(self, data):
         self.local_cache = copy.deepcopy(data)
-
 
     def get_echoes(self, processed_traces):
         try:
@@ -86,7 +54,6 @@ class Echoes_from_Traces(VirtualDatasource):
                 additionnal_fields[key] = [echoes[key], 'f4']
         return echoes, additionnal_fields
 
-
     def get_echoes_from_fast_traces(self, processed_fast_traces):
         # TODO: improve merging by replacing the saturated lines and columns
         echoes_high, additionnal_fields_high = self.get_echoes(processed_fast_traces[self.sensor.FastTraceType.MidRange])
@@ -101,11 +68,9 @@ class Echoes_from_Traces(VirtualDatasource):
                                             , additionnal_fields_high[field][1]]
         return echoes, additionnal_fields
 
-
     def get_at_timestamp(self, timestamp):
         sample = self.datasources[self.trr_ds_name].get_at_timestamp(timestamp)
         return self[int(np.round(sample.index))]
-
 
     def __getitem__(self, key:Any):
         #Load data in local cache to prevent modifying the original data

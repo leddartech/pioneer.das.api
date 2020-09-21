@@ -2,7 +2,7 @@ from pioneer.common import misc, linalg
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.datasources import DatasourceWrapper, VirtualDatasource
 from pioneer.das.api.interpolators import nearest_interpolator
-from pioneer.das.api.samples import Sample, Box3d, Box2d, Poly2d, Seg2d, Seg2dImage, Seg3d
+from pioneer.das.api.samples import Sample, Box3d, Box2d, Poly2d, Seg2d, Seg2dImage, Seg3d, Lane
 from pioneer.das.api.sources import FileSource
 
 from typing import Callable, Union, Optional, List, Dict, Tuple, Any
@@ -85,37 +85,28 @@ class Sensor(object):
         for ds in self.datasources.values():
             ds.invalidate_caches()
             
-    def add_datasource(self, ds:FileSource, ds_type:str, cache_size:int=100):
+    def add_datasource(self, ds, ds_type:str, cache_size:int=100):
         """Adds a datasouce to this sensor
 
         Args:
-            ds: a Filesource-derived instance
+            ds: a Filesource-derived instance or VirtualDatasource
             ds_type: the datasource type, e.g. 'ech'
         """
-        dsw = DatasourceWrapper(self, ds_type, ds, self.factories[ds_type] if ds_type in self.factories else (Sample, nearest_interpolator), cache_size = cache_size)
-        dsw = DatasourceWrapper(self, ds_type, ds, (Box3d, nearest_interpolator)) if 'box3d' in ds_type else dsw
-        dsw = DatasourceWrapper(self, ds_type, ds, (Box2d, nearest_interpolator)) if 'box2d' in ds_type else dsw
-        dsw = DatasourceWrapper(self, ds_type, ds, (Poly2d, nearest_interpolator)) if 'poly2d' in ds_type else dsw
-        dsw = DatasourceWrapper(self, ds_type, ds, (Seg2d, nearest_interpolator)) if 'seg2d' in ds_type else dsw
-        dsw = DatasourceWrapper(self, ds_type, ds, (Seg2dImage, nearest_interpolator)) if 'seg2dimg' in ds_type else dsw
-        dsw = DatasourceWrapper(self, ds_type, ds, (Seg3d, nearest_interpolator)) if 'seg3d' in ds_type else dsw
-        # dsw = DatasourceWrapper(self, ds_type, ds, (EchoXYZIT, nearest_interpolator)) if 'xyzit' in ds_type[:5] else dsw
-        self.datasources[ds_type] = dsw
 
-    def add_virtual_datasource(self, virtual_ds:VirtualDatasource):
-        """Adds a virtual datasource
-
-        Args:
-            virtual_ds:        the virtual datasource instance
-        """
-        virtual_ds._set_sensor(self)
-
-        self.datasources[virtual_ds.ds_type] = virtual_ds
-
-    def add_virtual_datasources(self):
-        """'Virtual' method to add all virtual datasources, to be redefined by base classes"""
-        pass
-
+        if isinstance(ds, VirtualDatasource):
+            ds._set_sensor(self)
+            self.datasources[ds_type] = ds
+        
+        else:
+            dsw = DatasourceWrapper(self, ds_type, ds, self.factories[ds_type] if ds_type in self.factories else (Sample, nearest_interpolator), cache_size = cache_size)
+            dsw = DatasourceWrapper(self, ds_type, ds, (Box3d, nearest_interpolator)) if 'box3d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Box2d, nearest_interpolator)) if 'box2d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Poly2d, nearest_interpolator)) if 'poly2d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Seg2d, nearest_interpolator)) if 'seg2d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Seg2dImage, nearest_interpolator)) if 'seg2dimg' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Seg3d, nearest_interpolator)) if 'seg3d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Lane, nearest_interpolator)) if 'lane' in ds_type else dsw
+            self.datasources[ds_type] = dsw
 
     def load_intrinsics(self, intrinsics_config:str):
         """Looks for a pickle file containing intrinsics information for this sensor, e.g. 'eagle_tfc.pkl'

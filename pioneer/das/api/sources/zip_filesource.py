@@ -230,7 +230,7 @@ class ZipFileSource(FileSource):
                 self.files = self.files[:n]
             else:
                 if n%self.nb_data_per_pkl_file == 0:
-                    self.files = self.files[:n/self.nb_data_per_pkl_file]
+                    self.files = self.files[:int(n/self.nb_data_per_pkl_file)]
                 else:
                     # on va conserver un fichier à la fin qui ne sera pas utilisé en entier
                     self.files = self.files[:n//self.nb_data_per_pkl_file+1]

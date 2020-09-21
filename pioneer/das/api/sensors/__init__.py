@@ -6,6 +6,7 @@ from pioneer.das.api.sensors.egomotion_provider import EgomotionProvider
 from pioneer.das.api.sensors.imu_egomotion_provider import IMUEgomotionProvider
 from pioneer.das.api.sensors.imu_sbg_ekinox import ImuSbgEkinox
 from pioneer.das.api.sensors.encoder import Encoder
+from pioneer.das.api.sensors.mti import MTi
 from pioneer.das.api.sensors.carla_gps import CarlaGPS 
 from pioneer.das.api.sensors.carla_imu import CarlaIMU 
 from pioneer.das.api.sensors.radar_ti import RadarTI

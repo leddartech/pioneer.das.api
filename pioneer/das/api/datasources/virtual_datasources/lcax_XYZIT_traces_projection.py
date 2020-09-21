@@ -49,30 +49,6 @@ class LCAx_XYZIT_traces_projection(VirtualDatasource):
         self.distances_vector = np.arange(self.trace_length, dtype='f8')
         self.distances_vector = self.distances_vector * self.sensor.distance_scaling + self.self_match_filter_offset
 
-
-    @staticmethod
-    def add_all_combinations_to_platform(pf:'Platform', remove_offset:bool=True) -> list:
-        try:
-            trr_dss = pf.expand_wildcards(["*_trr"]) # look for all leddar with traces
-            virtual_ds_list = []
-
-            for trr_ds_name_full_name in trr_dss:
-                
-                trr_ds_name, trr_pos, _ = parse_datasource_name(trr_ds_name_full_name)
-                sensor = pf[f"{trr_ds_name}_{trr_pos}"]
-                virtual_ds_type = f"xyzit-trr"
-                try:
-                    sensor.add_virtual_datasource(LCAx_XYZIT_traces_projection(virtual_ds_type, trr_ds_name_full_name, sensor, remove_offset))
-                    virtual_ds_list.append(f"{trr_ds_name}_{trr_pos}_{virtual_ds_type}")
-                except Exception as e:
-                    print(e)
-                    print(f"vitual datasource {trr_ds_name}_{trr_pos}_{virtual_ds_type} was not added")
-                
-            return virtual_ds_list
-        except Exception as e:
-            print(e)
-            print("Issue during try to add virtual datasources LCAx_XYZIT_traces_projection.")
-
     def get_at_timestamp(self, timestamp:int):
             """override"""
             # since lcax use nearest_interpolator, we just try to find the index closest to timestamp

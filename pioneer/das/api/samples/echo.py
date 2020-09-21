@@ -281,6 +281,12 @@ class Echo(Sample):
 
         return coords_img_tf[row, col, 2]
 
+    def channel_index_to_image_coord(self, index):
+        #FIXME: this should be cached
+        vv, hh = np.mgrid[0:self.v, 0:self.h]
+        coords_img = np.stack((vv,hh, np.arange(0, self.v*self.h).reshape(self.v, self.h)), axis=2)
+        coords_img_tf = self.transform_image(coords_img)
+
     def clip_to_fov_mask(self, pts:np.ndarray) -> np.ndarray:
                 
         lcax = self.datasource.sensor

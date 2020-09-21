@@ -15,3 +15,4 @@ from pioneer.das.api.samples.seg_3d import Seg3d
 from pioneer.das.api.samples.trace import Trace
 from pioneer.das.api.samples.xyvit import XYVIT
 from pioneer.das.api.samples.xyzit import XYZIT
+from pioneer.das.api.samples.lane import Lane

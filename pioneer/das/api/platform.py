@@ -12,8 +12,10 @@ from pioneer.das.api.sensors.encoder import Encoder
 from pioneer.das.api.sensors.carla_gps import CarlaGPS
 from pioneer.das.api.sensors.carla_imu import CarlaIMU
 from pioneer.das.api.sensors.radar_ti import RadarTI
+from pioneer.das.api.sensors.mti import MTi
 from pioneer.das.api.sources import ZipFileSource
 from pioneer.das.api.datasources import AbstractDatasource
+import pioneer.das.api.datasources.virtual_datasources as virtual_datasources
 
 from collections import OrderedDict
 from typing import Callable, Iterator, Union, Optional, List, Dict, Mapping, Tuple, Any
@@ -62,6 +64,7 @@ SENSOR_FACTORY = {  'lca2': LCAx,
                     'radarTI': RadarTI,
                     'webcam': Camera,
                     'encoder': Encoder,
+                    'mti': MTi,
                     'carlagps': CarlaGPS,
                     'carlaimu': CarlaIMU,
                     'leddar': LCAx,
@@ -205,6 +208,9 @@ class Platform(object):
 
         self._sensors = Sensors(self, self.yml)
 
+        if 'virtual_datasources' in self.yml:
+            self._add_virtual_datasources()
+
     def to_nas_path(self, path:str) -> str:
         """Convert absolute yaml paths to path relative to os.environ['nas'] """
         nas_base = os.environ.get('nas', '')
@@ -256,11 +262,16 @@ class Platform(object):
         """ 
         return platform_utils.expand_wildcards(labels, self.datasource_names())
 
-    def synchronized(self, sync_labels:List[str], interp_labels:List[str]=[], tolerance_us:Union[float, int]=1e3, fifo:int=-1):
+    def synchronized(self, sync_labels:List[str]=[], interp_labels:List[str]=[], tolerance_us:Union[float, int]=None, fifo:int=-1):
         """Creates a Synchronized instance with self as platform
            
            See Also: Synchronized.__init__()
         """
+        if 'synchronization' in self.yml:
+            sync_labels = self.yml['synchronization']['sync_labels'] if len(sync_labels)==0 else sync_labels
+            interp_labels = self.yml['synchronization']['interp_labels'] if len(interp_labels)==0 is None else interp_labels
+            tolerance_us = self.yml['synchronization']['tolerance_us'] if tolerance_us is None else tolerance_us
+        tolerance_us = 1e3 if tolerance_us is None else tolerance_us
         return Synchronized(self, self.expand_wildcards(sync_labels)
                             , self.expand_wildcards(interp_labels)
                             , tolerance_us, fifo)
@@ -280,8 +291,9 @@ class Platform(object):
     def record(self):
         """**Live platform only** toggle recording for all (live) sensors"""
         for ds_name in self.datasource_names():
-            #self[ds_name].ds.is_recording = True
-            self[ds_name].ds.is_recording = not self[ds_name].ds.is_recording
+            try:
+                self[ds_name].ds.is_recording = not self[ds_name].ds.is_recording
+            except: pass
     
     @property
     def egomotion_provider(self) -> 'EgomotionProvider':
@@ -293,6 +305,16 @@ class Platform(object):
         for s in self._sensors.values():
             ds_names.extend(s.datasource_names())
         return ds_names
+
+    def _add_virtual_datasources(self):
+        for virtual_ds_name in self.yml['virtual_datasources']:
+            if hasattr(virtual_datasources, virtual_ds_name):
+                args = self.yml['virtual_datasources'][virtual_ds_name]
+                virtual_datasource = virtual_datasources.VIRTUAL_DATASOURCE_FACTORY[virtual_ds_name](**args)
+                self[virtual_datasource.reference_sensor].add_datasource(virtual_datasource, virtual_datasource.ds_type)
+            else:
+                LoggingManager.instance().warning(f"The virtual datasource {virtual_ds_name} does not exist.")
+
 
     def __getitem__(self, label:str) -> Union[Sensor, AbstractDatasource]:
         """Implement operator '[]'
@@ -498,97 +520,6 @@ class Synchronized(object):
         return Filtered(self, indices)
 
 
-class Grouped(object):
-    """Groups multiple synchronized platforms in a single one"""
-
-    def __init__(self, platform_group:List[Platform] = None, synchronized_group:List[Synchronized] = None):
-        """Constructor
-        
-            Args:
-                platform_group:  A list of 'Platform' instances to be grouped.
-                synchronized_group:  A list of 'Synchronized' instances to be grouped.
-
-        """
-
-        self.platform_group = platform_group
-        self.synchronized_group = synchronized_group
-        self.is_synchronized = True if synchronized_group is not None else False
-
-    @property
-    def platform(self, index:int=0):
-        s, ii = self._group_index(index)
-        return self.platform_group[s]
-
-    def synchronized(self, sync_labels:List[str], interp_labels:List[str]=[], tolerance_us:Union[float, int]=1e3, fifo:int=-1):
-        if self.platform_group is None:
-            raise RuntimeError('No platform to synchronize.')
-        self.synchronized_group = []
-        for pf in self.platform_group:
-            self.synchronized_group.append(pf.synchronized(sync_labels=sync_labels, interp_labels=interp_labels, tolerance_us=tolerance_us, fifo=fifo))
-        self.is_synchronized = True
-        self.lengths = [s.__len__() for s in self.synchronized_group]
-        self.cumsum_lengths = np.cumsum([0]+self.lengths[:-1]) #starting index of each dataset
-
-    def _group_index(self, index:int):
-        """ """
-        if not self.is_synchronized:
-            raise RuntimeError('Grouped platform is not synchronized.')
-        if index >= len(self):
-            raise IndexError("Index out of bounds")
-        cumsum_index = index-self.cumsum_lengths
-        s = np.where(cumsum_index<self.lengths)[0][0] #find in which dataset to pick data
-        ii = cumsum_index[s] #find the index in the specific dataset
-        return s, ii
-
-    def timestamps(self, index:int):
-        s, ii = self._group_index(index)
-        return self.synchronized_group[s].timestamps(ii)
-
-    def keys(self):
-        ks = []
-        for s in self.synchronized_group:
-            for k in s.keys():
-                if k not in ks:
-                    ks.append(k)
-        return ks
-
-    def expand_wildcards(self, labels:List[str]):
-        """See also: platform.expand_widlcards()
-        """ 
-        return platform_utils.expand_wildcards(labels, self.keys())
-
-    def __contains__(self, key):
-        for s in self.synchronized_group:
-            if s.__contains__(key):
-                return True
-        return False
-    
-    def __len__(self):
-        return sum(self.lengths)
-
-    def __getitem__(self, index:Union[int, slice, Iterator[int]]) ->Dict[str, Sample]:
-
-        # Convert index to a list
-        list_index = []
-        try:
-            for i in index:
-                list_index.append(i)
-        except:
-            if isinstance(index, slice):
-                list_index = list(platform_utils.slice_to_range(index, len(self)))
-            if isinstance(index, numbers.Integral):
-                list_index = [index]
-        
-        merged = None
-        for i in list_index:
-            s, ii = self._group_index(i)
-            d = self.synchronized_group[s][ii]
-            if merged is None:
-                merged = {k:[v] for k,v in d.items()}
-            else:
-                for k,v in merged.items():
-                    v.append(d[k])
-        return merged
             
 class Filtered(object):
 
@@ -704,17 +635,14 @@ class Sensors(object):
 
         yml_items_tqdm = tqdm.tqdm(yml.items()) if self.platform.progress_bar else yml.items()
         for name, value in yml_items_tqdm:
-            if name == 'ignore':
+            if name in ['ignore','synchronization','virtual_datasources']:
                 continue
 
 
             sensor_type, _ = platform_utils.parse_sensor_name(name)
             self._sensors[name] = SENSOR_FACTORY[sensor_type](name, self.platform)
             self._ordered_names.append(name)
-            # if self.platform.is_live():
-            #     self._load_online_datasources(name, yml)
-            # else:
-            #     self._load_offline_datasources(name)
+
             self._load_offline_datasources(name)
 
             if 'orientation' in value:
@@ -731,16 +659,14 @@ class Sensors(object):
             if 'extrinsics' in value:
                 self._load_extrinsics(name, value['extrinsics'])
 
-            self._sensors[name].add_virtual_datasources()
-
             try:
                 provider = self._sensors[name].create_egomotion_provider()
             except:
-                LoggingManager.instance().warning("The 'egomotion_provider' for sensor name {name} could not be created.")
+                LoggingManager.instance().warning(f"The 'egomotion_provider' for sensor name {name} could not be created.")
 
             if provider is not None:
                 if self._egomotion_provider is not None:
-                    LoggingManager.instance().warning("Another 'egomotion_provider' found for sensor name {name}, ignoring it.")
+                    LoggingManager.instance().warning(f"Another 'egomotion_provider' found for sensor name {name}, ignoring it.")
                 else:
                     self._egomotion_provider = provider
 
@@ -777,13 +703,6 @@ class Sensors(object):
             use that transform's inverse
         """
         self._sensors[name].load_extrinsics(extrinsics_folder)
-
-    # def _load_online_datasources(self, name:str, yml):
-        
-    #     live_ds = create_live_datasources(self._sensors[name], yml)
-
-    #     for ds_name, ds in live_ds.items():
-    #         self._sensors[name].add_datasource(ds, ds_name, cache_size = 1)
 
     def _load_offline_datasources(self, name:str):
         """A dataset's zip files are named in a structured fashion.
