@@ -12,7 +12,16 @@ setuptools.setup(
     description="Pioneer's das api",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages=['pioneer', 'pioneer.das', 'pioneer.das.api'],
+    packages=[
+        'pioneer', 
+        'pioneer.das', 
+        'pioneer.das.api', 
+        'pioneer.das.api.samples', 
+        'pioneer.das.api.sensors', 
+        'pioneer.das.api.sources',
+        'pioneer.das.api.datasources',
+        'pioneer.das.api.datasources.virtual_datasources'
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
