@@ -7,7 +7,7 @@ print(setuptools.find_packages())
 
 setuptools.setup(
     name="pioneer_das_api", # Replace with your own username
-    version="0.0.1",
+    version="0.1.0",
     author="Leddartech",
     description="Pioneer's das api",
     long_description=long_description,
