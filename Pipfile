@@ -1,0 +1,26 @@
+[[source]]
+name = "gitlab"
+url = "https://__token__:qcnZ-LPju8cqtpG1cpss@svleddar-gitlab.leddartech.local/api/v4/projects/481/packages/pypi/simple"
+verify_ssl = true
+
+[[source]]
+name = "gitlab"
+url = "https://__token__:qcnZ-LPju8cqtpG1cpss@svleddar-gitlab.leddartech.local/api/v4/projects/487/packages/pypi/simple"
+verify_ssl = true
+
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+opencv-python = "*"
+numpy = "*"
+open3d = "*"
+six = "*"
+transforms3d = "*"
+
+[requires]
+python_version = "3.6"
