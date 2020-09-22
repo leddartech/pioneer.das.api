@@ -635,9 +635,11 @@ class Sensors(object):
 
         yml_items_tqdm = tqdm.tqdm(yml.items()) if self.platform.progress_bar else yml.items()
         for name, value in yml_items_tqdm:
-            if name in ['ignore','synchronization','virtual_datasources']:
-                continue
 
+            if name.split('_')[0] not in SENSOR_FACTORY:
+                if name not in ['ignore','virtual_datasources','synchronization']:
+                    LoggingManager.instance().warning(f"The key {name} in the configuration file is not understood.")
+                continue
 
             sensor_type, _ = platform_utils.parse_sensor_name(name)
             self._sensors[name] = SENSOR_FACTORY[sensor_type](name, self.platform)
