@@ -30,7 +30,17 @@ setuptools.setup(
     python_requires='>=3.6',
     install_requires=[
         'numpy',
-        'opencv-python'
+        'opencv-python',
+        'open3d',
+        'transforms3d',
+        'pioneer-common',
+        'six',
+        'ruamel.std.zipfile',
+        'pandas',
+        'tqdm',
+        'sklearn',
+        'utm',
+        'pyyaml'
     ],
     include_package_data=True
 )

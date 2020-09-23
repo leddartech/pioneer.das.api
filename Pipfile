@@ -21,6 +21,13 @@ numpy = "*"
 open3d = "*"
 six = "*"
 transforms3d = "*"
+pioneer-common = "*"
+"ruamel.std.zipfile" = "*"
+pandas = "*"
+tqdm = "*"
+sklearn = "*"
+utm = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.6"
