@@ -26,7 +26,7 @@ python3 setup.py develop --user
 
 If you don't want to install all the dependencies on your computer, you can run it in a virtual environment
 ```bash
-pipenv install
+pipenv install --skip-lock
 
 pipenv shell
 ```
