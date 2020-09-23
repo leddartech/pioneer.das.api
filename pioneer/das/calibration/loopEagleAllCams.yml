@@ -1,0 +1,22 @@
+# transformations list, with 7 columns points cloud data file
+
+transformations:
+  'flir_tfl-flir_tfr': 'flir_tfl_flir_tfr_homologs.csv'
+  'flir_tfl-flir_tfc': 'flir_tfl_flir_tfc_homologs.csv'
+  'flir_tfr-flir_tfc': 'flir_tfr_flir_tfc_homologs.csv'
+  'flir_tfc-eagle_tfc': 'flir_tfc_eagle_tfc_homologs.csv'
+  'flir_tfl-eagle_tfc': 'flir_tfl_eagle_tfc_homologs.csv'
+  'flir_tfr-eagle_tfc': 'flir_tfr_eagle_tfc_homologs.csv'
+
+# loops equations, evaluated with the first term points cloud
+loops:
+  'loop_cams': 'flir_tfl-flir_tfr->flir_tfr-flir_tfc->-flir_tfl-flir_tfc'
+
+plot:
+  reference: 'flir_tfl'
+
+output: 'loopAll.pkl'
+
+ransac:
+  nb_iterations: 5000
+  distance_threshold: 0.15
