@@ -28,6 +28,7 @@ tqdm = "*"
 sklearn = "*"
 utm = "*"
 pyyaml = "*"
+pioneer-das-api = "*"
 
 [requires]
 python_version = "3.6"
