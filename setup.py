@@ -30,7 +30,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    dependency_links=["https://__token__:qcnZ-LPju8cqtpG1cpss@svleddar-gitlab.leddartech.local/api/v4/projects/481/packages/pypi/simple/pioneer-common"],
+    dependency_links=["https://pioneer:yK6RUkhUCNHg3e1yxGT4@svleddar-gitlab.leddartech.local/api/v4/projects/481/packages/pypi/simple/pioneer-common"],
     install_requires=[
         'numpy',
         'opencv-python',
