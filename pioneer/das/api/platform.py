@@ -308,8 +308,15 @@ class Platform(object):
 
     def _add_virtual_datasources(self):
         for virtual_ds_name in self.yml['virtual_datasources']:
+
+            args = self.yml['virtual_datasources'][virtual_ds_name]
+
+            # If multiple instances of the same VirtualDatasource class, their keys has to be different
+            # in the config file. So add a unique id such as: virtual_ds_name -> virtual_ds_name_id
+            if hasattr(virtual_datasources, virtual_ds_name[:virtual_ds_name.rfind('_')]):
+                virtual_ds_name = virtual_ds_name[:virtual_ds_name.rfind('_')]
+
             if hasattr(virtual_datasources, virtual_ds_name):
-                args = self.yml['virtual_datasources'][virtual_ds_name]
                 virtual_datasource = virtual_datasources.VIRTUAL_DATASOURCE_FACTORY[virtual_ds_name](**args)
                 self[virtual_datasource.reference_sensor].add_datasource(virtual_datasource, virtual_datasource.ds_type)
             else:
