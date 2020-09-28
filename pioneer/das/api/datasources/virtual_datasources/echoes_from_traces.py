@@ -12,22 +12,26 @@ import numpy as np
 
 class Echoes_from_Traces(VirtualDatasource):
 
-    def __init__(self, ds_type, trr_ds_name, sensor=None, nb_detections_max:int=3):
-        super(Echoes_from_Traces, self).__init__(ds_type, [trr_ds_name], None)
-        self.ds_type = ds_type
-        self.trr_ds_name = trr_ds_name
-        self.sensor = sensor
+    def __init__(self, reference_sensor, dependencies, nb_detections_max:int=3, min_amplitude:float=0):
+        trr_ds_name = dependencies[0].split('_')[-1].split('-')[-1]
+        super(Echoes_from_Traces, self).__init__(f'ech-{trr_ds_name}', dependencies, None)
+        self.reference_sensor = reference_sensor
+        self.original_trace_datasource = dependencies[0]
         self.nb_detections_max = nb_detections_max
-        self.peak_detector = peak_detector.PeakDetector(nb_detections_max=self.nb_detections_max)
+        self.peak_detector = peak_detector.PeakDetector(nb_detections_max=self.nb_detections_max, min_amplitude=min_amplitude)
         self.amplitude_scaling = 1
 
-        self.trace_processing = TraceProcessingCollection([
-              Desaturate(self.sensor.saturation_calibration),
-              RemoveStaticNoise(self.sensor.static_noise),
-              ZeroBaseline(),
-              Smooth(),
-            ])
+        self.trace_processing = None
+        
 
+    def _set_trace_processing(self):
+        sensor = self.datasources[self.dependencies[0]].sensor
+        self.trace_processing = TraceProcessingCollection([
+            Desaturate(sensor.saturation_calibration),
+            RemoveStaticNoise(sensor.static_noise),
+            ZeroBaseline(),
+            Smooth(),
+        ])
 
     def initialize_local_cache(self, data):
         self.local_cache = copy.deepcopy(data)
@@ -56,8 +60,9 @@ class Echoes_from_Traces(VirtualDatasource):
 
     def get_echoes_from_fast_traces(self, processed_fast_traces):
         # TODO: improve merging by replacing the saturated lines and columns
-        echoes_high, additionnal_fields_high = self.get_echoes(processed_fast_traces[self.sensor.FastTraceType.MidRange])
-        echoes_low, additionnal_fields_low = self.get_echoes(processed_fast_traces[self.sensor.FastTraceType.LowRange])
+        sensor = self.datasources[self.dependencies[0]].sensor
+        echoes_high, additionnal_fields_high = self.get_echoes(processed_fast_traces[sensor.FastTraceType.MidRange])
+        echoes_low, additionnal_fields_low = self.get_echoes(processed_fast_traces[sensor.FastTraceType.LowRange])
         echoes = {}
         for field in ['indices','distances','amplitudes']:
             echoes[field] = np.hstack([echoes_high[field], echoes_low[field]])
@@ -69,12 +74,16 @@ class Echoes_from_Traces(VirtualDatasource):
         return echoes, additionnal_fields
 
     def get_at_timestamp(self, timestamp):
-        sample = self.datasources[self.trr_ds_name].get_at_timestamp(timestamp)
+        sample = self.datasources[self.original_trace_datasource].get_at_timestamp(timestamp)
         return self[int(np.round(sample.index))]
 
     def __getitem__(self, key:Any):
+
+        if self.trace_processing is None:
+            self._set_trace_processing()
+
         #Load data in local cache to prevent modifying the original data
-        trace_sample = self.datasources[self.trr_ds_name][key]
+        trace_sample = self.datasources[self.original_trace_datasource][key]
         timestamp = trace_sample.timestamp
         specs = trace_sample.specs
         if isinstance(trace_sample, FastTrace):
