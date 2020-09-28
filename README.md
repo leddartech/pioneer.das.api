@@ -13,7 +13,7 @@ extra-index-url = https://pioneer:yK6RUkhUCNHg3e1yxGT4@svleddar-gitlab.leddartec
 trusted-host = svleddar-gitlab.leddartech.local
 ```
 
-Use the package manager [pip](https://pioneer:yK6RUkhUCNHg3e1yxGT4@svleddar-gitlab.leddartech.local/api/v4/projects/487/packages/pypi/simple) to install pioneer.common .
+Use the package manager [pip](https://pioneer:yK6RUkhUCNHg3e1yxGT4@svleddar-gitlab.leddartech.local/api/v4/projects/487/packages/pypi/simple) to install pioneer.das.api .
 
 ```bash
 pip install pioneer-das-api
