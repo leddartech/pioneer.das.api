@@ -36,10 +36,6 @@ def box3d():
 def seg3d():
     return np.dtype([('classes', 'u2'), ('id', 'u2')])
 
-def seg3dConf(n_classes):
-    #TODO: WIP, not sure about indices, it makes the datasource more self-contained
-    return np.dtype([('indices', 'u4'), ('confidences', 'f4', (n_classes))]) # n_class floats for each indices, representing the ratio of a class for each echo, the accompanying dict will contain a column -> class_id mapping to label each class dimension
-
 def poly2d():
     return np.dtype([('polygon','O') #(N,2) array with N vertices and 2 x,y coordinates (in pixel units)
                     ,('classes','u2')

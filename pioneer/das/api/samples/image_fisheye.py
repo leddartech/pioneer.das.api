@@ -12,7 +12,7 @@ class ImageFisheye(Image):
         if not hasattr(self.datasource.sensor, 'mercator_projection'):
             self.datasource.sensor.mercator_projection = mercator_projection.MercatorProjection(self.camera_matrix, self.distortion_coeffs) 
 
-    def project_pts(self, pts, mask_fov=False, output_mask=False, undistorted=False):
+    def project_pts(self, pts, mask_fov=False, output_mask=False, undistorted=False, margin=0):
 
         R = T = np.zeros((3, 1))
         
@@ -29,7 +29,7 @@ class ImageFisheye(Image):
             image_pts = und_image_pts
 
         if mask_fov or output_mask:
-            mask = self.projection_mask(pts, und_image_pts)
+            mask = self.projection_mask(pts, und_image_pts, margin)
             
         if mask_fov:
             image_pts = image_pts[mask]

@@ -30,7 +30,7 @@ class Image(Sample):
             self.camera_matrix, self.distortion_coeffs, (h,v), 0.0, (h,v))
         return self._und_camera_matrix
 
-    def project_pts(self, pts, mask_fov=False, output_mask=False, undistorted=False):
+    def project_pts(self, pts, mask_fov=False, output_mask=False, undistorted=False, margin=0):
 
         '''projects 3D points from camera referential to the image plane.
 
@@ -39,6 +39,7 @@ class Image(Sample):
                 mask_fov - (True/False) If True the points outside fov are masked
                 output_mask - (True/False) If True, the mask from mask_fov is returned
                 undistorted - (True/False) If the image is undistorted
+                margin (optionnal): margin (in pixels) outside the image unaffected by the fov mask
         '''
 
         R = T = np.zeros((3, 1))
@@ -56,7 +57,7 @@ class Image(Sample):
             image_pts = und_image_pts
 
         if mask_fov or output_mask:
-            mask = self.projection_mask(pts, und_image_pts)
+            mask = self.projection_mask(pts, und_image_pts, margin)
 
         if mask_fov:
             image_pts = image_pts[mask]
@@ -78,12 +79,12 @@ class Image(Sample):
             newCameraMatrix=self.und_camera_matrix,
         )
 
-    def projection_mask(self, pts, projection):
+    def projection_mask(self, pts, projection, margin=0):
         v,h,_ = self.raw_image().shape
         mask = (pts[:,2] > 0)& \
-            (projection[:,0] >= 0) & \
-            (projection[:,0] <= h) & \
-            (projection[:,1] >= 0) & \
-            (projection[:,1] <= v)
+            (projection[:,0] >= 0 - margin) & \
+            (projection[:,0] <= h + margin) & \
+            (projection[:,1] >= 0 - margin) & \
+            (projection[:,1] <= v + margin)
         return mask
                                                     
