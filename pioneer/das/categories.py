@@ -56,7 +56,9 @@ CATEGORIES['deepen'] = {
     '30':{'name':'unclassified vehicle', 'color':(50, 130, 200)},
     '31':{'name':'obstacle', 'color':(100, 200, 50)},
     '32':{'name':'trailer', 'color':(255, 150, 120)},
-    '33':{'name':'barrier', 'color':(100, 190, 240)}
+    '33':{'name':'barrier', 'color':(100, 190, 240)},
+    '34':{'name':'bicycle rack', 'color':(20, 90, 200)},
+    '35':{'name':'construction vehicle', 'color':(80, 40,0)}
 }
 
 CATEGORIES['maskrcnn'] = {
