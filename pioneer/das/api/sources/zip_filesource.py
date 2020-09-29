@@ -102,7 +102,7 @@ class ZipFileSource(FileSource):
                         timestamps = sensor_ts[:,0]
                         # check if ts is always go up, for imu data (more than 1 data per pkl file) the test is not complet -> to improve
                         if len(timestamps)>2 and (np.min(np.diff(timestamps.astype(np.int64)))<0):
-                            LoggingManager.instance.warning('Timestamps are not strictly increasing for datasource file {}'.format(self.path))
+                            LoggingManager.instance().warning('Timestamps are not strictly increasing for datasource file {}'.format(self.path))
 
                         if sensor_ts.shape[1] > 1:
                             time_of_issues = sensor_ts[:,1]
@@ -220,7 +220,7 @@ class ZipFileSource(FileSource):
 
         if nfiles != nts:
             n = min(nts, nfiles)
-            LoggingManager.instance.warning('The number of timestamps and data files are '
+            LoggingManager.instance().warning('The number of timestamps and data files are '
                             'different for sensor %s (nfiles: %d != nts: %d). '
                             'Keeping the %d first timestamps and files'
                             %(self.path, nfiles, nts, n))
