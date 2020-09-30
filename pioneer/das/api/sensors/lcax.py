@@ -293,7 +293,7 @@ class LCAx(Sensor):
             try:
                 temp = self.get_temperature_at(timestamp)
             except Exception as e:
-                LoggingManager.instance.warning('Failed to apply temperature correction. '
+                LoggingManager.instance().warning('Failed to apply temperature correction. '
                                 'Error: {}'.format(str(e)))
                 return distances
 
