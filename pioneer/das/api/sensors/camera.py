@@ -1,6 +1,7 @@
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.samples import Image, ImageFisheye
 from pioneer.das.api.sensors.sensor import Sensor
+from pioneer.das.api.interpolators import nearest_interpolator
 
 import numpy as np
 
@@ -10,8 +11,8 @@ class Camera(Sensor):
     def __init__(self, name, platform):
         super(Camera, self).__init__(name
                                    , platform
-                                   , { 'img': (Image, None),
-                                       'flimg': (ImageFisheye, None)
+                                   , { 'img': (Image, nearest_interpolator),
+                                       'flimg': (ImageFisheye, nearest_interpolator)
                                         })
 
     @property
