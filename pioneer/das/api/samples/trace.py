@@ -21,6 +21,12 @@ class Trace(Sample):
         return self._raw
 
     @property
+    def raw_array(self):
+        specs = self.specs
+        raw = self.raw['data']
+        return raw.reshape(specs['v'], specs['h'], raw.shape[-1])
+
+    @property
     def specs(self):
         # override the sensor specs if they are present in the YAML config file
         sensor_specs = self.datasource.sensor.specs
