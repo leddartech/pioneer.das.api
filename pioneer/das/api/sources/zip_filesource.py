@@ -43,10 +43,7 @@ class ZipFileSource(FileSource):
 
         self.nb_data_per_pkl_file = 1
 
-
         self.files, self.time_of_issues, self.timestamps, self.nb_data_per_pkl_file = self.get_files(self.access)
-
-
 
         if check_timestamps:
             self._check_timestamps_consistency()
