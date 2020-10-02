@@ -69,7 +69,8 @@ def sensor_angles_from_lcas_angles(distance, elevation, azimut, dx_azimut, dy_az
         Constants: (see from_sensor_to_lcas)
     '''
     gamma_ = np.cos(elevation) * (dy_azimut * np.sin(azimut) + dx_azimut * np.cos(azimut))
-    distance_ = - gamma_ + (gamma_**2  + distance**2 - dx_azimut**2 - dy_azimut**2)**0.5
+    arg = gamma_**2 + np.maximum(0.0, distance**2 - dx_azimut**2 - dy_azimut**2)
+    distance_ = - gamma_ + np.sqrt(arg)
     _, elevation_, azimut_ = from_lcas_to_sensor(distance_, elevation, azimut, 0, dx_azimut, dy_azimut)
     return elevation_, azimut_
 
