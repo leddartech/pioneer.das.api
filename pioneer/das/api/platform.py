@@ -29,6 +29,7 @@ import numpy as np
 import os
 import pandas as pd
 import pickle
+import zipfile
 import six
 try:
     from StringIO import StringIO
@@ -269,7 +270,7 @@ class Platform(object):
         """
         if 'synchronization' in self.yml:
             sync_labels = self.yml['synchronization']['sync_labels'] if len(sync_labels)==0 else sync_labels
-            interp_labels = self.yml['synchronization']['interp_labels'] if len(interp_labels)==0 is None else interp_labels
+            interp_labels = self.yml['synchronization']['interp_labels'] if len(interp_labels)==0 else interp_labels
             tolerance_us = self.yml['synchronization']['tolerance_us'] if tolerance_us is None else tolerance_us
         tolerance_us = 1e3 if tolerance_us is None else tolerance_us
         return Synchronized(self, self.expand_wildcards(sync_labels)
@@ -317,8 +318,11 @@ class Platform(object):
                 virtual_ds_name = virtual_ds_name[:virtual_ds_name.rfind('_')]
 
             if hasattr(virtual_datasources, virtual_ds_name):
-                virtual_datasource = virtual_datasources.VIRTUAL_DATASOURCE_FACTORY[virtual_ds_name](**args)
-                self[virtual_datasource.reference_sensor].add_datasource(virtual_datasource, virtual_datasource.ds_type)
+                try:
+                    virtual_datasource = virtual_datasources.VIRTUAL_DATASOURCE_FACTORY[virtual_ds_name](**args)
+                    self[virtual_datasource.reference_sensor].add_datasource(virtual_datasource, virtual_datasource.ds_type)
+                except:
+                    LoggingManager.instance().warning(f"The virtual datasource {virtual_ds_name} could not be added.")
             else:
                 LoggingManager.instance().warning(f"The virtual datasource {virtual_ds_name} does not exist.")
 
@@ -378,7 +382,7 @@ class Synchronized(object):
         return self.sync_labels[self.ref_index]
 
     def _synchronize_offline_sensor_data(self):
-        """Synchronizes all datasources in the sync_labels list toghether. The first 
+        """Synchronizes all datasources in the sync_labels list together. The first 
            datasource in the list will be considered the 'reference datasource' 
         """
         
@@ -387,7 +391,7 @@ class Synchronized(object):
 
         mappings = []
 
-        all_ts_tqdm = tqdm.tqdm(self.all_ts) if self.platform.progress_bar else self.all_ts
+        all_ts_tqdm = tqdm.tqdm(self.all_ts, 'Synchronizing') if self.platform.progress_bar else self.all_ts
         for name, sensor_ts in all_ts_tqdm:
             # compute the difference between all ref_sensor and other sensor's
             # timestamps using broadcasting
@@ -395,7 +399,6 @@ class Synchronized(object):
                 raise RuntimeError('Sensor {} has 0 timestamps, could not \
                 synchronize arrays, please exclude this label from list'
                 .format(name))
-
 
             idx = closest_timestamps(self.ref_ts, sensor_ts, self.tolerance_us)
 
@@ -527,7 +530,175 @@ class Synchronized(object):
         return Filtered(self, indices)
 
 
+
+
+class SynchronizedGroup(Synchronized):
+    """Groups multiple synchronized platforms in a single one
+        Args:
+            -datasets: Can be either a list of paths for the datasets to group, 
+                or a single string for the path of a directory that contains the datasets to group.
+            -sync_labels: see Synchronized
+            -interp_labels: see Synchronized
+            -tolerance_us: see Synchronized
+
+        Note: For performance and memory concerns, only the platform for a single dataset is loaded at a time.
+            When trying to access the samples from another dataset than the one that is currently loaded,
+            we have to initialize the new platform and synchronize it, which takes a few seconds.
+            For this reason, this class is currently not usable for random access, but works better for sequential access.
+    """
+
+    def __init__(self, datasets:Union[str,list], sync_labels:List[str]=[], interp_labels:List[str]=[], tolerance_us:Union[float, int]=None):
+
+        if type(datasets) == str:
+            datasets = glob.glob(datasets)
+
+        self.datasets = datasets
+        self.sync_labels = sync_labels
+        self.interp_labels = interp_labels
+        self.tolerance_us = tolerance_us
+
+        self.loaded_dataset_index = None
+
+        self._preload_lenghts()
+
+    def _preload_lenghts(self):
+        """We have to pre-calculate the lenghts of each dataset, so we know which one to use when using __getitem__"""
+
+        self.lenghts = []        
+        self._load_synchronized(0)
+
+        # Get the actual values (could have been overriden by the platform.yml)
+        self.sync_labels = self.synchronized_platform.sync_labels
+        self.interp_labels = self.synchronized_platform.interp_labels
+        self.tolerance_us = self.synchronized_platform.tolerance_us
+
+        to_pop = []
+        for dataset_index in tqdm.tqdm(range(len(self.datasets)), 'Grouping synchronized platforms'):
+            try:
+                l = self._get_dataset_lenght(dataset_index)
+                self.lenghts.append(l)
+            except:
+                LoggingManager.instance().warning(f"The dataset {self.datasets[dataset_index]} could not be added to the SynchronizedGroup.")
+                to_pop.append(dataset_index)
+
+        for i in to_pop:
+            self.datasets.pop(i)
+
+        self.cumsum_lenghts = np.cumsum([0]+self.lenghts[:-1])
+
+    def _load_synchronized(self, dataset_index):
+        if dataset_index == self.loaded_dataset_index:
+            return
+        try:
+            pf = Platform(self.datasets[dataset_index])
+            sync = pf.synchronized(self.sync_labels, self.interp_labels, self.tolerance_us)
+            if dataset_index > 0:
+                assert sync.keys() == self.synchronized_platform.keys()
+            self.synchronized_platform = sync
+            self.loaded_dataset_index = dataset_index
+        except:
+            LoggingManager.instance().warning(f"There is an issue with the dataset {self.datasets[dataset_index]}. It was removed from the SynchronizedGroup.")
+            self.datasets.pop(dataset_index)
+            self.lenghts.pop(dataset_index)
+            self.cumsum_lenghts = np.cumsum([0]+self.lenghts[:-1])
+
+    def _get_dataset_lenght(self, dataset_index):
+        """
+        For better performance, we don't initialize each dataset and use its len() method.
+        Instead, we only load the timestamps.csv files and check the lenght of the matching timestamps.
+        """
+
+        if dataset_index in self.lenghts:
+            return self.lenghts[dataset_index]
+
+        files_with_ts = []
+        for ds_name in self.sync_labels:
+            datasource = self.synchronized_platform.platform[ds_name]
+            if isinstance(datasource, virtual_datasources.VirtualDatasource):
+                continue
             
+            files_with_ts.append(f"{ds_name}.zip")
+
+        ref_ts = []
+        sensor_ts = []
+        mappings = []
+
+        for zipname in files_with_ts:
+            path = f"{self.datasets[dataset_index]}/{zipname}"
+            with zipfile.ZipFile(path, 'r') as zf:
+                with zf.open('timestamps.csv') as ts:
+                    ts = np.loadtxt(ts, dtype='u8', delimiter=' ', ndmin=2)[:,0]
+
+                    if ref_ts == []:
+                        ref_ts = ts
+
+                    idx = closest_timestamps(ref_ts, ts, self.tolerance_us)
+                    mappings.append(idx)
+        
+        mappings = np.stack(mappings, axis=1)
+        mappings = mappings[(mappings != -1).all(axis=1), :]
+
+        return mappings.shape[0]
+
+    def __len__(self):
+        return sum(self.lenghts)
+
+    @property
+    def platform(self):
+        return self.synchronized_platform.platform
+ 
+    def timestamps(self, index:int):
+        raise RuntimeError('not implemented!')
+
+    def indices(self, index:int):
+        raise RuntimeError('not implemented!')
+
+    def sliced(self, intervals:List[Tuple[int, int]]):
+        raise RuntimeError('not implemented!')
+
+    def filtered(self, indices:List[int]):
+        raise RuntimeError('not implemented!')
+
+    def keys(self):
+        return self.synchronized_platform.keys()
+
+    def _group_index(self, index:int):
+
+        if index > len(self) or index < 0:
+            raise IndexError("Index out of bounds")
+        
+        cumsum_index = index-self.cumsum_lenghts
+        dataset_index = np.where(cumsum_index<self.lenghts)[0][0]
+        idx = cumsum_index[dataset_index] #find the index in the specific dataset
+        return dataset_index, idx
+
+    def __getitem__(self, index:Union[int, slice, Iterator[int]]) ->Dict[str, Sample]:
+
+        # Convert index to a list
+        list_index = []
+        try:
+            for i in index:
+                list_index.append(i)
+        except:
+            if isinstance(index, slice):
+                list_index = list(slice_to_range(index, len(self)))
+            if isinstance(index, numbers.Integral):
+                list_index = [index]
+        
+        merged = None
+        for i in list_index:
+            dataset_index, idx = self._group_index(i)
+            self._load_synchronized(dataset_index)
+            samples = self.synchronized_platform[idx]
+            if merged is None:
+                merged = {k:[v] for k,v in samples.items()}
+            else:
+                for k,v in merged.items():
+                    v.append(samples[k])
+        return merged
+
+
+
 class Filtered(object):
 
     def __init__(self, synchronized:Synchronized, indices:List[int]):
@@ -640,7 +811,7 @@ class Sensors(object):
         self._ordered_names = []
         self._egomotion_provider = None
 
-        yml_items_tqdm = tqdm.tqdm(yml.items()) if self.platform.progress_bar else yml.items()
+        yml_items_tqdm = tqdm.tqdm(yml.items(), 'Loading sensors') if self.platform.progress_bar else yml.items()
         for name, value in yml_items_tqdm:
 
             if name.split('_')[0] not in SENSOR_FACTORY:
