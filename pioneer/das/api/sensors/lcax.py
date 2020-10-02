@@ -69,7 +69,6 @@ class LCAx(Sensor):
 
         hashable = frozenset([(k,specs[k]) for k in ['v', 'h', 'v_fov', 'h_fov']]) #order invariant set
 
-
         if not hashable in self._cache:
             cache = {}
 
@@ -192,7 +191,6 @@ class LCAx(Sensor):
             self.static_noise = 0
             LoggingManager.instance().warning("Unable to read the static noise from the sensor {}".format(self.name))
 
-
     def get_corrected_projection_data(self, timestamp:Union[int, float], cache:dict, type:str='directions'):
         """ Returns temperature compensated projections directions or angles
 
@@ -242,12 +240,10 @@ class LCAx(Sensor):
         else:
             raise KeyError('Can not compute the point cloud projection')
         
-
     def apply_distance_corrections(self, timestamp, indices, distances):
         """Applies calibration and temperature-related distances corrections"""
         distances = self.apply_temperature_correction(timestamp, indices, distances)
         return distances
-
 
     @property
     def oversampling(self):

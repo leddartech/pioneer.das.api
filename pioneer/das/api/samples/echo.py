@@ -122,18 +122,8 @@ class Echo(Sample):
     def cache(self):
         return self.datasource.sensor.cache(self.specs)
 
-    #TODO: Refactoring purposes
-    def get_cloud( self
-                 , referential:str = None
-                 , ignore_orientation:bool=False
-                 , undistort:bool=False
-                 , reference_ts:int=-1
-                 , dtype:np.dtype = np.float64
-                 ):
-
-
+    def get_cloud(self, referential:str = None, ignore_orientation:bool=False, undistort:bool=False, reference_ts:int=-1, dtype:np.dtype = np.float64):
         points, amplitudes, triangles = self.quad_cloud(referential, ignore_orientation, undistort, reference_ts, dtype)
-
         return points, amplitudes, triangles.reshape(-1, 3)
 
     def point_cloud(self, referential:str=None, ignore_orientation:bool=False, undistort:bool=False, reference_ts:int=-1, 
@@ -147,20 +137,13 @@ class Echo(Sample):
             reference_ts: (only used if referential == 'world' and/or undistort == True), refer to compute_transform()'s documentation
             dtype: the output numpy data type
         """
-        pts_Local = self.datasource.sensor.get_corrected_cloud(self.timestamp, 
-                                                                self.cache(), 
-                                                                'point_cloud',
-                                                                self.indices, 
-                                                                self.distances, 
-                                                                None,
-                                                                dtype)
+        pts_Local = self.datasource.sensor.get_corrected_cloud(self.timestamp, self.cache(), 'point_cloud', self.indices, self.distances, None, dtype)
         
         if undistort:
             to_world = referential == 'world'
             self.undistort_points([pts_Local], self.timestamps, reference_ts, to_world, dtype = dtype)
             if to_world:
                 return pts_Local # note that in that case, orientation has to be ignored
-
 
         return self.transform(pts_Local, referential, ignore_orientation, reference_ts, dtype = dtype)
 
@@ -176,13 +159,8 @@ class Echo(Sample):
             dtype: the output numpy data type
         """
         
-        pts_Local, quad_amplitudes, quad_indices = self.datasource.sensor.get_corrected_cloud(self.timestamp,
-                                                                                                self.cache(),
-                                                                                                'quad_cloud',
-                                                                                                self.indices,
-                                                                                                self.distances,
-                                                                                                self.amplitudes,
-                                                                                                dtype)
+        pts_Local, quad_amplitudes, quad_indices = self.datasource.sensor.get_corrected_cloud(
+            self.timestamp, self.cache(), 'quad_cloud', self.indices, self.distances, self.amplitudes, dtype)
 
         if undistort:
             sn = self.indices.shape[0]

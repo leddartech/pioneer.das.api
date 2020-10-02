@@ -61,8 +61,8 @@ class Echoes_from_Traces(VirtualDatasource):
     def get_echoes_from_fast_traces(self, processed_fast_traces):
         # TODO: improve merging by replacing the saturated lines and columns
         sensor = self.datasources[self.dependencies[0]].sensor
-        echoes_high, additionnal_fields_high = self.get_echoes(processed_fast_traces[sensor.FastTraceType.MidRange])
-        echoes_low, additionnal_fields_low = self.get_echoes(processed_fast_traces[sensor.FastTraceType.LowRange])
+        echoes_high, additionnal_fields_high = self.get_echoes(processed_fast_traces['high'])
+        echoes_low, additionnal_fields_low = self.get_echoes(processed_fast_traces['low'])
         echoes = {}
         for field in ['indices','distances','amplitudes']:
             echoes[field] = np.hstack([echoes_high[field], echoes_low[field]])
