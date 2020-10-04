@@ -22,7 +22,6 @@ class Echoes_from_Traces(VirtualDatasource):
         self.amplitude_scaling = 1
 
         self.trace_processing = None
-        
 
     def _set_trace_processing(self):
         sensor = self.datasources[self.dependencies[0]].sensor

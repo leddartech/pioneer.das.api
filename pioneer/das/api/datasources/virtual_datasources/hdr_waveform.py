@@ -1,6 +1,7 @@
 from pioneer.common.trace_processing import TraceProcessingCollection, ZeroBaseline, Realign
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.samples import Trace
+from pioneer.common import platform
 
 from typing import Any
 
@@ -21,6 +22,11 @@ class HDRWaveform(VirtualDatasource):
         self.target_time_base_delay = None
 
     def __getitem__(self, key:Any):
+
+        if isinstance(key, slice):
+            return self[platform.slice_to_range(key, len(self))]
+        if isinstance(key, range):
+            return [self[index] for index in key]
 
         trace_sample = self.datasources[self.original_trace_datasource][key]
         timestamp = trace_sample.timestamp

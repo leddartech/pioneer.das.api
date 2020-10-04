@@ -39,3 +39,9 @@ class FastTrace(Trace):
         for fast_trace_type in ['low','high']:
             processed_traces[fast_trace_type] = trace_processing(raw_copy[fast_trace_type])
         return processed_traces
+
+    @property
+    def max_range(self):
+        raw = self.raw
+        trace_lenght = raw['high']['data'].shape[-1]
+        return raw['high']['time_base_delays'] + trace_lenght*raw['high']['distance_scaling']
