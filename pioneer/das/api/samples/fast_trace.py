@@ -3,9 +3,8 @@ from pioneer.das.api.samples.trace import Trace
 
 from typing import Callable
 
-import numpy as np
 import copy
-
+import numpy as np
 
 class FastTrace(Trace):
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):

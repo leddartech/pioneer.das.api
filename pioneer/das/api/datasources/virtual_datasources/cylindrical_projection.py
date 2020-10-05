@@ -1,8 +1,8 @@
+from pioneer.common import platform as platform_utils
 from pioneer.common.cylindrical_projection import CylindricalProjection, Pos
 from pioneer.das.api.datasources.virtual_datasources import VirtualDatasource
 from pioneer.das.api.interpolators import nearest_interpolator
 from pioneer.das.api.samples import ImageCylinder
-from pioneer.common import platform as platform_utils
 
 import numpy as np
 

@@ -1,14 +1,12 @@
-from pioneer.common.trace_processing import TraceProcessingCollection, Desaturate, RemoveStaticNoise, ZeroBaseline, Smooth, Realign
+from pioneer.common import platform
+from pioneer.common.trace_processing import Desaturate, Realign, RemoveStaticNoise, TraceProcessingCollection, Smooth, ZeroBaseline
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.datatypes import datasource_xyzit_float_intensity
 from pioneer.das.api.samples import EchoXYZIT, FastTrace
-from pioneer.common import platform
 
 from typing import Any
 
 import numpy as np
-
-
 
 class WaveformCloud(VirtualDatasource):
 

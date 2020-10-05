@@ -1,8 +1,7 @@
 from pioneer.common import clouds, peak_detector
 from pioneer.common.platform import parse_datasource_name
-from pioneer.common.trace_processing import TraceProcessingCollection, Desaturate, RemoveStaticNoise, ZeroBaseline, Smooth
+from pioneer.common.trace_processing import Desaturate, RemoveStaticNoise, Smooth, TraceProcessingCollection, ZeroBaseline
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
-
 from pioneer.das.api.samples import Echo, FastTrace
 
 from typing import Any

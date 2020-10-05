@@ -1,14 +1,12 @@
-from pioneer.common.trace_processing import TraceProcessingCollection, ZeroBaseline, Realign
+from pioneer.common import platform
+from pioneer.common.trace_processing import Realign, TraceProcessingCollection, ZeroBaseline
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.samples import Trace
-from pioneer.common import platform
 
 from typing import Any
 
-import numpy as np
 import copy
-
-
+import numpy as np
 
 class HDRWaveform(VirtualDatasource):
 

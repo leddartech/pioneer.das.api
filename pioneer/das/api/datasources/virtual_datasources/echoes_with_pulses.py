@@ -1,14 +1,12 @@
+from pioneer.common import clouds, platform
 from pioneer.common.trace_processing import TraceProcessingCollection, ZeroBaseline
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.samples import Echo, FastTrace
-from pioneer.common import clouds, platform
 
 from typing import Any
 
-import numpy as np
 import copy
-
-
+import numpy as np
 
 class EchoesWithPulses(VirtualDatasource):
 

@@ -3,6 +3,7 @@ from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.sensors.lcax import LCAx
 
 from typing import Union
+
 import numpy as np
 
 

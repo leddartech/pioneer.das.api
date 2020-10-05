@@ -1,9 +1,10 @@
-from pioneer.common.linalg import tf_inv, map_points
+from pioneer.common.linalg import map_points, tf_inv
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.datatypes import datasource_xyzit
 
 from typing import Any
+
 import copy
 import numpy as np
 
@@ -13,7 +14,6 @@ try :
 except:
     LoggingManager.instance().warning("Voxelisation will not work without installing open3d -> pip3 install open3d")
     OPEN3D_AVAILABLE = False
-
 
 class VoxelMap(VirtualDatasource):
 

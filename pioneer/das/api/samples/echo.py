@@ -1,4 +1,4 @@
-from pioneer.common import clouds, banks, images, plane
+from pioneer.common import banks, clouds, images, plane
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.samples.sample import Sample
 
