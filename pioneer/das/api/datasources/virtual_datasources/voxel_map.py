@@ -16,8 +16,22 @@ except:
     OPEN3D_AVAILABLE = False
 
 class VoxelMap(VirtualDatasource):
+    """Merges multiple past points clouds in a single one, in the same present referential (mapping).
+        Optionally, the merged point cloud can be voxelized (one averaged point per voxel, or volume unit).
 
-    def __init__(self, reference_sensor, dependencies, memory:int=5, skip:int=1, voxel_size:float=0.0):
+        In order to work, the platform needs to have an egomotion_provider.
+    """
+    def __init__(self, reference_sensor:str, dependencies:list, memory:int=5, skip:int=1, voxel_size:float=0.0):
+        """Constructor
+            Args:
+                reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
+                dependencies (list): A list of the datasource names. 
+                    The only element should be an echo or point cloud datasource (e.g. 'pixell_bfc_ech')
+                memory (int): The number of past frames to merge.
+                skip (int): If higher than 1, frames will be skipped. For example, with memory=10 and skip=2, 
+                    the frames N=0,-2,-4,-6,-8,-10 will be merged. The present frame (N=0) is always included.
+                voxel_size (float): If greater than 0, the merged point cloud will be voxelized.
+        """
         super(VoxelMap, self).__init__('xyzit-voxmap', dependencies, None)
         self.reference_sensor = reference_sensor
         self.original_point_cloud_datasource = dependencies[0]
@@ -64,6 +78,8 @@ class VoxelMap(VirtualDatasource):
         return self.sensor.platform.is_live()
 
     def __getitem__(self, key:Any):
+
+        #TODO: if multiple point cloud datasources in dependencies, we could merge them.
 
         min_key = key - self.memory
 

@@ -9,8 +9,17 @@ from typing import Any
 import numpy as np
 
 class WaveformCloud(VirtualDatasource):
+    """Makes a point cloud from each data point of each waveforms."""
 
-    def __init__(self, reference_sensor, dependencies, zero_baseline=False, remove_negative_distances=True):
+    def __init__(self, reference_sensor:str, dependencies:list, zero_baseline:bool=False, remove_negative_distances:bool=True):
+        """Constructor
+            Args:
+                reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
+                dependencies (list): A list of the datasource names. 
+                    The only element should be a Trace datasource (e.g. 'pixell_bfc_ftrr')
+                zero_baseline (bool): If True, the baseline of the waveforms are re-calibrated to be around zero.
+                remove_negative_distances (bool): If True, the points behind the sensor are filtered out.
+        """
         trr_ds_name = dependencies[0].split('_')[-1]
         super(WaveformCloud, self).__init__(f'xyzit-{trr_ds_name}', dependencies, None)
         self.reference_sensor = reference_sensor

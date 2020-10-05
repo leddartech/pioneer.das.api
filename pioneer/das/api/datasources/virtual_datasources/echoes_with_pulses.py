@@ -9,8 +9,22 @@ import copy
 import numpy as np
 
 class EchoesWithPulses(VirtualDatasource):
+    """Echoes, with a number of data points from the waveforms corresponding to the pulses that resulted in each echo."""
 
-    def __init__(self, reference_sensor, dependencies, pulse_sample_size=10, zero_baseline=False):
+    def __init__(self, reference_sensor:str, dependencies:list, pulse_sample_size:int=10, zero_baseline:bool=False):
+        """Constructor
+            Args:
+                reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
+                dependencies (list): A list of the datasource names. 
+                    First element should be an Echo datasource (e.g. 'pixell_bfc_ech')
+                    Second element should be a Trace datasource (e.g. 'pixell_bfc_ftrr')
+                pulse_sample_size (int): The number of data points to gather before and after each echo in the waveforms.
+                    For example, with pulse_sample_size=10, the pulses will be 21 points, because the highest point is
+                    taken in addition to the 10 points before and the 10 points after.
+                zero_baseline (bool): If True, the baseline of the waveforms are re-calibrated to be around zero.
+
+            Note: The pulses are stored under the 'pulses' key in the raw dictionnary. 
+        """
         super(EchoesWithPulses, self).__init__(f'ech-pulses', dependencies, None)
         self.reference_sensor = reference_sensor
         self.original_echoes_datasource = dependencies[0]

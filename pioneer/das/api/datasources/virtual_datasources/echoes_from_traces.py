@@ -10,8 +10,17 @@ import copy
 import numpy as np
 
 class Echoes_from_Traces(VirtualDatasource):
+    """Non official implementation of the peak detector. Also measures the widths and the skews for each echo."""
 
-    def __init__(self, reference_sensor, dependencies, nb_detections_max:int=3, min_amplitude:float=0):
+    def __init__(self, reference_sensor:str, dependencies:list, nb_detections_max:int=3, min_amplitude:float=0):
+        """Constructor
+            Args:
+                reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
+                dependencies (list): A list of the datasource names. 
+                    The only element should be a Trace datasource (e.g. 'pixell_bfc_ftrr') 
+                nb_detections_max (int): The maximum number of echoes per waveform.
+                min_amplitude (float): Amplitude threshold under which the echoes are filtered out.
+        """
         trr_ds_name = dependencies[0].split('_')[-1].split('-')[-1]
         super(Echoes_from_Traces, self).__init__(f'ech-{trr_ds_name}', dependencies, None)
         self.reference_sensor = reference_sensor

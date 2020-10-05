@@ -7,8 +7,18 @@ from pioneer.das.api.samples import ImageCylinder
 import numpy as np
 
 class FlirCylindricalProjection(VirtualDatasource):
+    """Merges the images of three cameras in a single one."""
 
-    def __init__(self, reference_sensor, dependencies, radius=50.0, fov_h=np.deg2rad(210), fov_v=np.deg2rad(67.5), image_h=2000, image_v=int(2000*0.25), fusion_overlap_ratio=0.25):
+    def __init__(self, reference_sensor:str, dependencies:list, 
+                    radius=50.0, fov_h=np.deg2rad(210), fov_v=np.deg2rad(67.5), 
+                    image_h=2000, image_v=int(2000*0.25), 
+                    fusion_overlap_ratio=0.25):
+        """Constructor
+            Args:
+                reference_sensor (str): The name of the central camera (e.g. 'flir_bfc').
+                dependencies (list): A list of the image datasource names from left to right. 
+                    (e.g. ['flir_bfl_img','flir_bfc_img','flir_bfr_img'])
+        """
         super(FlirCylindricalProjection, self).__init__('img-cyl', dependencies, None, timestamps_source = dependencies[Pos.CENTER.value])
         self.reference_sensor = reference_sensor
         self.dependencies = dependencies

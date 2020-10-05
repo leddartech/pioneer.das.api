@@ -9,8 +9,15 @@ import copy
 import numpy as np
 
 class HDRWaveform(VirtualDatasource):
+    """High Dynamic Range waveforms are created by combining both sets of waveforms from FastTraces."""
 
-    def __init__(self, reference_sensor, dependencies):
+    def __init__(self, reference_sensor:str, dependencies:list):
+        """Constructor
+            Args:
+                reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
+                dependencies (list): A list of the datasource names. 
+                    The only element should be a FastTrace datasource (e.g. 'pixell_bfc_ftrr')
+        """
         trr_ds_name = dependencies[0].split('_')[-1].split('-')[-1]
         super(HDRWaveform, self).__init__(f'trr-hdr', dependencies, None)
         self.reference_sensor = reference_sensor
