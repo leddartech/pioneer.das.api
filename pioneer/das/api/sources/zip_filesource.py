@@ -8,6 +8,7 @@ from ruamel.std import zipfile
 
 import multiprocessing
 import numpy as np
+import pandas as pd
 import os
 import re
 import sys
@@ -50,15 +51,11 @@ class ZipFileSource(FileSource):
 
     def get_files(self, access):
 
-        # print(f"get_files access {os.path.basename(self.path)}... ")
-
         try:
             members = access( lambda archive: archive.infolist())
         except Exception as e:
             traceback.print_exc()
             raise e
-
-        # print(f"get_files access ok: {len(members)} files ")
 
         files = []
 
@@ -95,7 +92,9 @@ class ZipFileSource(FileSource):
             elif(name == Constants.TIMESTAMPS_CSV_PATTERN):
                 def f_TIMESTAMPS_CSV_PATTERN(archive):
                     with archive.open(name) as stream:
-                        sensor_ts = np.loadtxt(stream, dtype='u8', delimiter=' ', ndmin=2)
+                        # sensor_ts = np.loadtxt(stream, dtype='u8', delimiter=' ', ndmin=2)
+                        sensor_ts = pd.read_csv(stream, delimiter=" ", dtype='u8', header=None).values
+
                         timestamps = sensor_ts[:,0]
                         # check if ts is always go up, for imu data (more than 1 data per pkl file) the test is not complet -> to improve
                         if len(timestamps)>2 and (np.min(np.diff(timestamps.astype(np.int64)))<0):
@@ -108,18 +107,15 @@ class ZipFileSource(FileSource):
                         return time_of_issues, timestamps
 
                 time_of_issues, timestamps = access(f_TIMESTAMPS_CSV_PATTERN)
-            
+         
         if self.sort:
             files.sort()
             files = [s[1] for s in files]
-
-        # print("get_files ok!")
             
         return files, time_of_issues, timestamps, nb_data_per_pkl_file
 
 
     def set_mode(self, mode):
-
 
         def access_file(f):
             with zipfile.ZipFile(self.path, 'r') as archive:
@@ -152,9 +148,6 @@ class ZipFileSource(FileSource):
                         self.archive = zipfile.ZipFile(self.path, 'r')
                         print(f'\rZipFileSource fallback failed: {access_file_e}, retrying infinitely')
                         time.sleep(0.1)
-
-                    
-
 
         if mode == "lock":
             self.archive = zipfile.ZipFile(self.path, 'r')

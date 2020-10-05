@@ -20,13 +20,11 @@ class DatasourceWrapper(AbstractDatasource):
         self._cache_keys = deque(maxlen = cache_size)
         self.sample_factory, self.interpolator = sample_interp
         
-
     def invalidate_caches(self):
         self._cache = {}
         self._cache_keys = deque(maxlen = self._cache_keys.maxlen)
         self._interpolated = {}
         self._interpolated_keys = deque(maxlen = self._cache_keys.maxlen)
-
 
     @property
     def interpolator(self):
@@ -38,7 +36,6 @@ class DatasourceWrapper(AbstractDatasource):
         self._interpolated = {}
         self._interpolated_keys = deque(maxlen = self._cache_keys.maxlen)
 
-
     @property
     def timestamps(self):
         return self.ds.timestamps
@@ -48,13 +45,11 @@ class DatasourceWrapper(AbstractDatasource):
         return self.ds.time_of_issues
 
     def _add_interpolated_from_float_index(self, float_index:float):
-
         if self.interpolator is None:
             raise RuntimeError('Index is float {} : No inperpolator found'.format(float_index))
         raw = self.interpolator(self, float_index)
         self._interpolated_keys.append(float_index)
         v =  self._interpolated[float_index] = self.sample_factory(float_index, self.sensor[self.ds_type], raw, self.to_timestamp(float_index))
-
         return v
 
     def to_timestamp(self, float_index:float) -> int:
@@ -68,14 +63,12 @@ class DatasourceWrapper(AbstractDatasource):
         return float_index
 
     def get_at_timestamp(self, timestamp:Union[int, Iterable], interpolator:Callable=None) -> Union['Sample', List['Sample']]:
-
         try: #is timestamp iterable?
             return [self.get_at_timestamp(t, interpolator) for t in timestamp]
         except:
             float_index = self.to_float_index(timestamp)
             if interpolator is None:
                 return self[float_index]
-
             return self.sample_factory(float_index, self.sensor[self.ds_type], interpolator(self, float_index), timestamp)
 
     def __getitem__(self, key:Any) -> Union['Sample', List['Sample']]:

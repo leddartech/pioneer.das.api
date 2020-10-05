@@ -1,8 +1,7 @@
 from pioneer.common import clouds, peak_detector
 from pioneer.common.platform import parse_datasource_name
-from pioneer.common.trace_processing import TraceProcessingCollection, Desaturate, RemoveStaticNoise, ZeroBaseline, Smooth
+from pioneer.common.trace_processing import Desaturate, RemoveStaticNoise, Smooth, TraceProcessingCollection, ZeroBaseline
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
-
 from pioneer.das.api.samples import Echo, FastTrace
 
 from typing import Any
@@ -22,7 +21,6 @@ class Echoes_from_Traces(VirtualDatasource):
         self.amplitude_scaling = 1
 
         self.trace_processing = None
-        
 
     def _set_trace_processing(self):
         sensor = self.datasources[self.dependencies[0]].sensor
@@ -61,8 +59,8 @@ class Echoes_from_Traces(VirtualDatasource):
     def get_echoes_from_fast_traces(self, processed_fast_traces):
         # TODO: improve merging by replacing the saturated lines and columns
         sensor = self.datasources[self.dependencies[0]].sensor
-        echoes_high, additionnal_fields_high = self.get_echoes(processed_fast_traces[sensor.FastTraceType.MidRange])
-        echoes_low, additionnal_fields_low = self.get_echoes(processed_fast_traces[sensor.FastTraceType.LowRange])
+        echoes_high, additionnal_fields_high = self.get_echoes(processed_fast_traces['high'])
+        echoes_low, additionnal_fields_low = self.get_echoes(processed_fast_traces['low'])
         echoes = {}
         for field in ['indices','distances','amplitudes']:
             echoes[field] = np.hstack([echoes_high[field], echoes_low[field]])

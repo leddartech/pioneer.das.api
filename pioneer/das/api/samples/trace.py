@@ -14,9 +14,9 @@ class Trace(Sample):
         if self._raw is None:
             self._raw = super(Trace, self).raw
             
-            self._raw['time_base_delays'] = self.datasource.sensor.time_base_delays
-            self._raw['distance_scaling'] = self.datasource.sensor.distance_scaling
-            self._raw['trace_smoothing_kernel'] = self.datasource.sensor.get_trace_smoothing_kernel()
+            for attribute in ['time_base_delays', 'distance_scaling', 'trace_smoothing_kernel']:
+                if attribute not in self._raw and hasattr(self.datasource.sensor, attribute):
+                    self._raw[attribute] = getattr(self.datasource.sensor, attribute)
 
         return self._raw
 
@@ -60,3 +60,9 @@ class Trace(Sample):
             if size > 5 and position > 2 and position + size + 2 < traces['data'].shape[-1]:
                 flags[channel] = 1
         return flags
+
+    @property
+    def max_range(self):
+        raw = self.raw
+        trace_lenght = raw['data'].shape[-1]
+        return raw['time_base_delays'] + trace_lenght*raw['distance_scaling']
