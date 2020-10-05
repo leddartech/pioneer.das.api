@@ -287,6 +287,8 @@ class Echo(Sample):
         coords_img = np.stack((vv,hh, np.arange(0, self.v*self.h).reshape(self.v, self.h)), axis=2)
         coords_img_tf = self.transform_image(coords_img)
 
+        return np.argwhere(coords_img_tf[...,2] == index)[0]
+
     def clip_to_fov_mask(self, pts:np.ndarray) -> np.ndarray:
                 
         lcax = self.datasource.sensor
