@@ -7,7 +7,7 @@ print(setuptools.find_packages())
 
 setuptools.setup(
     name="pioneer_das_api", # Replace with your own username
-    version="0.1.0",
+    version="0.2.0",
     author="Leddartech",
     description="Pioneer's das api",
     long_description=long_description,
@@ -36,7 +36,7 @@ setuptools.setup(
         'opencv-python',
         'open3d',
         'transforms3d',
-        'pioneer-common',
+        'pioneer-common>=0.2.0',
         'six',
         'ruamel.std.zipfile',
         'pandas',
