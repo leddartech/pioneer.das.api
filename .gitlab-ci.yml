@@ -9,6 +9,11 @@ build-package:
     - pip3 install --upgrade keyrings.alt 
     - python3 setup.py bdist_wheel
     - python3 -m twine upload --repository gitlab dist/pioneer_das_api-${CI_COMMIT_TAG}-py3-none-any.whl --config-file /tmp/.pypirc
+    - python3 setup.py install --user
     - python3 setup.py build_sphinx
   only:
     - tags
+
+  artifacts:
+    paths:
+      - build/sphinx/html/*
