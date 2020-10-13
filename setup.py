@@ -1,8 +1,5 @@
 import setuptools
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
-
 from sphinx.setup_command import BuildDoc
 cmdclass = {'build_sphinx': BuildDoc}
 
@@ -11,8 +8,6 @@ setuptools.setup(
     version="0.3.0",
     author="Leddartech",
     description="Pioneer's das api",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
     packages=[
         'pioneer', 
         'pioneer.das', 
