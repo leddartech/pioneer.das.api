@@ -5,7 +5,7 @@ cmdclass = {'build_sphinx': BuildDoc}
 
 setuptools.setup(
     name="pioneer_das_api", # Replace with your own username
-    version="0.3.0",
+    version="0.3.0.dev0",
     author="Leddartech",
     description="Pioneer's das api",
     packages=[
