@@ -1,6 +1,8 @@
+import pioneer.common.constants as Constants
 from pioneer.das.api.datasources import DataSource
 from pioneer.das.api.loaders import pickle_loader, txt_loader, image_loader
 
+import re
 from six import string_types
 
 def _endswith(s, patterns):
@@ -8,6 +10,15 @@ def _endswith(s, patterns):
     if isinstance(patterns, string_types):
         patterns = [patterns,]
     return any([s.endswith(p) for p in patterns])
+
+def try_all_patterns(name):
+    for p in [Constants.NUMBERED_PICKLE_PATTERN,
+              Constants.NUMBERED_PNG_PATTERN,
+              Constants.NUMBERED_JPG_PATTERN]:
+        match = re.match(p, name)
+        if match:
+            return match, p
+    return None, None
 
 class FileSource(DataSource):
 

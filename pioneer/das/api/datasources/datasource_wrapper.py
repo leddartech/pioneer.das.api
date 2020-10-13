@@ -11,7 +11,7 @@ import numpy as np
 
 class DatasourceWrapper(AbstractDatasource):
 
-    def __init__(self, sensor:'Sensor', ds_type:str, ds:FileSource, sample_interp:Tuple[Any, Any], cache_size:int = 100):
+    def __init__(self, sensor:'Sensor', ds_type:str, ds:FileSource, sample_interp:Tuple[Any, Any], cache_size:int=100):
         super(DatasourceWrapper, self).__init__(sensor, ds_type)
         self.sensor = sensor
         self.ds = ds
@@ -19,6 +19,7 @@ class DatasourceWrapper(AbstractDatasource):
         self._cache = {}
         self._cache_keys = deque(maxlen = cache_size)
         self.sample_factory, self.interpolator = sample_interp
+        self.use_cache = cache_size > 0
         
     def invalidate_caches(self):
         self._cache = {}
@@ -74,9 +75,11 @@ class DatasourceWrapper(AbstractDatasource):
     def __getitem__(self, key:Any) -> Union['Sample', List['Sample']]:
 
         def try_get_from_cache_or_make_room(i, cache, cache_keys):
+            if not self.use_cache:
+                return None
             n = len(cache_keys)
             if i not in cache_keys:
-                if n  >= cache_keys.maxlen:
+                if n >= cache_keys.maxlen:
                     k = cache_keys.popleft()
                     s = cache.pop(k)
                     del s
@@ -95,8 +98,11 @@ class DatasourceWrapper(AbstractDatasource):
             v = try_get_from_cache_or_make_room(i, self._cache, self._cache_keys)
 
             if v is None:
-                self._cache_keys.append(i)
-                v = self._cache[i] = self.sample_factory(i, self.sensor[self.ds_type])
+                if self.use_cache:
+                    self._cache_keys.append(i)
+                    v = self._cache[i] = self.sample_factory(i, self.sensor[self.ds_type])
+                else:
+                    v = self.sample_factory(i, self.sensor[self.ds_type])
                 if self.sensor.platform.is_live():
                     # When the platform is live the fifo could fill up before data is accessed, 
                     # so we must avoid relying on it to get Sample.raw, Sample.timestamp

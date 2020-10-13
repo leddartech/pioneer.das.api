@@ -98,14 +98,14 @@ class Sensor(object):
             self.datasources[ds_type] = ds
         
         else:
-            dsw = DatasourceWrapper(self, ds_type, ds, self.factories[ds_type] if ds_type in self.factories else (Sample, nearest_interpolator), cache_size = cache_size)
-            dsw = DatasourceWrapper(self, ds_type, ds, (Box3d, nearest_interpolator)) if 'box3d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Box2d, nearest_interpolator)) if 'box2d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Poly2d, nearest_interpolator)) if 'poly2d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Seg2d, nearest_interpolator)) if 'seg2d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Seg2dImage, nearest_interpolator)) if 'seg2dimg' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Seg3d, nearest_interpolator)) if 'seg3d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Lane, nearest_interpolator)) if 'lane' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, self.factories[ds_type] if ds_type in self.factories else (Sample, nearest_interpolator), cache_size=cache_size)
+            dsw = DatasourceWrapper(self, ds_type, ds, (Box3d, nearest_interpolator), cache_size=cache_size) if 'box3d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Box2d, nearest_interpolator), cache_size=cache_size) if 'box2d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Poly2d, nearest_interpolator), cache_size=cache_size) if 'poly2d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Seg2d, nearest_interpolator), cache_size=cache_size) if 'seg2d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Seg2dImage, nearest_interpolator), cache_size=cache_size) if 'seg2dimg' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Seg3d, nearest_interpolator), cache_size=cache_size) if 'seg3d' in ds_type else dsw
+            dsw = DatasourceWrapper(self, ds_type, ds, (Lane, nearest_interpolator), cache_size=cache_size) if 'lane' in ds_type else dsw
             self.datasources[ds_type] = dsw
 
     def load_intrinsics(self, intrinsics_config:str):

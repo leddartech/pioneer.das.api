@@ -12,3 +12,26 @@ from pioneer.das.api.sensors.carla_imu import CarlaIMU
 from pioneer.das.api.sensors.radar_ti import RadarTI
 from pioneer.das.api.sensors.lcax import LCAx
 from pioneer.das.api.sensors.lca3 import LCA3
+
+
+SENSOR_FACTORY = {  
+    'lca2': LCAx,
+    'pixell': Pixell,
+    'lca3': LCA3,
+    'eagle': LCA3,
+    'flir': Camera,
+    'camera': Camera,
+    'sbgekinox': ImuSbgEkinox,
+    'vlp16': MotorLidar,
+    'ouster64': MotorLidar,
+    'peakcan': Sensor,
+    'radarTI': RadarTI,
+    'webcam': Camera,
+    'encoder': Encoder,
+    'mti': MTi,
+    'carlagps': CarlaGPS,
+    'carlaimu': CarlaIMU,
+    'leddar': LCAx,
+    'lidar': MotorLidar,
+    'any': Sensor,
+}

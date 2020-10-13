@@ -1,8 +1,7 @@
-from pioneer.common.logging_manager import LoggingManager
-from pioneer.das.api.sources.filesource import FileSource
-from pioneer.das.api.loaders import pickle_loader
-
 import pioneer.common.constants as Constants
+from pioneer.common.logging_manager import LoggingManager
+from pioneer.das.api.sources.filesource import FileSource, try_all_patterns
+from pioneer.das.api.loaders import pickle_loader
 
 from ruamel.std import zipfile
 
@@ -17,19 +16,8 @@ import time
 import traceback
 import yaml
 
-def try_all_patterns(name):
-    for p in [Constants.NUMBERED_PICKLE_PATTERN,
-              Constants.NUMBERED_PNG_PATTERN,
-              Constants.NUMBERED_JPG_PATTERN]:
-        match = re.match(p, name)
-        if match:
-            return match, p
-    return None, None
-
 class ZipFileSource(FileSource):
-
-    """Loads a list of files from a zip archive.
-    """
+    """Loads a list of files from a zip archive."""
 
     def __init__(self, path, pattern=None, sort=True, loader=None,
                  check_timestamps=True, mode="lock"):
