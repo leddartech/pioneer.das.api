@@ -1,44 +1,29 @@
 from pioneer.common import platform as platform_utils
 from pioneer.common.logging_manager import LoggingManager
-from pioneer.das.api.samples.sample import Sample
-from pioneer.das.api.sensors.lcax import LCAx
-from pioneer.das.api.sensors.lca3 import LCA3
-from pioneer.das.api.sensors.pixell import Pixell
-from pioneer.das.api.sensors.motor_lidar import MotorLidar
-from pioneer.das.api.sensors.camera import Camera
-from pioneer.das.api.sensors.sensor import Sensor
-from pioneer.das.api.sensors.imu_sbg_ekinox import ImuSbgEkinox
-from pioneer.das.api.sensors.encoder import Encoder
-from pioneer.das.api.sensors.carla_gps import CarlaGPS
-from pioneer.das.api.sensors.carla_imu import CarlaIMU
-from pioneer.das.api.sensors.radar_ti import RadarTI
-from pioneer.das.api.sensors.mti import MTi
-from pioneer.das.api.sources import ZipFileSource
 from pioneer.das.api.datasources import AbstractDatasource
-import pioneer.das.api.datasources.virtual_datasources as virtual_datasources
+from pioneer.das.api.datasources import virtual_datasources
+from pioneer.das.api.samples.sample import Sample
+from pioneer.das.api.sensors import Sensor
+from pioneer.das.api.sensors import SENSOR_FACTORY
+from pioneer.das.api.sources import DirSource, ZipFileSource
 
-from collections import OrderedDict
 from typing import Callable, Iterator, Union, Optional, List, Dict, Mapping, Tuple, Any
 
 import ast
-import copy
-import fnmatch
 import glob
 import numbers
 import numpy as np
 import os
 import pandas as pd
-import pickle
-import zipfile
 import six
 try:
     from StringIO import StringIO
 except ImportError:
     from io import StringIO
 import sys
-import time
 import tqdm
 import yaml
+import zipfile
 
 def parse_yaml_string(ys):
     fd = StringIO(ys)
@@ -52,27 +37,6 @@ except ImportError:
     LoggingManager.instance().warning('Numba is not installed, you may have MemoryErrors when '
                   'synchronizing data sources.')
     HAVE_NUMBA = False
-
-SENSOR_FACTORY = {  'lca2': LCAx,
-                    'pixell': Pixell,
-                    'lca3': LCA3,
-                    'eagle': LCA3,
-                    'flir': Camera,
-                    'camera': Camera,
-                    'sbgekinox': ImuSbgEkinox,
-                    'vlp16': MotorLidar,
-                    'ouster64': MotorLidar,
-                    'peakcan': Sensor,
-                    'radarTI': RadarTI,
-                    'webcam': Camera,
-                    'encoder': Encoder,
-                    'mti': MTi,
-                    'carlagps': CarlaGPS,
-                    'carlaimu': CarlaIMU,
-                    'leddar': LCAx,
-                    'lidar': MotorLidar,
-                    'any': Sensor,}
-
 
 def closest_timestamps_np(ref_ts:np.ndarray, target_ts:np.ndarray, tol:Union[float, int]):
     """Finds indices of timestamps pairs where a value in 'target_ts' is whithin 'tol' of a value 'ref_ts'
@@ -106,31 +70,23 @@ def closest_timestamps_np(ref_ts:np.ndarray, target_ts:np.ndarray, tol:Union[flo
 closest_timestamps = closest_timestamps_np
 
 if HAVE_NUMBA:
-    @numba.jit
+    @numba.njit
     def closest_timestamps_numba(ref_ts, target_ts, tol):
-        """ Numba-optimized version of closest_timestamps_np()
-        """
+        """ Numba-optimized version of closest_timestamps_np()"""
         n_ref = ref_ts.shape[0]
-        n_target_ts = target_ts.shape[0]
         ref_ts = ref_ts.astype(np.int64)
         target_ts = target_ts.astype(np.int64)
-
-        indices = np.empty(n_ref, dtype=np.int64)
-        indices.fill(-1)
+        indices = np.full(n_ref, -1)
 
         for i_ref in range(n_ref):
-            min_diff = np.inf
-            min_idx = -1
-            for i_target_ts in range(n_target_ts):
-                diff = np.abs(ref_ts[i_ref] - target_ts[i_target_ts])
-                if diff < min_diff:
-                    min_diff = diff
-                    min_idx = i_target_ts
-            if min_diff > tol:
-                min_idx = -1
+            diff = np.abs(ref_ts[i_ref] - target_ts)
+            min_idx = np.argmin(diff)
+            if diff[min_idx] > tol:
+                continue
             indices[i_ref] = min_idx
 
         return indices
+        
     closest_timestamps = closest_timestamps_numba
 
 class Platform(object):
@@ -139,7 +95,7 @@ class Platform(object):
        live sensors, while an offline platform can be used to extract data from a recording. 
     """
 
-    def __init__(self, dataset:Optional[str] = None, configuration:Optional[str] = None, include:Optional[list] = None, ignore:Optional[list] = [], progress_bar:bool=True, default_cache_size:int=100):
+    def __init__(self, dataset:Optional[str]=None, configuration:Optional[str]=None, include:Optional[list]=None, ignore:Optional[list]=[], progress_bar:bool=True, default_cache_size:int=100):
         """Constructor
 
            Args:
@@ -184,9 +140,15 @@ class Platform(object):
         else:
             self.yml = parse_yaml_string(self.configuration)
 
+        self.include = include
+        self.ignore = ignore
+
         # If there is a way to use wildcards here instead, it would be better
         include = self.yml.keys() if include is None else include
         to_keep, to_pop = [], []
+        for additionnal_key in ['virtual_datasources', 'synchronization']:
+            if additionnal_key in self.yml:
+                to_keep.append(additionnal_key)
         for sensor in self.yml:
             for inc in include:
                 if inc in sensor:
@@ -326,8 +288,7 @@ class Platform(object):
                     LoggingManager.instance().warning(f"The virtual datasource {virtual_ds_name} could not be added.")
             else:
                 LoggingManager.instance().warning(f"The virtual datasource {virtual_ds_name} does not exist.")
-
-
+        
     def __getitem__(self, label:str) -> Union[Sensor, AbstractDatasource]:
         """Implement operator '[]'
 
@@ -386,30 +347,25 @@ class Synchronized(object):
         """Synchronizes all datasources in the sync_labels list together. The first 
            datasource in the list will be considered the 'reference datasource' 
         """
-        
         self.all_ts = [(c, self.platform[c].timestamps) for c in self.sync_labels]
         self.ref_ts = dict(self.all_ts)[self.ref_ds_name]
-
         mappings = []
 
         all_ts_tqdm = tqdm.tqdm(self.all_ts, 'Synchronizing') if self.platform.progress_bar else self.all_ts
         for name, sensor_ts in all_ts_tqdm:
-            # compute the difference between all ref_sensor and other sensor's
-            # timestamps using broadcasting
+            
             if sensor_ts.size == 0:
                 raise RuntimeError('Sensor {} has 0 timestamps, could not \
                 synchronize arrays, please exclude this label from list'
                 .format(name))
-
+            
             idx = closest_timestamps(self.ref_ts, sensor_ts, self.tolerance_us)
-
             mappings.append(idx)
 
         return np.stack(mappings, axis=1)
 
     def expand_wildcards(self, labels:List[str]):
-        """See also: platform.expand_widlcards()
-        """ 
+        """See also: platform.expand_widlcards()""" 
         return platform_utils.expand_wildcards(labels, self.keys())
 
     def keys(self):
@@ -506,7 +462,6 @@ class Synchronized(object):
 
     def timestamps(self, index:int) -> np.ndarray:
         """Returns timestamps for all synchronized datasources for a given index"""
-
         ts = []
         for source_i, sample_i in enumerate(self.sync_indices[index, :]):
             source = self.platform[self.sync_labels[source_i]]
@@ -536,19 +491,19 @@ class Synchronized(object):
 class SynchronizedGroup(Synchronized):
     """Groups multiple synchronized platforms in a single one
         Args:
-            -datasets: Can be either a list of paths for the datasets to group, 
-                or a single string for the path of a directory that contains the datasets to group.
+            -datasets: Can be either a list of paths for the datasets to be grouped, 
+                or a single string for the path of a directory that contains the datasets that will all be grouped.
             -sync_labels: see Synchronized
             -interp_labels: see Synchronized
             -tolerance_us: see Synchronized
-
-        Note: For performance and memory concerns, only the platform for a single dataset is loaded at a time.
-            When trying to access the samples from another dataset than the one that is currently loaded,
-            we have to initialize the new platform and synchronize it, which takes a few seconds.
-            For this reason, this class is currently not usable for random access, but works better for sequential access.
+            -include: see Platform
+            -ignore: see Platform
+            -preload: If True, all platforms will be initialized and synchronized at start. 
+                Good for random or non-sequential data access, but initialization is slower.
     """
 
-    def __init__(self, datasets:Union[str,list], sync_labels:List[str]=[], interp_labels:List[str]=[], tolerance_us:Union[float, int]=None):
+    def __init__(self, datasets:Union[str,list], sync_labels:List[str]=[], interp_labels:List[str]=[], tolerance_us:Union[float, int]=None,
+                     include:Optional[list]=None, ignore:Optional[list]=[], preload:bool=False):
 
         if type(datasets) == str:
             datasets = glob.glob(datasets)
@@ -557,84 +512,95 @@ class SynchronizedGroup(Synchronized):
         self.sync_labels = sync_labels
         self.interp_labels = interp_labels
         self.tolerance_us = tolerance_us
+        self.include = include
+        self.ignore = ignore
+        self.preload = preload
 
-        self.loaded_dataset_index = None
+        self.cached_synchronized = [None for d in self.datasets]
+       
+        # The first platform is synchronized at start
+        sync0 = self.get_synchronized(0, progress_bar=True)
+        self.sync_labels = sync0.sync_labels
+        self.interp_labels = sync0.interp_labels
+        self.tolerance_us = sync0.tolerance_us
 
         self._preload_lenghts()
 
     def _preload_lenghts(self):
         """We have to pre-calculate the lenghts of each dataset, so we know which one to use when using __getitem__"""
 
-        self.lenghts = []        
-        self._load_synchronized(0)
-
-        # Get the actual values (could have been overriden by the platform.yml)
-        self.sync_labels = self.synchronized_platform.sync_labels
-        self.interp_labels = self.synchronized_platform.interp_labels
-        self.tolerance_us = self.synchronized_platform.tolerance_us
-
-        to_pop = []
+        self.lenghts = [] 
         for dataset_index in tqdm.tqdm(range(len(self.datasets)), 'Grouping synchronized platforms'):
             try:
-                l = self._get_dataset_lenght(dataset_index)
-                self.lenghts.append(l)
+                if self.preload:
+                    l = self._get_dataset_lenght(dataset_index)
+                else:
+                    l = self._get_dataset_lenght_fast(dataset_index)
             except:
+                l = 0
                 LoggingManager.instance().warning(f"The dataset {self.datasets[dataset_index]} could not be added to the SynchronizedGroup.")
-                to_pop.append(dataset_index)
 
-        for i in to_pop:
-            self.datasets.pop(i)
+            self.lenghts.append(l)
 
         self.cumsum_lenghts = np.cumsum([0]+self.lenghts[:-1])
 
-    def _load_synchronized(self, dataset_index):
-        if dataset_index == self.loaded_dataset_index:
-            return
-        try:
-            pf = Platform(self.datasets[dataset_index])
-            sync = pf.synchronized(self.sync_labels, self.interp_labels, self.tolerance_us)
-            if dataset_index > 0:
-                assert sync.keys() == self.synchronized_platform.keys()
-            self.synchronized_platform = sync
-            self.loaded_dataset_index = dataset_index
-        except:
-            LoggingManager.instance().warning(f"There is an issue with the dataset {self.datasets[dataset_index]}. It was removed from the SynchronizedGroup.")
-            self.datasets.pop(dataset_index)
-            self.lenghts.pop(dataset_index)
-            self.cumsum_lenghts = np.cumsum([0]+self.lenghts[:-1])
+    def get_synchronized(self, dataset_index, progress_bar=False):
+        if self.cached_synchronized[dataset_index] is None:
+            try:
+                pf = Platform(self.datasets[dataset_index], include=self.include, ignore=self.ignore, progress_bar=progress_bar, default_cache_size=0)
+                sync = pf.synchronized(self.sync_labels, self.interp_labels, self.tolerance_us)
+                self.cached_synchronized[dataset_index] = sync
+            except:
+                LoggingManager.instance().warning(f"There is an issue with the dataset {self.datasets[dataset_index]}.")
+        return self.cached_synchronized[dataset_index]
 
     def _get_dataset_lenght(self, dataset_index):
-        """
-        For better performance, we don't initialize each dataset and use its len() method.
-        Instead, we only load the timestamps.csv files and check the lenght of the matching timestamps.
-        """
+        sync = self.get_synchronized(dataset_index)
+        return len(sync)
 
-        if dataset_index in self.lenghts:
-            return self.lenghts[dataset_index]
+    def _get_dataset_lenght_fast(self, dataset_index):
+        """
+        This is a faster way to get the lenght of a synchronized platform, without initalizing it.
+        We directly load the timestamp.csv files and check how many matching frames are found.
+        """
+        # If the synchronized platform is already cached, get its lenght
+        if self.cached_synchronized[dataset_index] is not None:
+            return len(self.cached_synchronized[dataset_index])
 
-        files_with_ts = []
+        # Here, we determine for which datasources we have to load a timestamp.csv file
+        datasources_with_ts = []
         for ds_name in self.sync_labels:
-            datasource = self.synchronized_platform.platform[ds_name]
+            datasource = self.cached_synchronized[0].platform[ds_name]
             if isinstance(datasource, virtual_datasources.VirtualDatasource):
                 continue
-            
-            files_with_ts.append(f"{ds_name}.zip")
+            datasources_with_ts.append(f"{ds_name}")
 
         ref_ts = []
         sensor_ts = []
         mappings = []
 
-        for zipname in files_with_ts:
-            path = f"{self.datasets[dataset_index]}/{zipname}"
-            with zipfile.ZipFile(path, 'r') as zf:
-                with zf.open('timestamps.csv') as ts:
-                    ts = np.loadtxt(ts, dtype='u8', delimiter=' ', ndmin=2)[:,0]
+        for ds_name in datasources_with_ts:
 
-                    if ref_ts == []:
-                        ref_ts = ts
+            # zipped case
+            if os.path.exists(f"{self.datasets[dataset_index]}/{ds_name}.zip"):
+                path = f"{self.datasets[dataset_index]}/{ds_name}.zip"
+                with zipfile.ZipFile(path, 'r') as zf:
+                    with zf.open('timestamps.csv') as stream:
+                        ts = pd.read_csv(stream, delimiter=" ", dtype='u8', header=None).values[:,0]
 
-                    idx = closest_timestamps(ref_ts, ts, self.tolerance_us)
-                    mappings.append(idx)
+            # unzipped case
+            elif os.path.exists(f"{self.datasets[dataset_index]}/{ds_name}/timestamps.csv"):
+                path = f"{self.datasets[dataset_index]}/{ds_name}/timestamps.csv"
+                with open(path) as stream:
+                    ts = pd.read_csv(stream, delimiter=" ", dtype='u8', header=None).values[:,0]
+            else:
+                continue
+
+            if ref_ts == []:
+                ref_ts = ts
+
+            idx = closest_timestamps(ref_ts, ts, self.tolerance_us)
+            mappings.append(idx)
         
         mappings = np.stack(mappings, axis=1)
         mappings = mappings[(mappings != -1).all(axis=1), :]
@@ -646,7 +612,7 @@ class SynchronizedGroup(Synchronized):
 
     @property
     def platform(self):
-        return self.synchronized_platform.platform
+        return self.cached_synchronized[0].platform
  
     def timestamps(self, index:int):
         raise RuntimeError('not implemented!')
@@ -661,10 +627,14 @@ class SynchronizedGroup(Synchronized):
         raise RuntimeError('not implemented!')
 
     def keys(self):
-        return self.synchronized_platform.keys()
+        return self.cached_synchronized.keys()
 
     def _group_index(self, index:int):
-
+        """For a given index from 0 to the summed lenght of all grouped datasets,
+        finds in which dataset to get the samples and what is the corresponding index in this dataset.
+        Ex: If we grouped two datasets of lenght 1000 each, then _group_index(1500) would return 
+            the pair 1, 500. So, the samples are at index 500 in the second (dataset_index=1) dataset.
+        """
         if index > len(self) or index < 0:
             raise IndexError("Index out of bounds")
         
@@ -675,7 +645,6 @@ class SynchronizedGroup(Synchronized):
 
     def __getitem__(self, index:Union[int, slice, Iterator[int]]) ->Dict[str, Sample]:
 
-        # Convert index to a list
         list_index = []
         try:
             for i in index:
@@ -689,8 +658,7 @@ class SynchronizedGroup(Synchronized):
         merged = None
         for i in list_index:
             dataset_index, idx = self._group_index(i)
-            self._load_synchronized(dataset_index)
-            samples = self.synchronized_platform[idx]
+            samples = self.get_synchronized(dataset_index)[idx]
             if merged is None:
                 merged = {k:[v] for k,v in samples.items()}
             else:
@@ -886,32 +854,28 @@ class Sensors(object):
         self._sensors[name].load_extrinsics(extrinsics_folder)
 
     def _load_offline_datasources(self, name:str):
-        """A dataset's zip files are named in a structured fashion.
 
-            The expected format is f"{sensor}_{location}_{datasource}.zip" 
-            where 'sensor' represents the sensor type, 'location' represents 
-            a location hint that must be unique across a sensors of the same type
-            and 'datasource' is the sensor's datasource type (a sensor can have 
-            multiple datasources)
+        archives = glob.glob(os.path.join(self.platform.dataset, name + '_*'))
+        for archive in [os.path.basename(f) for f in archives]:
 
-            For example, 'lca2_bfl_ech.zip' would contain echoes from a Leddartech's 
-            LCA2 positioned at the 'bottom front left' of the vehicle.
+            if archive.endswith('.zip'):
+                # remove the .zip and extracts the 'datasource' suffix:
+                ds_name = os.path.splitext(archive)[0].split('_')[-1]
+                try:
+                    ds = ZipFileSource(os.path.join(self.platform.dataset, archive))
+                    self._sensors[name].add_datasource(ds, ds_name, cache_size = self.platform.default_cache_size)
+                except:
+                    LoggingManager.instance().warning(f'Zip file for {name}_{ds_name} could not be loaded.')
+                    continue
 
-            Args:
-                name: the sensor name (e.g. 'lca2_bfl')
-        """
-
-        files = glob.glob(os.path.join(self.platform.dataset, name + '_*.zip'))
-
-        for filename in [os.path.basename(f) for f in files]:
-            # remove the .zip and extracts the 'datasource' suffix:
-            ds_name = os.path.splitext(filename)[0].split('_')[-1]
-            try:
-                ds = ZipFileSource(os.path.join(self.platform.dataset, filename))
-                self._sensors[name].add_datasource(ds, ds_name, cache_size = self.platform.default_cache_size)
-            except:
-                LoggingManager.instance().warning(f'Zip file for {name}_{ds_name} could not be loaded.')
-                continue
+            else:
+                ds_name = archive.split('_')[-1]
+                try:
+                    ds = DirSource(os.path.join(self.platform.dataset, archive))
+                    self._sensors[name].add_datasource(ds, ds_name, cache_size = self.platform.default_cache_size)
+                except:
+                    LoggingManager.instance().warning(f'Data directory for {name}_{ds_name} could not be loaded.')
+                    continue
 
     def override_sensor_extrinsics(self, name:str, extrinsics_folder:str):
         """Override the extrinsics that we loaded from the platfrom yml.

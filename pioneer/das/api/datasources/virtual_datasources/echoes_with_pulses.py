@@ -11,7 +11,7 @@ import numpy as np
 class EchoesWithPulses(VirtualDatasource):
     """Echoes, with a number of data points from the waveforms corresponding to the pulses that resulted in each echo."""
 
-    def __init__(self, reference_sensor:str, dependencies:list, pulse_sample_size:int=10, zero_baseline:bool=False):
+    def __init__(self, reference_sensor:str, dependencies:list, pulse_sample_size:int=10, zero_baseline:bool=True):
         """Constructor
             Args:
                 reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
@@ -22,8 +22,6 @@ class EchoesWithPulses(VirtualDatasource):
                     For example, with pulse_sample_size=10, the pulses will be 21 points, because the highest point is
                     taken in addition to the 10 points before and the 10 points after.
                 zero_baseline (bool): If True, the baseline of the waveforms are re-calibrated to be around zero.
-
-            Note: The pulses are stored under the 'pulses' key in the raw dictionnary. 
         """
         super(EchoesWithPulses, self).__init__(f'ech-pulses', dependencies, None)
         self.reference_sensor = reference_sensor
@@ -64,19 +62,27 @@ class EchoesWithPulses(VirtualDatasource):
         padded_traces = np.pad(full_traces,((0,0),(self.pulse_sample_size,self.pulse_sample_size+1)))
         pulses = np.vstack([padded_traces[ind,echoes_positions_in_traces+ind_pulse+self.pulse_sample_size] for ind_pulse in np.arange(-self.pulse_sample_size, self.pulse_sample_size+1, dtype=int)]).T
 
+        indices = np.repeat(echoes_sample.indices[...,None], pulses.shape[-1], axis=-1).flatten()
+        delta = self.pulse_sample_size*raw_traces['distance_scaling']
+        deltas = np.repeat(np.linspace(-delta, delta, pulses.shape[-1])[None,...], pulses.shape[0], axis=0)
+        distances = (np.repeat(echoes_sample.distances[...,None], pulses.shape[-1], axis=-1) - deltas).flatten()
+        amplitudes = pulses.flatten()
+        timestamps = (np.repeat(echoes_sample.timestamps[...,None], pulses.shape[-1], axis=-1)).flatten()
+        flags = (np.repeat(echoes_sample.flags[...,None], pulses.shape[-1], axis=-1)).flatten()
+
+        keep = np.where((distances > 0) & (amplitudes > 0))[0]
+
         raw = clouds.to_echo_package(
-            indices = echoes_sample.indices, 
-            distances = echoes_sample.distances, 
-            amplitudes = echoes_sample.amplitudes,
-            timestamps = echoes_sample.timestamps, 
-            flags = echoes_sample.flags, 
+            indices = indices[keep], 
+            distances = distances[keep], 
+            amplitudes = amplitudes[keep],
+            timestamps = timestamps[keep], 
+            flags = flags[keep], 
             timestamp = timestamp,
             specs = {"v" : specs['v'], "h" : specs['h'], "v_fov" : specs['v_fov'], "h_fov" : specs['h_fov']},
             distance_scale = 1.0, 
             amplitude_scale = 1.0, 
             led_power = 1.0, 
             eof_timestamp = None)
-
-        raw['pulses'] = pulses
         
         return Echo(key, self, raw, timestamp)
