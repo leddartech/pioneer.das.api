@@ -1,8 +1,5 @@
 import setuptools
 
-from sphinx.setup_command import BuildDoc
-cmdclass = {'build_sphinx': BuildDoc}
-
 setuptools.setup(
     name="pioneer_das_api", # Replace with your own username
     version="0.3.0.dev0",
