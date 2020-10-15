@@ -16,6 +16,6 @@ jobs:
       env:
         ACCESS_TOKEN: 0a526406b929707b4d5a0b554ad58d4861c5d484
         BASE_BRANCH: master
-        BRANCH: master 
+        BRANCH: gh_pages 
         FOLDER: docs/_build/html
-        BUILD_SCRIPT: pip install .[all] && make docs-build && touch docs/_build/html/.nojekyll
+        BUILD_SCRIPT: pip install .[all] && make html && touch docs/_build/html/.nojekyll
