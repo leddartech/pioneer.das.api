@@ -148,18 +148,9 @@ CATEGORIES['maskrcnn'] = {
 CATEGORIES['detectron'] = CATEGORIES['maskrcnn']
 CATEGORIES['detectron']['81'] = {'name':'road','color':(168, 130, 180)}
 
-
-CATEGORIES['tracebox2dnet'] = {
-    '0':{'name':'person','color':(242, 132, 48)},
+CATEGORIES['toynet'] = {
+    '0':{'name':'pedestrian','color':(242, 132, 48)},
     '1':{'name':'vehicule','color':(241, 48, 242)},
-}
-CATEGORIES['traceseg2dnet'] = {
-    '0':{'name':'person','color':(242, 132, 48)},
-    '1':{'name':'vehicule','color':(241, 48, 242)},
-}
-CATEGORIES['tracebox3dnet'] = {
-    '0':{'name':'person','color':(242, 132, 48)},
-    '1':{'name':'car','color':(241, 48, 242)},
 }
 
 CATEGORIES['carla'] = {

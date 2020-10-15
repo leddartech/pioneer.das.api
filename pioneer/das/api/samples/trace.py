@@ -26,6 +26,11 @@ class Trace(Sample):
         raw = self.raw['data']
         return raw.reshape(specs['v'], specs['h'], raw.shape[-1])
 
+    def processed_array(self, trace_processing:Callable):
+        specs = self.specs
+        processed = self.processed(trace_processing)['data']
+        return processed.reshape(specs['v'], specs['h'], processed.shape[-1])
+
     @property
     def specs(self):
         # override the sensor specs if they are present in the YAML config file

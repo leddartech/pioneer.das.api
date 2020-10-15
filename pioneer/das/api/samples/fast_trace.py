@@ -32,6 +32,15 @@ class FastTrace(Trace):
         array[1,:,:rawLow.shape[-1]] = rawLow
         return array.reshape((2, specs['v'], specs['h'], array.shape[-1]))
 
+    def processed_array(self, trace_processing:Callable):
+        specs = self.specs
+        processedLow = self.processed(trace_processing)['low']['data']
+        processedMid = self.processed(trace_processing)['high']['data']
+        array = np.zeros((2, specs['v']*specs['h'], processedMid.shape[-1]))
+        array[0] = processedMid
+        array[1,:,:processedLow.shape[-1]] = processedLow
+        return array.reshape((2, specs['v'], specs['h'], array.shape[-1]))
+
     def processed(self, trace_processing:Callable):
         processed_traces = {}
         raw_copy = copy.deepcopy(self.raw)
