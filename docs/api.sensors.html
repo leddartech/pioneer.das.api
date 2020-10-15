@@ -1,0 +1,1146 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>api.sensors package &mdash; pioneer.das.api 0.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="api.sources package" href="api.sources.html" />
+    <link rel="prev" title="api.samples package" href="api.samples.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pioneer.das.api
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">api package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="api.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="api.datasources.html">api.datasources package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.samples.html">api.samples package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">api.sensors package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.camera">api.sensors.camera module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.carla_gps">api.sensors.carla_gps module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.carla_imu">api.sensors.carla_imu module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.egomotion_provider">api.sensors.egomotion_provider module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.encoder">api.sensors.encoder module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.imu_egomotion_provider">api.sensors.imu_egomotion_provider module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.imu_sbg_ekinox">api.sensors.imu_sbg_ekinox module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.lca3">api.sensors.lca3 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.lcax">api.sensors.lcax module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.motor_lidar">api.sensors.motor_lidar module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.mti">api.sensors.mti module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.pixell">api.sensors.pixell module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.radar_ti">api.sensors.radar_ti module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors.sensor">api.sensors.sensor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.sensors">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.sources.html">api.sources package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.chessboard">api.chessboard module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.datatypes">api.datatypes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.imu">api.imu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.interpolators">api.interpolators module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.loaders">api.loaders module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#api-platform-module">api.platform module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.utils">api.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.datasources.html">api.datasources package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.datasources.virtual_datasources.html">api.datasources.virtual_datasources package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.samples.html">api.samples package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">api.sensors package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.camera">api.sensors.camera module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.carla_gps">api.sensors.carla_gps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.carla_imu">api.sensors.carla_imu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.egomotion_provider">api.sensors.egomotion_provider module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.encoder">api.sensors.encoder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.imu_egomotion_provider">api.sensors.imu_egomotion_provider module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.imu_sbg_ekinox">api.sensors.imu_sbg_ekinox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.lca3">api.sensors.lca3 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.lcax">api.sensors.lcax module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.motor_lidar">api.sensors.motor_lidar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.mti">api.sensors.mti module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.pixell">api.sensors.pixell module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.radar_ti">api.sensors.radar_ti module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors.sensor">api.sensors.sensor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.sensors">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.sources.html">api.sources package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">api</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="api.html">api package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="api.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.html">api.datasources package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.samples.html">api.samples package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">api.sensors package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.sources.html">api.sources package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.chessboard">api.chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.datatypes">api.datatypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.imu">api.imu module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.interpolators">api.interpolators module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.loaders">api.loaders module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#api-platform-module">api.platform module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.utils">api.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pioneer.das.api</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="api.html">api package</a> &raquo;</li>
+        
+      <li>api.sensors package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.sensors.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-sensors-package">
+<h1>api.sensors package<a class="headerlink" href="#api-sensors-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-api.sensors.camera">
+<span id="api-sensors-camera-module"></span><h2>api.sensors.camera module<a class="headerlink" href="#module-api.sensors.camera" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.camera.Camera">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.camera.</code><code class="sig-name descname">Camera</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.camera.Camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.sensor.Sensor</span></code></p>
+<p>Camera sensor, expects ‘img’ datasource, intrinsics matrix and distortion coefficients</p>
+<dl class="method">
+<dt id="api.sensors.camera.Camera.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.camera.Camera.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.camera.Camera.camera_matrix">
+<em class="property">property </em><code class="sig-name descname">camera_matrix</code><a class="headerlink" href="#api.sensors.camera.Camera.camera_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>the 3x3 intrinsics matrix</p>
+<p>See also: <a class="reference external" href="https://docs.opencv.org/4.0.0/d9/d0c/group__calib3d.html#ga3207604e4b1a1758aa66acb6ed5aa65d">https://docs.opencv.org/4.0.0/d9/d0c/group__calib3d.html#ga3207604e4b1a1758aa66acb6ed5aa65d</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.camera.Camera.distortion_coeffs">
+<em class="property">property </em><code class="sig-name descname">distortion_coeffs</code><a class="headerlink" href="#api.sensors.camera.Camera.distortion_coeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nx1 distortion coefficient, refer to opencv documentation</p>
+<p>See also: <a class="reference external" href="https://docs.opencv.org/4.0.0/d9/d0c/group__calib3d.html#ga3207604e4b1a1758aa66acb6ed5aa65d">https://docs.opencv.org/4.0.0/d9/d0c/group__calib3d.html#ga3207604e4b1a1758aa66acb6ed5aa65d</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.camera.Camera.load_intrinsics">
+<code class="sig-name descname">load_intrinsics</code><span class="sig-paren">(</span><em class="sig-param">intrinsics_config</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.camera.Camera.load_intrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks for a pickle file containing intrinsics information for this sensor, e.g. ‘eagle_tfc.pkl’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>intrinsics_config</strong> – path to folder containing this sensor’s intrinsics pickle file,</p></li>
+<li><p><strong>or relative to dataset path</strong><strong>)</strong><strong>, </strong><strong>e.g. '/nas/cam_intrinsics'</strong><strong> or </strong><strong>'cam_intrinsics'</strong> (<em>(</em><em>absolute</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.carla_gps">
+<span id="api-sensors-carla-gps-module"></span><h2>api.sensors.carla_gps module<a class="headerlink" href="#module-api.sensors.carla_gps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.carla_gps.CarlaGPS">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.carla_gps.</code><code class="sig-name descname">CarlaGPS</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.carla_gps.CarlaGPS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.sensor.Sensor</span></code></p>
+<dl class="method">
+<dt id="api.sensors.carla_gps.CarlaGPS.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.carla_gps.CarlaGPS.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.carla_imu">
+<span id="api-sensors-carla-imu-module"></span><h2>api.sensors.carla_imu module<a class="headerlink" href="#module-api.sensors.carla_imu" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.carla_imu.CarlaEgomotionProvider">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.carla_imu.</code><code class="sig-name descname">CarlaEgomotionProvider</code><span class="sig-paren">(</span><em class="sig-param">referential_name: str</em>, <em class="sig-param">sensor</em>, <em class="sig-param">ds_type</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.carla_imu.CarlaEgomotionProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.egomotion_provider.EgomotionProvider</span></code></p>
+<dl class="method">
+<dt id="api.sensors.carla_imu.CarlaEgomotionProvider.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">referential_name: str</em>, <em class="sig-param">sensor</em>, <em class="sig-param">ds_type</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.carla_imu.CarlaEgomotionProvider.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.carla_imu.CarlaEgomotionProvider.get_Global_from_Ego_at">
+<code class="sig-name descname">get_Global_from_Ego_at</code><span class="sig-paren">(</span><em class="sig-param">ts: int</em>, <em class="sig-param">dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#api.sensors.carla_imu.CarlaEgomotionProvider.get_Global_from_Ego_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform to map a point from world coords to EgomotionProdiver’s coords</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.sensors.carla_imu.CarlaIMU">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.carla_imu.</code><code class="sig-name descname">CarlaIMU</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.carla_imu.CarlaIMU" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.sensor.Sensor</span></code></p>
+<dl class="method">
+<dt id="api.sensors.carla_imu.CarlaIMU.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.carla_imu.CarlaIMU.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.carla_imu.CarlaIMU.create_egomotion_provider">
+<code class="sig-name descname">create_egomotion_provider</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.carla_imu.CarlaIMU.create_egomotion_provider" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.egomotion_provider">
+<span id="api-sensors-egomotion-provider-module"></span><h2>api.sensors.egomotion_provider module<a class="headerlink" href="#module-api.sensors.egomotion_provider" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.egomotion_provider.EgomotionProvider">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.egomotion_provider.</code><code class="sig-name descname">EgomotionProvider</code><span class="sig-paren">(</span><em class="sig-param">referential_name: str</em>, <em class="sig-param">subsampling: int = 100</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.egomotion_provider.EgomotionProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="api.sensors.egomotion_provider.EgomotionProvider.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">referential_name: str</em>, <em class="sig-param">subsampling: int = 100</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.egomotion_provider.EgomotionProvider.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.egomotion_provider.EgomotionProvider.apply_trajectory">
+<code class="sig-name descname">apply_trajectory</code><span class="sig-paren">(</span><em class="sig-param">trajectory: numpy.ndarray</em>, <em class="sig-param">points: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#api.sensors.egomotion_provider.EgomotionProvider.apply_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.egomotion_provider.EgomotionProvider.compute_tf_EgoZero_from_Sensor">
+<code class="sig-name descname">compute_tf_EgoZero_from_Sensor</code><span class="sig-paren">(</span><em class="sig-param">tf_Ego_from_Sensor: numpy.ndarray</em>, <em class="sig-param">reference_ts: int</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#api.sensors.egomotion_provider.EgomotionProvider.compute_tf_EgoZero_from_Sensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.egomotion_provider.EgomotionProvider.compute_trajectory">
+<code class="sig-name descname">compute_trajectory</code><span class="sig-paren">(</span><em class="sig-param">sorted_ts: numpy.ndarray</em>, <em class="sig-param">tf_Global_from_EgoZero: numpy.ndarray</em>, <em class="sig-param">dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#api.sensors.egomotion_provider.EgomotionProvider.compute_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trajectory of tf_EgoZero_from_Ego transforms</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.egomotion_provider.EgomotionProvider.get_Global_from_Ego_at">
+<code class="sig-name descname">get_Global_from_Ego_at</code><span class="sig-paren">(</span><em class="sig-param">ts: int</em>, <em class="sig-param">dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#api.sensors.egomotion_provider.EgomotionProvider.get_Global_from_Ego_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform to map a point from world coords to EgomotionProdiver’s coords</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.egomotion_provider.EgomotionProvider.referential_name">
+<em class="property">property </em><code class="sig-name descname">referential_name</code><a class="headerlink" href="#api.sensors.egomotion_provider.EgomotionProvider.referential_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.egomotion_provider.EgomotionProvider.tf_Global_from_EgoZero">
+<em class="property">property </em><code class="sig-name descname">tf_Global_from_EgoZero</code><a class="headerlink" href="#api.sensors.egomotion_provider.EgomotionProvider.tf_Global_from_EgoZero" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.encoder">
+<span id="api-sensors-encoder-module"></span><h2>api.sensors.encoder module<a class="headerlink" href="#module-api.sensors.encoder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.encoder.Encoder">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.encoder.</code><code class="sig-name descname">Encoder</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.encoder.Encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.sensor.Sensor</span></code></p>
+<dl class="method">
+<dt id="api.sensors.encoder.Encoder.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.encoder.Encoder.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.encoder.Encoder.create_egomotion_provider">
+<code class="sig-name descname">create_egomotion_provider</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.encoder.Encoder.create_egomotion_provider" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.sensors.encoder.WheelEgomotionProvider">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.encoder.</code><code class="sig-name descname">WheelEgomotionProvider</code><span class="sig-paren">(</span><em class="sig-param">referential_name: str</em>, <em class="sig-param">sensor</em>, <em class="sig-param">ds_type</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.encoder.WheelEgomotionProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.egomotion_provider.EgomotionProvider</span></code></p>
+<dl class="method">
+<dt id="api.sensors.encoder.WheelEgomotionProvider.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">referential_name: str</em>, <em class="sig-param">sensor</em>, <em class="sig-param">ds_type</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.encoder.WheelEgomotionProvider.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.encoder.WheelEgomotionProvider.get_Global_from_Ego_at">
+<code class="sig-name descname">get_Global_from_Ego_at</code><span class="sig-paren">(</span><em class="sig-param">ts: int</em>, <em class="sig-param">dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#api.sensors.encoder.WheelEgomotionProvider.get_Global_from_Ego_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform to map a point from world coords to EgomotionProdiver’s coords</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.imu_egomotion_provider">
+<span id="api-sensors-imu-egomotion-provider-module"></span><h2>api.sensors.imu_egomotion_provider module<a class="headerlink" href="#module-api.sensors.imu_egomotion_provider" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.imu_egomotion_provider.IMUEgomotionProvider">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.imu_egomotion_provider.</code><code class="sig-name descname">IMUEgomotionProvider</code><span class="sig-paren">(</span><em class="sig-param">referential_name: str</em>, <em class="sig-param">navposvel: pioneer.das.api.datasources.abstract_datasource.AbstractDatasource</em>, <em class="sig-param">ekfeuler: pioneer.das.api.datasources.abstract_datasource.AbstractDatasource</em>, <em class="sig-param">subsampling: int = 100</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.imu_egomotion_provider.IMUEgomotionProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.egomotion_provider.EgomotionProvider</span></code></p>
+<dl class="method">
+<dt id="api.sensors.imu_egomotion_provider.IMUEgomotionProvider.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">referential_name: str</em>, <em class="sig-param">navposvel: pioneer.das.api.datasources.abstract_datasource.AbstractDatasource</em>, <em class="sig-param">ekfeuler: pioneer.das.api.datasources.abstract_datasource.AbstractDatasource</em>, <em class="sig-param">subsampling: int = 100</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.imu_egomotion_provider.IMUEgomotionProvider.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.imu_egomotion_provider.IMUEgomotionProvider.get_Global_from_Ego_at">
+<code class="sig-name descname">get_Global_from_Ego_at</code><span class="sig-paren">(</span><em class="sig-param">ts: int</em>, <em class="sig-param">dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#api.sensors.imu_egomotion_provider.IMUEgomotionProvider.get_Global_from_Ego_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>override</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.imu_sbg_ekinox">
+<span id="api-sensors-imu-sbg-ekinox-module"></span><h2>api.sensors.imu_sbg_ekinox module<a class="headerlink" href="#module-api.sensors.imu_sbg_ekinox" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.imu_sbg_ekinox.ImuSbgEkinox">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.imu_sbg_ekinox.</code><code class="sig-name descname">ImuSbgEkinox</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.imu_sbg_ekinox.ImuSbgEkinox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.sensor.Sensor</span></code></p>
+<dl class="method">
+<dt id="api.sensors.imu_sbg_ekinox.ImuSbgEkinox.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.imu_sbg_ekinox.ImuSbgEkinox.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.imu_sbg_ekinox.ImuSbgEkinox.create_egomotion_provider">
+<code class="sig-name descname">create_egomotion_provider</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.imu_sbg_ekinox.ImuSbgEkinox.create_egomotion_provider" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.lca3">
+<span id="api-sensors-lca3-module"></span><h2>api.sensors.lca3 module<a class="headerlink" href="#module-api.sensors.lca3" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.lca3.LCA3">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.lca3.</code><code class="sig-name descname">LCA3</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lca3.LCA3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.lcax.LCAx</span></code></p>
+<dl class="method">
+<dt id="api.sensors.lca3.LCA3.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lca3.LCA3.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lca3.LCA3.get_trace_smoothing_kernel">
+<code class="sig-name descname">get_trace_smoothing_kernel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lca3.LCA3.get_trace_smoothing_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the convolution kernel for trace processing for Eagle</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.lcax">
+<span id="api-sensors-lcax-module"></span><h2>api.sensors.lcax module<a class="headerlink" href="#module-api.sensors.lcax" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.lcax.LCAx">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.lcax.</code><code class="sig-name descname">LCAx</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.sensor.Sensor</span></code></p>
+<p>LeddarTech LCAx family of sensors, expects ‘ech’, ‘sta’ and ‘cfg’ datasources</p>
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.apply_distance_corrections">
+<code class="sig-name descname">apply_distance_corrections</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em>, <em class="sig-param">indices</em>, <em class="sig-param">distances</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.apply_distance_corrections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies calibration and temperature-related distances corrections</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.apply_temperature_correction">
+<code class="sig-name descname">apply_temperature_correction</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em>, <em class="sig-param">indices</em>, <em class="sig-param">distances</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.apply_temperature_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies temperature-related distance corrections</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.base_point_count">
+<em class="property">property </em><code class="sig-name descname">base_point_count</code><a class="headerlink" href="#api.sensors.lcax.LCAx.base_point_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.binning">
+<em class="property">property </em><code class="sig-name descname">binning</code><a class="headerlink" href="#api.sensors.lcax.LCAx.binning" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.cache">
+<code class="sig-name descname">cache</code><span class="sig-paren">(</span><em class="sig-param">specs: Dict[str, Union[int, float]]</em><span class="sig-paren">)</span> &#x2192; Dict[str, numpy.ndarray]<a class="headerlink" href="#api.sensors.lcax.LCAx.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>caches computation that are shared for all ‘ech’ samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>specs</strong> – a dict with keys, ‘v’: number of scan channels, ‘h’: the number of imaging channels,
+‘v_fov’: scan field of view, in degrees, ‘h_fov’: imaging field of view, in degrees</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dict with keys ‘angles’ (the projection angles), ‘directions’ (the projection directions)
+and ‘quad_directions’ (the projection surface cloud directions)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If ‘angle_chart’ is defined in this sensor’s intrinsics, the angle chart’s angles is used to
+compute ‘directions’, but <strong>not</strong> ‘quad_directions’.
+If ‘mirror_temp_compensation’ is defined in this sensor’s intrisincs, ‘angles_temp_lut’
+and ‘directions_temp_lut’ will appear in cache and be used by apply_direction_corrections()</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.distance_scaling">
+<em class="property">property </em><code class="sig-name descname">distance_scaling</code><a class="headerlink" href="#api.sensors.lcax.LCAx.distance_scaling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the distance in meters between two subsequent points in a trace</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.get_corrected_cloud">
+<code class="sig-name descname">get_corrected_cloud</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em>, <em class="sig-param">cache</em>, <em class="sig-param">type</em>, <em class="sig-param">indices</em>, <em class="sig-param">distances</em>, <em class="sig-param">amplitudes=None</em>, <em class="sig-param">dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.get_corrected_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the point-cloud (or quad-cloud) using the get_corrected_projection_data() method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>type</strong> – ‘point_cloud’ or ‘quad_cloud’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.get_corrected_projection_data">
+<code class="sig-name descname">get_corrected_projection_data</code><span class="sig-paren">(</span><em class="sig-param">timestamp: Union[int, float], cache: dict, type: str = 'directions'</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.get_corrected_projection_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns temperature compensated projections directions or angles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timestamp</strong> – the timestamp at which the sample is needed (use to obtain the right temperature)</p></li>
+<li><p><strong>cache</strong> – the cache to search in (obtained by calling LCAx.cache(…))</p></li>
+<li><p><strong>type</strong> – the type of directions (e.g) ‘directions’ or ‘quad_directions’.
+<strong>Must be present in the cache</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the compensated directions if any, or the uncompensated direction otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.get_temperature_at">
+<code class="sig-name descname">get_temperature_at</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.get_temperature_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.get_trace_smoothing_kernel">
+<code class="sig-name descname">get_trace_smoothing_kernel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.get_trace_smoothing_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the convolution kernel for trace processing for LCA2</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.load_intrinsics">
+<code class="sig-name descname">load_intrinsics</code><span class="sig-paren">(</span><em class="sig-param">intrinsics_config: Union[str, dict]</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.load_intrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the LCAx intrinsics from a dictionnary like {‘v’: 8, ‘h’, 32, ‘v_fov’: 20, ‘h_fov’: 30}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>intrinsics_config</strong> – The intrinsics configuration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.load_specs_from_cfg">
+<code class="sig-name descname">load_specs_from_cfg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.load_specs_from_cfg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.load_static_noise_from_cfg">
+<code class="sig-name descname">load_static_noise_from_cfg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.load_static_noise_from_cfg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.load_time_base_delays_from_cfg">
+<code class="sig-name descname">load_time_base_delays_from_cfg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.lcax.LCAx.load_time_base_delays_from_cfg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.lcax.LCAx.oversampling">
+<em class="property">property </em><code class="sig-name descname">oversampling</code><a class="headerlink" href="#api.sensors.lcax.LCAx.oversampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.motor_lidar">
+<span id="api-sensors-motor-lidar-module"></span><h2>api.sensors.motor_lidar module<a class="headerlink" href="#module-api.sensors.motor_lidar" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.motor_lidar.MotorLidar">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.motor_lidar.</code><code class="sig-name descname">MotorLidar</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.motor_lidar.MotorLidar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.sensor.Sensor</span></code></p>
+<dl class="class">
+<dt id="api.sensors.motor_lidar.MotorLidar.TemperatureCompensation">
+<em class="property">class </em><code class="sig-name descname">TemperatureCompensation</code><a class="headerlink" href="#api.sensors.motor_lidar.MotorLidar.TemperatureCompensation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="api.sensors.motor_lidar.MotorLidar.TemperatureCompensation.Activated">
+<code class="sig-name descname">Activated</code><em class="property"> = 0</em><a class="headerlink" href="#api.sensors.motor_lidar.MotorLidar.TemperatureCompensation.Activated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="api.sensors.motor_lidar.MotorLidar.TemperatureCompensation.Deactivated">
+<code class="sig-name descname">Deactivated</code><em class="property"> = 1</em><a class="headerlink" href="#api.sensors.motor_lidar.MotorLidar.TemperatureCompensation.Deactivated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.motor_lidar.MotorLidar.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.motor_lidar.MotorLidar.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.motor_lidar.MotorLidar.apply_temperature_correction">
+<code class="sig-name descname">apply_temperature_correction</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em>, <em class="sig-param">distances</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.motor_lidar.MotorLidar.apply_temperature_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies temperature-related distance corrections</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.motor_lidar.MotorLidar.get_corrected_cloud">
+<code class="sig-name descname">get_corrected_cloud</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em>, <em class="sig-param">pts</em>, <em class="sig-param">dtype</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.motor_lidar.MotorLidar.get_corrected_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>It corrects the pts-cloud according to a temperature compensation (if any).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.motor_lidar.MotorLidar.load_intrinsics">
+<code class="sig-name descname">load_intrinsics</code><span class="sig-paren">(</span><em class="sig-param">intrinsics_config: Union[str, dict]</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.motor_lidar.MotorLidar.load_intrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>load data from yml platform</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.mti">
+<span id="api-sensors-mti-module"></span><h2>api.sensors.mti module<a class="headerlink" href="#module-api.sensors.mti" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.mti.MTi">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.mti.</code><code class="sig-name descname">MTi</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.mti.MTi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.sensor.Sensor</span></code></p>
+<dl class="method">
+<dt id="api.sensors.mti.MTi.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.mti.MTi.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.pixell">
+<span id="api-sensors-pixell-module"></span><h2>api.sensors.pixell module<a class="headerlink" href="#module-api.sensors.pixell" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.pixell.Pixell">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.pixell.</code><code class="sig-name descname">Pixell</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.pixell.Pixell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.lcax.LCAx</span></code></p>
+<dl class="method">
+<dt id="api.sensors.pixell.Pixell.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.pixell.Pixell.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.pixell.Pixell.angles_from_heads">
+<em class="property">static </em><code class="sig-name descname">angles_from_heads</code><span class="sig-paren">(</span><em class="sig-param">distances</em>, <em class="sig-param">angles</em>, <em class="sig-param">head_positions</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.pixell.Pixell.angles_from_heads" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.pixell.Pixell.cache">
+<code class="sig-name descname">cache</code><span class="sig-paren">(</span><em class="sig-param">specs</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.pixell.Pixell.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>caches computation that are shared for all ‘ech’ samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>specs</strong> – a dict with keys, ‘v’: number of scan channels, ‘h’: the number of imaging channels,
+‘v_fov’: scan field of view, in degrees, ‘h_fov’: imaging field of view, in degrees</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dict with keys ‘angles’ (the projection angles), ‘directions’ (the projection directions)
+and ‘quad_directions’ (the projection surface cloud directions)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If ‘angle_chart’ is defined in this sensor’s intrinsics, the angle chart’s angles is used to
+compute ‘directions’, but <strong>not</strong> ‘quad_directions’.
+If ‘mirror_temp_compensation’ is defined in this sensor’s intrisincs, ‘angles_temp_lut’
+and ‘directions_temp_lut’ will appear in cache and be used by apply_direction_corrections()</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.pixell.Pixell.get_cloud">
+<code class="sig-name descname">get_cloud</code><span class="sig-paren">(</span><em class="sig-param">cache</em>, <em class="sig-param">type</em>, <em class="sig-param">indices</em>, <em class="sig-param">distances</em>, <em class="sig-param">amplitudes=None</em>, <em class="sig-param">dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.pixell.Pixell.get_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get cloud data (type_pts, type_amplitudes, type_indices) from a sensor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.pixell.Pixell.get_corrected_cloud">
+<code class="sig-name descname">get_corrected_cloud</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em>, <em class="sig-param">cache</em>, <em class="sig-param">type</em>, <em class="sig-param">indices</em>, <em class="sig-param">distances</em>, <em class="sig-param">amplitudes=None</em>, <em class="sig-param">dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.pixell.Pixell.get_corrected_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the point-cloud (or quad-cloud) using the get_corrected_projection_data() method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>type</strong> – ‘point_cloud’ or ‘quad_cloud’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.pixell.Pixell.get_head_position_per_channel">
+<code class="sig-name descname">get_head_position_per_channel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.pixell.Pixell.get_head_position_per_channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.pixell.Pixell.get_trace_smoothing_kernel">
+<code class="sig-name descname">get_trace_smoothing_kernel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.pixell.Pixell.get_trace_smoothing_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the convolution kernel for trace processing for LCA2</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.pixell.Pixell.load_intrinsics">
+<code class="sig-name descname">load_intrinsics</code><span class="sig-paren">(</span><em class="sig-param">intrinsics_config: Union[str, dict]</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.pixell.Pixell.load_intrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic intrinsics are brougth back under Sensor.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.radar_ti">
+<span id="api-sensors-radar-ti-module"></span><h2>api.sensors.radar_ti module<a class="headerlink" href="#module-api.sensors.radar_ti" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.radar_ti.RadarTI">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.radar_ti.</code><code class="sig-name descname">RadarTI</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.radar_ti.RadarTI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.sensors.sensor.Sensor</span></code></p>
+<dl class="method">
+<dt id="api.sensors.radar_ti.RadarTI.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.radar_ti.RadarTI.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.radar_ti.RadarTI.get_corrected_cloud">
+<code class="sig-name descname">get_corrected_cloud</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em>, <em class="sig-param">pts</em>, <em class="sig-param">dtype</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.radar_ti.RadarTI.get_corrected_cloud" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors.sensor">
+<span id="api-sensors-sensor-module"></span><h2>api.sensors.sensor module<a class="headerlink" href="#module-api.sensors.sensor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.sensors.sensor.Sensor">
+<em class="property">class </em><code class="sig-prename descclassname">api.sensors.sensor.</code><code class="sig-name descname">Sensor</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">pf</em>, <em class="sig-param">factories: Dict[str</em>, <em class="sig-param">Tuple[Any</em>, <em class="sig-param">Any]] = {}</em>, <em class="sig-param">call_start: Optional[Callable] = None</em>, <em class="sig-param">call_stop: Optional[Callable] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A sensor encapsulate a sensor and its datasources.
+<em>Important</em> when you add a new derivation of class Sensor,
+don’t forget to add it to platform.SENSOR_FACTORY.</p>
+<dl class="exception">
+<dt id="api.sensors.sensor.Sensor.NoPathToReferential">
+<em class="property">exception </em><code class="sig-name descname">NoPathToReferential</code><a class="headerlink" href="#api.sensors.sensor.Sensor.NoPathToReferential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param">key: str</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the datasource</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – the datasource type, e.g. ‘ech’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">pf</em>, <em class="sig-param">factories: Dict[str</em>, <em class="sig-param">Tuple[Any</em>, <em class="sig-param">Any]] = {}</em>, <em class="sig-param">call_start: Optional[Callable] = None</em>, <em class="sig-param">call_stop: Optional[Callable] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the sensor’s name and position id, e.g. ‘eagle_tfc’</p></li>
+<li><p><strong>platform</strong> – the platform this sensor belongs to</p></li>
+<li><p><strong>factories</strong> – a dict containing one entry per datasource type, each entry’s value is a tuple containing
+(Sample-derived, optional_interpolator_function). For example, a factoryies dict could be
+{“ech”:(Echo, None), “sta”:(Sample, interpolators.linear_dict_of_float_interpolator)}</p></li>
+<li><p><strong>call_start</strong> – a callback to be called by Sensor.start() (e.g. to start an actual live sensor)</p></li>
+<li><p><strong>call_stop</strong> – similar to call_start</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.add_datasource">
+<code class="sig-name descname">add_datasource</code><span class="sig-paren">(</span><em class="sig-param">ds</em>, <em class="sig-param">ds_type: str</em>, <em class="sig-param">cache_size: int = 100</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.add_datasource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a datasouce to this sensor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> – a Filesource-derived instance or VirtualDatasource</p></li>
+<li><p><strong>ds_type</strong> – the datasource type, e.g. ‘ech’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.create_egomotion_provider">
+<code class="sig-name descname">create_egomotion_provider</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Optional[EgomotionProvider]<a class="headerlink" href="#api.sensors.sensor.Sensor.create_egomotion_provider" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.datasource_names">
+<code class="sig-name descname">datasource_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#api.sensors.sensor.Sensor.datasource_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns this sensor’s datasource types</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.extrinsics_dirty">
+<em class="property">property </em><code class="sig-name descname">extrinsics_dirty</code><a class="headerlink" href="#api.sensors.sensor.Sensor.extrinsics_dirty" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extrinsics dirty signal</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.invalidate_datasources_caches">
+<code class="sig-name descname">invalidate_datasources_caches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.invalidate_datasources_caches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalidate sensor’s datasources caches</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.items">
+<code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the datasource key,value iterable, implement dict API</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.keys">
+<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the datasource types, implement dict API</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.load_extrinsics">
+<code class="sig-name descname">load_extrinsics</code><span class="sig-paren">(</span><em class="sig-param">extrinsics_folder: str</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.load_extrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks for a pickle file containing extrinsics information for this sensor, named ‘From-To’ e.g. ‘flir_tfl-eagle_tfc.pkl’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>intrinsics_config</strong> – path to folder containing this sensor’s extrinsics pickle file</p></li>
+<li><p><strong>or relative to dataset path</strong><strong>)</strong><strong>, </strong><strong>e.g. '/nas/extrinsics'</strong><strong> or </strong><strong>'extrinsics'</strong> (<em>(</em><em>absolute</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.load_intrinsics">
+<code class="sig-name descname">load_intrinsics</code><span class="sig-paren">(</span><em class="sig-param">intrinsics_config: str</em><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.load_intrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks for a pickle file containing intrinsics information for this sensor, e.g. ‘eagle_tfc.pkl’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>intrinsics_config</strong> – path to folder containing this sensor’s intrinsics pickle file,</p></li>
+<li><p><strong>or relative to dataset path</strong><strong>)</strong><strong>, </strong><strong>e.g. '/nas/cam_intrinsics'</strong><strong> or </strong><strong>'cam_intrinsics'</strong> (<em>(</em><em>absolute</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.map_to">
+<code class="sig-name descname">map_to</code><span class="sig-paren">(</span><em class="sig-param">target: str</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#api.sensors.sensor.Sensor.map_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a 4x4 tranform matrix mapping a point from this sensor’s referential to ‘target’ sensor’s referential</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target</strong> – the name of the target sensor in which referential we want to map to</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#api.sensors.sensor.Sensor.NoPathToReferential" title="api.sensors.sensor.Sensor.NoPathToReferential"><strong>Sensor.NoPathToReferential</strong></a> – if no mapping could be found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.platform">
+<em class="property">property </em><code class="sig-name descname">platform</code><a class="headerlink" href="#api.sensors.sensor.Sensor.platform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts the live sensor wrapped by this Sensor instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.sensors.sensor.Sensor.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.sensors.sensor.Sensor.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the live sensor wrapped by this Sensor instance</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.sensors">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api.sensors" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.sources.html" class="btn btn-neutral float-right" title="api.sources package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api.samples.html" class="btn btn-neutral float-left" title="api.samples package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Leddartech
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

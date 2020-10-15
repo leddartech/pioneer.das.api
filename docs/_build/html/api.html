@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>api package &mdash; pioneer.das.api 0.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="api.datasources package" href="api.datasources.html" />
+    <link rel="prev" title="Welcome to pioneer.das.api’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pioneer.das.api
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">api package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.datasources.html">api.datasources package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.samples.html">api.samples package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.sensors.html">api.sensors package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.sources.html">api.sources package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.chessboard">api.chessboard module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.datatypes">api.datatypes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.imu">api.imu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.interpolators">api.interpolators module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.loaders">api.loaders module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-platform-module">api.platform module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.utils">api.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.datasources.html">api.datasources package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.datasources.virtual_datasources.html">api.datasources.virtual_datasources package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.samples.html">api.samples package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.sensors.html">api.sensors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.sources.html">api.sources package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">api</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">api package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.html">api.datasources package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.samples.html">api.samples package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.sensors.html">api.sensors package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.sources.html">api.sources package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-api.chessboard">api.chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-api.datatypes">api.datatypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-api.imu">api.imu module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-api.interpolators">api.interpolators module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-api.loaders">api.loaders module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-platform-module">api.platform module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-api.utils">api.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-api">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pioneer.das.api</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>api package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-package">
+<h1>api package<a class="headerlink" href="#api-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.datasources.html">api.datasources package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.datasources.virtual_datasources.html">api.datasources.virtual_datasources package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.virtual_datasources.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.virtual_datasources.html#module-api.datasources.virtual_datasources.cylindrical_projection">api.datasources.virtual_datasources.cylindrical_projection module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.virtual_datasources.html#module-api.datasources.virtual_datasources.echoes_from_traces">api.datasources.virtual_datasources.echoes_from_traces module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.virtual_datasources.html#module-api.datasources.virtual_datasources.echoes_with_pulses">api.datasources.virtual_datasources.echoes_with_pulses module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.virtual_datasources.html#module-api.datasources.virtual_datasources.hdr_waveform">api.datasources.virtual_datasources.hdr_waveform module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.virtual_datasources.html#module-api.datasources.virtual_datasources.virtual_datasource">api.datasources.virtual_datasources.virtual_datasource module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.virtual_datasources.html#module-api.datasources.virtual_datasources.voxel_map">api.datasources.virtual_datasources.voxel_map module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.virtual_datasources.html#module-api.datasources.virtual_datasources.waveform_cloud">api.datasources.virtual_datasources.waveform_cloud module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.virtual_datasources.html#module-api.datasources.virtual_datasources">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#module-api.datasources.abstract_datasource">api.datasources.abstract_datasource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#module-api.datasources.datasource">api.datasources.datasource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#module-api.datasources.datasource_wrapper">api.datasources.datasource_wrapper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#module-api.datasources">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.samples.html">api.samples package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.box_2d">api.samples.box_2d module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.box_3d">api.samples.box_3d module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.echo">api.samples.echo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.echo_xyzit">api.samples.echo_xyzit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.fast_trace">api.samples.fast_trace module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.image">api.samples.image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.image_cylinder">api.samples.image_cylinder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.image_fisheye">api.samples.image_fisheye module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.lane">api.samples.lane module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.poly_2d">api.samples.poly_2d module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.rpm">api.samples.rpm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.sample">api.samples.sample module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.seg_2d">api.samples.seg_2d module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.seg_2d_image">api.samples.seg_2d_image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.seg_3d">api.samples.seg_3d module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.trace">api.samples.trace module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.xyvit">api.samples.xyvit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples.xyzit">api.samples.xyzit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.samples.html#module-api.samples">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.sensors.html">api.sensors package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.camera">api.sensors.camera module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.carla_gps">api.sensors.carla_gps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.carla_imu">api.sensors.carla_imu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.egomotion_provider">api.sensors.egomotion_provider module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.encoder">api.sensors.encoder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.imu_egomotion_provider">api.sensors.imu_egomotion_provider module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.imu_sbg_ekinox">api.sensors.imu_sbg_ekinox module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.lca3">api.sensors.lca3 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.lcax">api.sensors.lcax module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.motor_lidar">api.sensors.motor_lidar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.mti">api.sensors.mti module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.pixell">api.sensors.pixell module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.radar_ti">api.sensors.radar_ti module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors.sensor">api.sensors.sensor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sensors.html#module-api.sensors">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.sources.html">api.sources package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.sources.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sources.html#module-api.sources.filesource">api.sources.filesource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sources.html#module-api.sources.zip_filesource">api.sources.zip_filesource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.sources.html#module-api.sources">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-api.chessboard">
+<span id="api-chessboard-module"></span><h2>api.chessboard module<a class="headerlink" href="#module-api.chessboard" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="api.chessboard.load_chessboard_specifications">
+<code class="sig-prename descclassname">api.chessboard.</code><code class="sig-name descname">load_chessboard_specifications</code><span class="sig-paren">(</span><em class="sig-param">platform</em><span class="sig-paren">)</span><a class="headerlink" href="#api.chessboard.load_chessboard_specifications" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-api.datatypes">
+<span id="api-datatypes-module"></span><h2>api.datatypes module<a class="headerlink" href="#module-api.datatypes" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="api.datatypes.box2d">
+<code class="sig-prename descclassname">api.datatypes.</code><code class="sig-name descname">box2d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datatypes.box2d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.datatypes.box3d">
+<code class="sig-prename descclassname">api.datatypes.</code><code class="sig-name descname">box3d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datatypes.box3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Here are the standard coordinates for 3d bounding boxes</p>
+<p>y_ENU
+^                 x_Robot (forward, maps bbox lenght)
+|                 /
+|    y_Robot (sideways, maps bbox width)
+|         ‘     /
+|           ‘  /
+|             o
+|
+|
+|
+o———–&gt;x_ENU
+z_ENU</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.datatypes.datasource_xyzit">
+<code class="sig-prename descclassname">api.datatypes.</code><code class="sig-name descname">datasource_xyzit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datatypes.datasource_xyzit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.datatypes.datasource_xyzit_float_intensity">
+<code class="sig-prename descclassname">api.datatypes.</code><code class="sig-name descname">datasource_xyzit_float_intensity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datatypes.datasource_xyzit_float_intensity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.datatypes.lane">
+<code class="sig-prename descclassname">api.datatypes.</code><code class="sig-name descname">lane</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datatypes.lane" title="Permalink to this definition">¶</a></dt>
+<dd><p>vertices: (N,3) numpy array of the 3D coordinates
+type: number to identify the type of lane (see das/lane_type.py)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.datatypes.poly2d">
+<code class="sig-prename descclassname">api.datatypes.</code><code class="sig-name descname">poly2d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datatypes.poly2d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.datatypes.rad">
+<code class="sig-prename descclassname">api.datatypes.</code><code class="sig-name descname">rad</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datatypes.rad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.datatypes.seg2d">
+<code class="sig-prename descclassname">api.datatypes.</code><code class="sig-name descname">seg2d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datatypes.seg2d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.datatypes.seg3d">
+<code class="sig-prename descclassname">api.datatypes.</code><code class="sig-name descname">seg3d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datatypes.seg3d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-api.imu">
+<span id="api-imu-module"></span><h2>api.imu module<a class="headerlink" href="#module-api.imu" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="api.imu.axangle3_to_4">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">axangle3_to_4</code><span class="sig-paren">(</span><em class="sig-param">ax</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.axangle3_to_4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.axangle4_to_3">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">axangle4_to_3</code><span class="sig-paren">(</span><em class="sig-param">ax</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.axangle4_to_3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.axangle_X0_init">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">axangle_X0_init</code><span class="sig-paren">(</span><em class="sig-param">mat</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.axangle_X0_init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.get_euler_angleZYX">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">get_euler_angleZYX</code><span class="sig-paren">(</span><em class="sig-param">R</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.get_euler_angleZYX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.get_imu_pose">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">get_imu_pose</code><span class="sig-paren">(</span><em class="sig-param">nav</em>, <em class="sig-param">euler</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.get_imu_pose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.imu_to_pose">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">imu_to_pose</code><span class="sig-paren">(</span><em class="sig-param">imuVector</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.imu_to_pose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.inverse_transform">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">inverse_transform</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.inverse_transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.pose_to_transf">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">pose_to_transf</code><span class="sig-paren">(</span><em class="sig-param">pose</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.pose_to_transf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.print_transf_result">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">print_transf_result</code><span class="sig-paren">(</span><em class="sig-param">Tr</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.print_transf_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.quaternion_X0_init">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">quaternion_X0_init</code><span class="sig-paren">(</span><em class="sig-param">mat</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.quaternion_X0_init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.state_2_affine">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">state_2_affine</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.state_2_affine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.x_quaternion_to_mat">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">x_quaternion_to_mat</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.x_quaternion_to_mat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.imu.x_to_mat">
+<code class="sig-prename descclassname">api.imu.</code><code class="sig-name descname">x_to_mat</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#api.imu.x_to_mat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-api.interpolators">
+<span id="api-interpolators-module"></span><h2>api.interpolators module<a class="headerlink" href="#module-api.interpolators" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="api.interpolators.ceil_interpolator">
+<code class="sig-prename descclassname">api.interpolators.</code><code class="sig-name descname">ceil_interpolator</code><span class="sig-paren">(</span><em class="sig-param">datasource</em>, <em class="sig-param">float_index</em><span class="sig-paren">)</span><a class="headerlink" href="#api.interpolators.ceil_interpolator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.interpolators.euler_imu_linear_ndarray_interpolator">
+<code class="sig-prename descclassname">api.interpolators.</code><code class="sig-name descname">euler_imu_linear_ndarray_interpolator</code><span class="sig-paren">(</span><em class="sig-param">datasource</em>, <em class="sig-param">float_index</em><span class="sig-paren">)</span><a class="headerlink" href="#api.interpolators.euler_imu_linear_ndarray_interpolator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.interpolators.floor_interpolator">
+<code class="sig-prename descclassname">api.interpolators.</code><code class="sig-name descname">floor_interpolator</code><span class="sig-paren">(</span><em class="sig-param">datasource</em>, <em class="sig-param">float_index</em><span class="sig-paren">)</span><a class="headerlink" href="#api.interpolators.floor_interpolator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.interpolators.from_float_index">
+<code class="sig-prename descclassname">api.interpolators.</code><code class="sig-name descname">from_float_index</code><span class="sig-paren">(</span><em class="sig-param">float_index</em><span class="sig-paren">)</span><a class="headerlink" href="#api.interpolators.from_float_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.interpolators.linear_dict_of_float_interpolator">
+<code class="sig-prename descclassname">api.interpolators.</code><code class="sig-name descname">linear_dict_of_float_interpolator</code><span class="sig-paren">(</span><em class="sig-param">datasource</em>, <em class="sig-param">float_index</em><span class="sig-paren">)</span><a class="headerlink" href="#api.interpolators.linear_dict_of_float_interpolator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.interpolators.linear_ndarray_interpolator">
+<code class="sig-prename descclassname">api.interpolators.</code><code class="sig-name descname">linear_ndarray_interpolator</code><span class="sig-paren">(</span><em class="sig-param">datasource</em>, <em class="sig-param">float_index</em><span class="sig-paren">)</span><a class="headerlink" href="#api.interpolators.linear_ndarray_interpolator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.interpolators.nearest_interpolator">
+<code class="sig-prename descclassname">api.interpolators.</code><code class="sig-name descname">nearest_interpolator</code><span class="sig-paren">(</span><em class="sig-param">datasource</em>, <em class="sig-param">float_index</em><span class="sig-paren">)</span><a class="headerlink" href="#api.interpolators.nearest_interpolator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-api.loaders">
+<span id="api-loaders-module"></span><h2>api.loaders module<a class="headerlink" href="#module-api.loaders" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="api.loaders.image_loader">
+<code class="sig-prename descclassname">api.loaders.</code><code class="sig-name descname">image_loader</code><span class="sig-paren">(</span><em class="sig-param">fileobj</em><span class="sig-paren">)</span><a class="headerlink" href="#api.loaders.image_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image loader to be used with FileSource</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>{string} -- Image filename</strong> (<em>fileobj</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>np.ndarray – Image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.loaders.load_files_from_folder">
+<code class="sig-prename descclassname">api.loaders.</code><code class="sig-name descname">load_files_from_folder</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">pattern</em>, <em class="sig-param">sort=False</em>, <em class="sig-param">return_keys=False</em><span class="sig-paren">)</span><a class="headerlink" href="#api.loaders.load_files_from_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load files from a folder and sort them according to a regex pattern</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.loaders.pickle_loader">
+<code class="sig-prename descclassname">api.loaders.</code><code class="sig-name descname">pickle_loader</code><span class="sig-paren">(</span><em class="sig-param">fileobj</em><span class="sig-paren">)</span><a class="headerlink" href="#api.loaders.pickle_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle data file loader. To be used with FileSource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>{string</strong><strong>,</strong><strong>file} -- A file object</strong><strong> or </strong><strong>a string</strong> (<em>fileobj</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>object – Unpickled object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.loaders.txt_loader">
+<code class="sig-prename descclassname">api.loaders.</code><code class="sig-name descname">txt_loader</code><span class="sig-paren">(</span><em class="sig-param">fileobj</em><span class="sig-paren">)</span><a class="headerlink" href="#api.loaders.txt_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bytes data file loader. To be used with FileSource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>{string</strong><strong>,</strong><strong>file} -- A file object</strong><strong> or </strong><strong>a string</strong> (<em>fileobj</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="api-platform-module">
+<h2>api.platform module<a class="headerlink" href="#api-platform-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-api.utils">
+<span id="api-utils-module"></span><h2>api.utils module<a class="headerlink" href="#module-api.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="api.utils.distance_to_plane">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">distance_to_plane</code><span class="sig-paren">(</span><em class="sig-param">pts</em>, <em class="sig-param">params</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.distance_to_plane" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the signed distance between a points and a plane. The parameters
+of the plane are given according to</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>{np.ndarray} -- The points</strong> (<em>pts</em>) – </p></li>
+<li><p><strong>{np.ndarray} -- The plane parameters</strong> (<em>params</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[np.ndarray] – Distance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.utils.estimate_ground_plane">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">estimate_ground_plane</code><span class="sig-paren">(</span><em class="sig-param">pts</em>, <em class="sig-param">residual_threshold=0.5</em>, <em class="sig-param">ransac_iter=1000</em>, <em class="sig-param">normal_threshold=0.85</em>, <em class="sig-param">up=None</em>, <em class="sig-param">mask=None</em>, <em class="sig-param">min_samples=3</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.estimate_ground_plane" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the ground plane from a point cloud.</p>
+<p>The plane is not necessarily the ground. It is just a plane whose normal
+is roughly parallel to some <cite>up</cite> vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>{np.ndarray} -- Input point cloud</strong> (<em>pts</em>) – </p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>{float} -- The threshold for the RANSAC</strong><strong> (</strong><strong>default</strong> (<em>residual_threshold</em>) – {0.5})</p></li>
+<li><p><strong>{int} -- Number of ransac iterations</strong><strong> (</strong><strong>default</strong> (<em>ransac_iter</em>) – {100})</p></li>
+<li><p><strong>{float} -- The normal threshold to determine potential</strong> (<em>normal_threshold</em>) – ground plane points (default: {0.85})</p></li>
+<li><p><strong>{np.ndarray} -- The up vector indicating an approximate normal vector</strong> (<em>up</em>) – for the ground plane.</p></li>
+<li><p><strong>{np.ndarray} -- Point validity mask</strong><strong> (</strong><strong>only the points</strong> (<a class="reference internal" href="api.samples.html#api.samples.echo.Echo.mask" title="api.samples.echo.Echo.mask"><em>mask</em></a>) – where mask == True are used (default: None))</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>[np.ndarray] – Array of the indices of the points that belong to the</dt><dd><p>ground plane</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.utils.estimate_plane">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">estimate_plane</code><span class="sig-paren">(</span><em class="sig-param">pts</em>, <em class="sig-param">residual_threshold=0.5</em>, <em class="sig-param">ransac_iter=1000</em>, <em class="sig-param">min_samples=3</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.estimate_plane" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate a plane from a 3D points array.</p>
+<p>Plane parameters are estimated using this equation</p>
+<p>a*x + b*y + c*z + d = 0</p>
+<p>returned parameters are in the form</p>
+<p>[a, b, c, d]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>{np.ndarray} -- The points array</strong> (<em>pts</em>) – </p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>{float} -- The ransac residual threshold</strong><strong> (</strong><strong>default</strong> (<em>residual_threshold</em>) – {0.5})</p></li>
+<li><p><strong>{int} -- Number of ransac iterations</strong><strong> (</strong><strong>default</strong> (<em>ransac_iter</em>) – {100})</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(np.ndarray, np.ndarray, np.ndarray) – Plane parameters, inlier mask, signed distance to plane</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.utils.find_inliers">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">find_inliers</code><span class="sig-paren">(</span><em class="sig-param">pts</em>, <em class="sig-param">distance_threshold</em>, <em class="sig-param">nb_points</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.find_inliers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.utils.fit_plane_ols">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">fit_plane_ols</code><span class="sig-paren">(</span><em class="sig-param">pts</em>, <em class="sig-param">normalize=True</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.fit_plane_ols" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.utils.fit_plane_svd">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">fit_plane_svd</code><span class="sig-paren">(</span><em class="sig-param">pts</em>, <em class="sig-param">normalize=True</em>, <em class="sig-param">full_matrices=True</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.fit_plane_svd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a 3D plane using a SVD</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>{np.ndarray} -- The points. Should be Nx3</strong><strong> or </strong><strong>Nx4</strong> (<em>pts</em>) – </p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p><strong>{bool} -- Subtract the mean to the point cloud</strong><strong> (</strong><strong>default</strong> (<em>normalize</em>) – {True})</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.ndarray – The plane parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.utils.normal_from_parameters">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">normal_from_parameters</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.normal_from_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.utils.ransac_fit_plane">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">ransac_fit_plane</code><span class="sig-paren">(</span><em class="sig-param">pts</em>, <em class="sig-param">residual_threshold=0.5</em>, <em class="sig-param">ransac_iter=1000</em>, <em class="sig-param">min_samples=3</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.ransac_fit_plane" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a plane using ransac using fit_plane_svd and computing the orthogonal
+distances to find the inliers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>{np.ndarray} -- The point cloud</strong> (<em>pts</em>) – </p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>{float} -- The threshold distance to the plane</strong><strong> (</strong><strong>default</strong> (<em>residual_threshold</em>) – {0.5})</p></li>
+<li><p><strong>{int} -- The number of ransac iterations</strong><strong> (</strong><strong>default</strong> (<em>ransac_iter</em>) – {1000})</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError -- The ransac procedure failed to find a plane that satisfies</strong> – the distance threshold</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>(np.ndarray, np.ndarray, np.ndarray) – Plane parameters, inlier mask,</dt><dd><p>signed distance to plane</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.utils.ransac_fit_plane_ols">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">ransac_fit_plane_ols</code><span class="sig-paren">(</span><em class="sig-param">pts</em>, <em class="sig-param">residual_threshold=0.5</em>, <em class="sig-param">ransac_iter=1000</em>, <em class="sig-param">min_samples=3</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.ransac_fit_plane_ols" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Fit a plane using RANSAC by solving an ordinary least square problem.</dt><dd><p>The main difference with ransac fit plane is that the distances are computed</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><p>pts {np.ndarray} – The point cloud</p>
+</dd>
+<dt>Keyword Arguments:</dt><dd><p>residual_threshold {float} – The threshold distance to the plane (default: {0.5})
+ransac_iter {int} – The number of ransac iterations (default: {1000})
+min_samples {int} – [description] (default: {3})</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>(np.ndarray, np.ndarray, np.ndarray) – Plane parameters, inlier mask,</dt><dd><p>signed distance to plane</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.utils.ray_plane_intersection">
+<code class="sig-prename descclassname">api.utils.</code><code class="sig-name descname">ray_plane_intersection</code><span class="sig-paren">(</span><em class="sig-param">ray</em>, <em class="sig-param">plane</em>, <em class="sig-param">origin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.utils.ray_plane_intersection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-api">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.datasources.html" class="btn btn-neutral float-right" title="api.datasources package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to pioneer.das.api’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Leddartech
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
