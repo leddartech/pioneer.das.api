@@ -1,4 +1,4 @@
-from open3d.open3d.geometry import (PointCloud, KDTreeSearchParamHybrid)
+from open3d.open3d_pybind.geometry import (PointCloud, KDTreeSearchParamHybrid)
 from sklearn.linear_model import LinearRegression, RANSACRegressor
 
 import numpy as np

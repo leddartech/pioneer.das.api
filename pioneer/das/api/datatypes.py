@@ -24,7 +24,7 @@ def box3d():
     |               
     | 
     o----------->x_ENU
-   z_ENU
+    z_ENU
     '''
     return np.dtype([('c', 'f4', (3)) #center (x,y,z)
                     , ('d', 'f4', (3)) #dimensions (lx, ly, lz) typically mapped to (length, width, height)

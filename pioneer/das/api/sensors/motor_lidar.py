@@ -1,5 +1,4 @@
 from pioneer.common.logging_manager  import LoggingManager
-from pioneer.das.api                 import platform
 from pioneer.das.api.sensors.sensor  import Sensor
 from pioneer.das.api.samples         import XYZIT, Sample
 from pioneer.das.api.interpolators   import nearest_interpolator
