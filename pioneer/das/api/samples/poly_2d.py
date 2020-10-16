@@ -23,33 +23,21 @@ class Poly2d(Sample):
 
         return self.resize_mask(image, resolution) if resolution is not None else image
 
-    def mask_category(self, category:str, resolution:tuple=None, mode:str='binary'):
+    def mask_category(self, category:str, resolution:tuple=None, confidence_threshold:float=0.5):
         polygons = self.raw
         _,_,ds_type = platform.parse_datasource_name(self.datasource.label)
         poly_source = categories.get_source(ds_type)
-
-        if mode in ['binary','id']:
-            mask = np.zeros((polygons['resolution'][0],polygons['resolution'][1]), dtype=np.uint8)
-        elif mode == 'area':
-            areas = self.areas()
-            mask = np.zeros((polygons['resolution'][0],polygons['resolution'][1]))
-        else:
-            raise ValueError("Only supported modes are 'binary', 'id' and 'area'.")
+        mask = np.zeros((polygons['resolution'][0],polygons['resolution'][1]), dtype=np.uint8)
         
         for i, poly in enumerate(polygons['data']):
+
+            if 'confidence' in polygons:
+                if polygons['confidence'][i] < confidence_threshold:
+                    continue
+
             name, color = categories.get_name_color(poly_source,poly['classes'])
-
             if name == category:
-
-                value = 0
-                if mode == 'binary':
-                    value = 1
-                if mode == 'id':
-                    value = int(polygons['data']['id'][i]+1)
-                if mode == 'area':
-                    value = areas[i]/polygons['resolution'][0]/polygons['resolution'][1]
-            
-                cv2.fillPoly(mask, [poly['polygon']], value)
+                cv2.fillPoly(mask, [poly['polygon']], 1)
 
         return self.resize_mask(mask, resolution) if resolution is not None else mask
 

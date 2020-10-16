@@ -504,7 +504,7 @@ class SynchronizedGroup(Synchronized):
                      include:Optional[list]=None, ignore:Optional[list]=[], preload:bool=False):
                      
         if type(datasets) == str:
-            datasets = glob.glob(datasets)
+            datasets = glob.glob(f"{datasets}/*")
 
         self.datasets = datasets
         self.sync_labels = sync_labels
