@@ -1,0 +1,609 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>api.datasources.virtual_datasources package &mdash; pioneer.das.api 0.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="api.samples package" href="api.samples.html" />
+    <link rel="prev" title="api.datasources package" href="api.datasources.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pioneer.das.api
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">api package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="api.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="api.datasources.html">api.datasources package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="api.datasources.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.html#module-api.datasources.abstract_datasource">api.datasources.abstract_datasource module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.html#module-api.datasources.datasource">api.datasources.datasource module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.html#module-api.datasources.datasource_wrapper">api.datasources.datasource_wrapper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.datasources.html#module-api.datasources">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.samples.html">api.samples package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.sensors.html">api.sensors package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.sources.html">api.sources package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.chessboard">api.chessboard module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.datatypes">api.datatypes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.imu">api.imu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.interpolators">api.interpolators module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.loaders">api.loaders module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#api-platform-module">api.platform module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api.utils">api.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-api">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.datasources.html">api.datasources package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="api.datasources.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">api.datasources.virtual_datasources package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.datasources.virtual_datasources.cylindrical_projection">api.datasources.virtual_datasources.cylindrical_projection module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.datasources.virtual_datasources.echoes_from_traces">api.datasources.virtual_datasources.echoes_from_traces module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.datasources.virtual_datasources.echoes_with_pulses">api.datasources.virtual_datasources.echoes_with_pulses module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.datasources.virtual_datasources.hdr_waveform">api.datasources.virtual_datasources.hdr_waveform module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.datasources.virtual_datasources.virtual_datasource">api.datasources.virtual_datasources.virtual_datasource module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.datasources.virtual_datasources.voxel_map">api.datasources.virtual_datasources.voxel_map module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.datasources.virtual_datasources.waveform_cloud">api.datasources.virtual_datasources.waveform_cloud module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-api.datasources.virtual_datasources">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#module-api.datasources.abstract_datasource">api.datasources.abstract_datasource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#module-api.datasources.datasource">api.datasources.datasource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#module-api.datasources.datasource_wrapper">api.datasources.datasource_wrapper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.datasources.html#module-api.datasources">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">api.datasources.virtual_datasources package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.datasources.virtual_datasources.cylindrical_projection">api.datasources.virtual_datasources.cylindrical_projection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.datasources.virtual_datasources.echoes_from_traces">api.datasources.virtual_datasources.echoes_from_traces module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.datasources.virtual_datasources.echoes_with_pulses">api.datasources.virtual_datasources.echoes_with_pulses module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.datasources.virtual_datasources.hdr_waveform">api.datasources.virtual_datasources.hdr_waveform module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.datasources.virtual_datasources.virtual_datasource">api.datasources.virtual_datasources.virtual_datasource module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.datasources.virtual_datasources.voxel_map">api.datasources.virtual_datasources.voxel_map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.datasources.virtual_datasources.waveform_cloud">api.datasources.virtual_datasources.waveform_cloud module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-api.datasources.virtual_datasources">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.samples.html">api.samples package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.sensors.html">api.sensors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.sources.html">api.sources package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">api</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="api.html">api package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="api.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="api.datasources.html">api.datasources package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.samples.html">api.samples package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.sensors.html">api.sensors package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.sources.html">api.sources package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.chessboard">api.chessboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.datatypes">api.datatypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.imu">api.imu module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.interpolators">api.interpolators module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.loaders">api.loaders module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#api-platform-module">api.platform module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api.utils">api.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#module-api">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pioneer.das.api</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="api.html">api package</a> &raquo;</li>
+        
+          <li><a href="api.datasources.html">api.datasources package</a> &raquo;</li>
+        
+      <li>api.datasources.virtual_datasources package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.datasources.virtual_datasources.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-datasources-virtual-datasources-package">
+<h1>api.datasources.virtual_datasources package<a class="headerlink" href="#api-datasources-virtual-datasources-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-api.datasources.virtual_datasources.cylindrical_projection">
+<span id="api-datasources-virtual-datasources-cylindrical-projection-module"></span><h2>api.datasources.virtual_datasources.cylindrical_projection module<a class="headerlink" href="#module-api.datasources.virtual_datasources.cylindrical_projection" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.datasources.virtual_datasources.cylindrical_projection.FlirCylindricalProjection">
+<em class="property">class </em><code class="sig-prename descclassname">api.datasources.virtual_datasources.cylindrical_projection.</code><code class="sig-name descname">FlirCylindricalProjection</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">radius=50.0</em>, <em class="sig-param">fov_h=3.6651914291880923</em>, <em class="sig-param">fov_v=1.1780972450961724</em>, <em class="sig-param">image_h=2000</em>, <em class="sig-param">image_v=500</em>, <em class="sig-param">fusion_overlap_ratio=0.25</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.cylindrical_projection.FlirCylindricalProjection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource</span></code></p>
+<p>Merges the images of three cameras in a single one.</p>
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.cylindrical_projection.FlirCylindricalProjection.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.cylindrical_projection.FlirCylindricalProjection.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.cylindrical_projection.FlirCylindricalProjection.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">radius=50.0</em>, <em class="sig-param">fov_h=3.6651914291880923</em>, <em class="sig-param">fov_v=1.1780972450961724</em>, <em class="sig-param">image_h=2000</em>, <em class="sig-param">image_v=500</em>, <em class="sig-param">fusion_overlap_ratio=0.25</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.cylindrical_projection.FlirCylindricalProjection.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor
+:param reference_sensor: The name of the central camera (e.g. ‘flir_bfc’).
+:type reference_sensor: str
+:param dependencies: A list of the image datasource names from left to right.</p>
+<blockquote>
+<div><p>(e.g. [‘flir_bfl_img’,’flir_bfc_img’,’flir_bfr_img’])</p>
+</div></blockquote>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.datasources.virtual_datasources.echoes_from_traces">
+<span id="api-datasources-virtual-datasources-echoes-from-traces-module"></span><h2>api.datasources.virtual_datasources.echoes_from_traces module<a class="headerlink" href="#module-api.datasources.virtual_datasources.echoes_from_traces" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces">
+<em class="property">class </em><code class="sig-prename descclassname">api.datasources.virtual_datasources.echoes_from_traces.</code><code class="sig-name descname">Echoes_from_Traces</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">nb_detections_max: int = 3</em>, <em class="sig-param">min_amplitude: float = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource</span></code></p>
+<p>Non official implementation of the peak detector. Also measures the widths and the skews for each echo.</p>
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param">key: Any</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">nb_detections_max: int = 3</em>, <em class="sig-param">min_amplitude: float = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor
+:param reference_sensor: The name of the sensor (e.g. ‘pixell_bfc’).
+:type reference_sensor: str
+:param dependencies: A list of the datasource names.</p>
+<blockquote>
+<div><p>The only element should be a Trace datasource (e.g. ‘pixell_bfc_ftrr’)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nb_detections_max</strong> (<em>int</em>) – The maximum number of echoes per waveform.</p></li>
+<li><p><strong>min_amplitude</strong> (<em>float</em>) – Amplitude threshold under which the echoes are filtered out.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.get_at_timestamp">
+<code class="sig-name descname">get_at_timestamp</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.get_at_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default implementation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.get_echoes">
+<code class="sig-name descname">get_echoes</code><span class="sig-paren">(</span><em class="sig-param">processed_traces</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.get_echoes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.get_echoes_from_fast_traces">
+<code class="sig-name descname">get_echoes_from_fast_traces</code><span class="sig-paren">(</span><em class="sig-param">processed_fast_traces</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.get_echoes_from_fast_traces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.initialize_local_cache">
+<code class="sig-name descname">initialize_local_cache</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_from_traces.Echoes_from_Traces.initialize_local_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.datasources.virtual_datasources.echoes_with_pulses">
+<span id="api-datasources-virtual-datasources-echoes-with-pulses-module"></span><h2>api.datasources.virtual_datasources.echoes_with_pulses module<a class="headerlink" href="#module-api.datasources.virtual_datasources.echoes_with_pulses" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.datasources.virtual_datasources.echoes_with_pulses.EchoesWithPulses">
+<em class="property">class </em><code class="sig-prename descclassname">api.datasources.virtual_datasources.echoes_with_pulses.</code><code class="sig-name descname">EchoesWithPulses</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">pulse_sample_size: int = 10</em>, <em class="sig-param">zero_baseline: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_with_pulses.EchoesWithPulses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource</span></code></p>
+<p>Echoes, with a number of data points from the waveforms corresponding to the pulses that resulted in each echo.</p>
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.echoes_with_pulses.EchoesWithPulses.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param">key: Any</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_with_pulses.EchoesWithPulses.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.echoes_with_pulses.EchoesWithPulses.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">pulse_sample_size: int = 10</em>, <em class="sig-param">zero_baseline: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.echoes_with_pulses.EchoesWithPulses.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor
+:param reference_sensor: The name of the sensor (e.g. ‘pixell_bfc’).
+:type reference_sensor: str
+:param dependencies: A list of the datasource names.</p>
+<blockquote>
+<div><p>First element should be an Echo datasource (e.g. ‘pixell_bfc_ech’)
+Second element should be a Trace datasource (e.g. ‘pixell_bfc_ftrr’)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pulse_sample_size</strong> (<em>int</em>) – The number of data points to gather before and after each echo in the waveforms.
+For example, with pulse_sample_size=10, the pulses will be 21 points, because the highest point is
+taken in addition to the 10 points before and the 10 points after.</p></li>
+<li><p><strong>zero_baseline</strong> (<em>bool</em>) – If True, the baseline of the waveforms are re-calibrated to be around zero.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.datasources.virtual_datasources.hdr_waveform">
+<span id="api-datasources-virtual-datasources-hdr-waveform-module"></span><h2>api.datasources.virtual_datasources.hdr_waveform module<a class="headerlink" href="#module-api.datasources.virtual_datasources.hdr_waveform" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.datasources.virtual_datasources.hdr_waveform.HDRWaveform">
+<em class="property">class </em><code class="sig-prename descclassname">api.datasources.virtual_datasources.hdr_waveform.</code><code class="sig-name descname">HDRWaveform</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.hdr_waveform.HDRWaveform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource</span></code></p>
+<p>High Dynamic Range waveforms are created by combining both sets of waveforms from FastTraces.</p>
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.hdr_waveform.HDRWaveform.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param">key: Any</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.hdr_waveform.HDRWaveform.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.hdr_waveform.HDRWaveform.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.hdr_waveform.HDRWaveform.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor
+:param reference_sensor: The name of the sensor (e.g. ‘pixell_bfc’).
+:type reference_sensor: str
+:param dependencies: A list of the datasource names.</p>
+<blockquote>
+<div><p>The only element should be a FastTrace datasource (e.g. ‘pixell_bfc_ftrr’)</p>
+</div></blockquote>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.datasources.virtual_datasources.virtual_datasource">
+<span id="api-datasources-virtual-datasources-virtual-datasource-module"></span><h2>api.datasources.virtual_datasources.virtual_datasource module<a class="headerlink" href="#module-api.datasources.virtual_datasources.virtual_datasource" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource">
+<em class="property">class </em><code class="sig-prename descclassname">api.datasources.virtual_datasources.virtual_datasource.</code><code class="sig-name descname">VirtualDatasource</code><span class="sig-paren">(</span><em class="sig-param">ds_type: str, dependencies: List[str], callback: Optional[Callable[[Dict[str, pioneer.das.api.datasources.abstract_datasource.AbstractDatasource], Any], Sample]], timestamps_source=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.datasources.abstract_datasource.AbstractDatasource</span></code></p>
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">ds_type: str, dependencies: List[str], callback: Optional[Callable[[Dict[str, pioneer.das.api.datasources.abstract_datasource.AbstractDatasource], Any], Sample]], timestamps_source=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor
+:param ds_type: the datasource type, e.g. ‘ech-bbox’
+:param dependencies: a list of datasource names used to compute this datasources, e.g. [‘eagle_tfc_ech’, ‘flir_tfc_img’, …].
+:param callback: a method that will be called with arguments:</p>
+<blockquote>
+<div><p>‘datasources’: a dict with dependencies as keys and corresponding datasources as values
+‘key’:  the argument passed to the virtual datasource’s __getitem__().</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timestamps_source</strong> – datasource used as timestamps, If None first one dependencies used</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.get_at_timestamp">
+<code class="sig-name descname">get_at_timestamp</code><span class="sig-paren">(</span><em class="sig-param">timestamp: int</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.get_at_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default implementation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.get_first_datasource">
+<code class="sig-name descname">get_first_datasource</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; pioneer.das.api.datasources.abstract_datasource.AbstractDatasource<a class="headerlink" href="#api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.get_first_datasource" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.invalidate_caches">
+<code class="sig-name descname">invalidate_caches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.invalidate_caches" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.label">
+<em class="property">property </em><code class="sig-name descname">label</code><a class="headerlink" href="#api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.timestamps">
+<em class="property">property </em><code class="sig-name descname">timestamps</code><a class="headerlink" href="#api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource.timestamps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.datasources.virtual_datasources.voxel_map">
+<span id="api-datasources-virtual-datasources-voxel-map-module"></span><h2>api.datasources.virtual_datasources.voxel_map module<a class="headerlink" href="#module-api.datasources.virtual_datasources.voxel_map" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.datasources.virtual_datasources.voxel_map.VoxelMap">
+<em class="property">class </em><code class="sig-prename descclassname">api.datasources.virtual_datasources.voxel_map.</code><code class="sig-name descname">VoxelMap</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">memory: int = 5</em>, <em class="sig-param">skip: int = 1</em>, <em class="sig-param">voxel_size: float = 0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.voxel_map.VoxelMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource</span></code></p>
+<p>Merges multiple past points clouds in a single one, in the same present referential (mapping).
+Optionally, the merged point cloud can be voxelized (one averaged point per voxel, or volume unit).</p>
+<p>In order to work, the platform needs to have an egomotion_provider.</p>
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.voxel_map.VoxelMap.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param">key: Any</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.voxel_map.VoxelMap.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.voxel_map.VoxelMap.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">memory: int = 5</em>, <em class="sig-param">skip: int = 1</em>, <em class="sig-param">voxel_size: float = 0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.voxel_map.VoxelMap.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor
+:param reference_sensor: The name of the sensor (e.g. ‘pixell_bfc’).
+:type reference_sensor: str
+:param dependencies: A list of the datasource names.</p>
+<blockquote>
+<div><p>The only element should be an echo or point cloud datasource (e.g. ‘pixell_bfc_ech’)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>memory</strong> (<em>int</em>) – The number of past frames to merge.</p></li>
+<li><p><strong>skip</strong> (<em>int</em>) – If higher than 1, frames will be skipped. For example, with memory=10 and skip=2,
+the frames N=0,-2,-4,-6,-8,-10 will be merged. The present frame (N=0) is always included.</p></li>
+<li><p><strong>voxel_size</strong> (<em>float</em>) – If greater than 0, the merged point cloud will be voxelized.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.voxel_map.VoxelMap.clear_cache">
+<code class="sig-name descname">clear_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.voxel_map.VoxelMap.clear_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.voxel_map.VoxelMap.get_at_timestamp">
+<code class="sig-name descname">get_at_timestamp</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.voxel_map.VoxelMap.get_at_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default implementation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.voxel_map.VoxelMap.stack_point_cloud">
+<em class="property">static </em><code class="sig-name descname">stack_point_cloud</code><span class="sig-paren">(</span><em class="sig-param">stack</em>, <em class="sig-param">point_cloud</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.voxel_map.VoxelMap.stack_point_cloud" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.voxel_map.VoxelMap.voxelize">
+<code class="sig-name descname">voxelize</code><span class="sig-paren">(</span><em class="sig-param">pc</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.voxel_map.VoxelMap.voxelize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.datasources.virtual_datasources.waveform_cloud">
+<span id="api-datasources-virtual-datasources-waveform-cloud-module"></span><h2>api.datasources.virtual_datasources.waveform_cloud module<a class="headerlink" href="#module-api.datasources.virtual_datasources.waveform_cloud" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="api.datasources.virtual_datasources.waveform_cloud.WaveformCloud">
+<em class="property">class </em><code class="sig-prename descclassname">api.datasources.virtual_datasources.waveform_cloud.</code><code class="sig-name descname">WaveformCloud</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">zero_baseline: bool = False</em>, <em class="sig-param">remove_negative_distances: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.waveform_cloud.WaveformCloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.datasources.virtual_datasources.virtual_datasource.VirtualDatasource</span></code></p>
+<p>Makes a point cloud from each data point of each waveforms.</p>
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.waveform_cloud.WaveformCloud.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param">key: Any</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.waveform_cloud.WaveformCloud.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.waveform_cloud.WaveformCloud.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">reference_sensor: str</em>, <em class="sig-param">dependencies: list</em>, <em class="sig-param">zero_baseline: bool = False</em>, <em class="sig-param">remove_negative_distances: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.waveform_cloud.WaveformCloud.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor
+:param reference_sensor: The name of the sensor (e.g. ‘pixell_bfc’).
+:type reference_sensor: str
+:param dependencies: A list of the datasource names.</p>
+<blockquote>
+<div><p>The only element should be a Trace datasource (e.g. ‘pixell_bfc_ftrr’)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zero_baseline</strong> (<em>bool</em>) – If True, the baseline of the waveforms are re-calibrated to be around zero.</p></li>
+<li><p><strong>remove_negative_distances</strong> (<em>bool</em>) – If True, the points behind the sensor are filtered out.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="api.datasources.virtual_datasources.waveform_cloud.WaveformCloud.get_extrema_positions">
+<code class="sig-name descname">get_extrema_positions</code><span class="sig-paren">(</span><em class="sig-param">sensor</em>, <em class="sig-param">distances</em>, <em class="sig-param">ts</em>, <em class="sig-param">time_base_delays</em><span class="sig-paren">)</span><a class="headerlink" href="#api.datasources.virtual_datasources.waveform_cloud.WaveformCloud.get_extrema_positions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.datasources.virtual_datasources">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api.datasources.virtual_datasources" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.samples.html" class="btn btn-neutral float-right" title="api.samples package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api.datasources.html" class="btn btn-neutral float-left" title="api.datasources package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Leddartech
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
