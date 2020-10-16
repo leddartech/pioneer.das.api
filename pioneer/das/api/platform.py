@@ -502,12 +502,7 @@ class SynchronizedGroup(Synchronized):
 
     def __init__(self, datasets:Union[str,list], sync_labels:List[str]=[], interp_labels:List[str]=[], tolerance_us:Union[float, int]=None,
                      include:Optional[list]=None, ignore:Optional[list]=[], preload:bool=False):
-        """
-            Note: For performance and memory concerns, only the platform for a single dataset is loaded at a time.
-                When trying to access the samples from another dataset than the one that is currently loaded,
-                we have to initialize the new platform and synchronize it, which takes a few seconds.
-                For this reason, this class is currently not usable for random access, but works better for sequential access.
-        
+                     
         if type(datasets) == str:
             datasets = glob.glob(datasets)
 
@@ -530,8 +525,7 @@ class SynchronizedGroup(Synchronized):
         self._preload_lenghts()
 
     def _preload_lenghts(self):
-        """We have to pre-calculate the lenghts of each dataset, so we know which one to use when using __getitem__"""
-
+    
         self.lenghts = [] 
         for dataset_index in tqdm.tqdm(range(len(self.datasets)), 'Grouping synchronized platforms'):
             try:
