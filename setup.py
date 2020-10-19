@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="pioneer_das_api", # Replace with your own username
-    version="0.2.0",
+    version="0.2.1",
     author="Leddartech",
     description="Pioneer's das api",
     packages=[
