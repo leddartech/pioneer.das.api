@@ -29,7 +29,7 @@ setuptools.setup(
         'opencv-python',
         'open3d',
         'transforms3d',
-        'pioneer-common>=0.2.0',
+        'pioneer-common>=0.2',
         'six',
         'ruamel.std.zipfile',
         'pandas',
