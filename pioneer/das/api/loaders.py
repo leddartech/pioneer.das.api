@@ -67,12 +67,12 @@ def pickle_loader(fileobj):
         object -- Unpickled object
     """
     if isinstance(fileobj, bytes):
-        data = pickle.loads(fileobj)
+        data = pickle.loads(fileobj, encoding="latin1")
     elif isinstance(fileobj, six.string_types):
         with open(fileobj, 'rb') as f:
-            data = pickle.load(f)
+            data = pickle.load(f, encoding="latin1")
     elif hasattr(fileobj, 'read'):
-        data = pickle.load(fileobj)
+        data = pickle.load(fileobj, encoding="latin1")
     else:
         raise ValueError('fileobj is not a filename or a file object')
     return data
