@@ -23,12 +23,13 @@ def __extract_or_copy_file(args):
     except:
         print(f'Failed to extract or copy: {filepath}')
 
-def extract_zipfiles(dataset:str, output:str):
+def extract_zipfiles(dataset:str, output:str, files:list='all'):
     """Make a copy of a dataset with unzipped files
     
         Args:
             dataset (str): Path to the original dataset
             output (str): Path to the copy to be created. Must be non-existant for safety reasons.
+            files (list): list of zipfile names to include. Default is 'all'.
     """
 
     if not os.path.exists(output):
@@ -38,6 +39,10 @@ def extract_zipfiles(dataset:str, output:str):
         return
 
     all_files = glob.glob(f'{dataset}/*')
+    
+    if isinstance(files, list):
+        all_files = [f for f in all_files if f.split('/')[-1] in files]
+
     all_files = [[f, output] for f in all_files]
 
     pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
