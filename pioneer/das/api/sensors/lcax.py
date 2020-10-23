@@ -266,6 +266,10 @@ class LCAx(Sensor):
         """Get the distance in meters between two subsequent points in a trace"""
         return misc.distance_per_sample(self.adc_freq, self.oversampling, self.binning)
 
+    @property
+    def trace_smoothing_kernel(self):
+        return self.get_trace_smoothing_kernel()
+
     def get_trace_smoothing_kernel(self):
         """Get the convolution kernel for trace processing for LCA2"""
         kernel = [71,114,71]

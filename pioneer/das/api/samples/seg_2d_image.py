@@ -2,6 +2,7 @@ from pioneer.das.api                import datatypes
 from pioneer.das.api.samples.sample import Sample
 
 import copy
+import cv2
 import numpy as np
 
 class Seg2dImage(Sample):
