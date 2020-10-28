@@ -3,6 +3,9 @@ from pioneer.das.api.samples.sample import Sample
 import numpy as np
 
 class XYZIT(Sample):
+    """Point cloud provided by a mechanical lidar sensor.
+        For each data point, contains (x,y,z) coordinates, the intensity (i) and a timestamp (t).
+    """
 
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(XYZIT, self).__init__(index, datasource, virtual_raw, virtual_ts)

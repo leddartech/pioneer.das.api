@@ -1,5 +1,5 @@
 from pioneer.common                  import platform, clouds
-from pioneer.das                     import categories
+from pioneer.das.api                 import categories
 from pioneer.das.api.samples.sample  import Sample
 
 import numpy as np

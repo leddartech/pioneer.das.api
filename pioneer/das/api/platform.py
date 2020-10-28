@@ -777,16 +777,15 @@ class Sensors(object):
         self._ordered_names = []
         self._egomotion_provider = None
 
-        yml_items_tqdm = tqdm.tqdm(yml.items(), 'Loading sensors') if self.platform.progress_bar else yml.items()
+        yml_sensor_items = [s for s in yml.items() if s[0] not in ['ignore','virtual_datasources','synchronization']]
+        yml_items_tqdm = tqdm.tqdm(yml_sensor_items, 'Loading sensors') if self.platform.progress_bar else yml_sensor_items
         for name, value in yml_items_tqdm:
 
-            if name.split('_')[0] not in SENSOR_FACTORY:
-                if name not in ['ignore','virtual_datasources','synchronization']:
-                    LoggingManager.instance().warning(f"The key {name} in the configuration file is not understood.")
-                continue
-
             sensor_type, _ = platform_utils.parse_sensor_name(name)
-            self._sensors[name] = SENSOR_FACTORY[sensor_type](name, self.platform)
+            if sensor_type in SENSOR_FACTORY:
+                self._sensors[name] = SENSOR_FACTORY[sensor_type](name, self.platform)
+            else:
+                self._sensors[name] = Sensor(name, self.platform)
             self._ordered_names.append(name)
 
             self._load_offline_datasources(name)
@@ -857,7 +856,7 @@ class Sensors(object):
 
             if archive.endswith('.zip'):
                 # remove the .zip and extracts the 'datasource' suffix:
-                ds_name = os.path.splitext(archive)[0].split('_')[-1]
+                ds_name = os.path.splitext(archive)[0].split('_')[-1]#.split('-')[0]
                 try:
                     ds = ZipFileSource(os.path.join(self.platform.dataset, archive))
                     self._sensors[name].add_datasource(ds, ds_name, cache_size = self.platform.default_cache_size)
@@ -866,7 +865,7 @@ class Sensors(object):
                     continue
 
             else:
-                ds_name = archive.split('_')[-1]
+                ds_name = archive.split('_')[-1]#.split('-')[0]
                 try:
                     ds = DirSource(os.path.join(self.platform.dataset, archive))
                     self._sensors[name].add_datasource(ds, ds_name, cache_size = self.platform.default_cache_size)

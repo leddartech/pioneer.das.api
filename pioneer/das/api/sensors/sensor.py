@@ -2,7 +2,8 @@ from pioneer.common import misc, linalg
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.datasources import DatasourceWrapper, VirtualDatasource
 from pioneer.das.api.interpolators import nearest_interpolator
-from pioneer.das.api.samples import Sample, Box3d, Box2d, Poly2d, Seg2d, Seg2dImage, Seg3d, Lane
+from pioneer.das.api.samples import Sample
+from pioneer.das.api.samples import annotations
 from pioneer.das.api.sources import FileSource
 
 from typing import Callable, Union, Optional, List, Dict, Tuple, Any
@@ -39,7 +40,7 @@ class Sensor(object):
         """
         self.name = name
         self.datasources = {}
-        self.factories = factories
+        self.factories = {**factories, **annotations.ANNOTATIONS_FACTORY}
         self.pf = pf
         self.yml = {}
         try:
@@ -98,14 +99,8 @@ class Sensor(object):
             self.datasources[ds_type] = ds
         
         else:
-            dsw = DatasourceWrapper(self, ds_type, ds, self.factories[ds_type] if ds_type in self.factories else (Sample, nearest_interpolator), cache_size=cache_size)
-            dsw = DatasourceWrapper(self, ds_type, ds, (Box3d, nearest_interpolator), cache_size=cache_size) if 'box3d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Box2d, nearest_interpolator), cache_size=cache_size) if 'box2d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Poly2d, nearest_interpolator), cache_size=cache_size) if 'poly2d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Seg2d, nearest_interpolator), cache_size=cache_size) if 'seg2d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Seg2dImage, nearest_interpolator), cache_size=cache_size) if 'seg2dimg' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Seg3d, nearest_interpolator), cache_size=cache_size) if 'seg3d' in ds_type else dsw
-            dsw = DatasourceWrapper(self, ds_type, ds, (Lane, nearest_interpolator), cache_size=cache_size) if 'lane' in ds_type else dsw
+            ds_type_no_suffix = ds_type.split('-')[0]
+            dsw = DatasourceWrapper(self, ds_type, ds, self.factories[ds_type_no_suffix] if ds_type_no_suffix in self.factories else (Sample, nearest_interpolator), cache_size=cache_size)
             self.datasources[ds_type] = dsw
 
     def load_intrinsics(self, intrinsics_config:str):

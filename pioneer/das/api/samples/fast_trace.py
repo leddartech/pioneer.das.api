@@ -7,6 +7,10 @@ import copy
 import numpy as np
 
 class FastTrace(Trace):
+    """Derivation of Trace sample, for Pixell sensors. 
+        Two distinct sets of waveforms are contained in the raw data dictionnary, under the keys 'high' and 'low'.
+    """
+
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(FastTrace, self).__init__(index, datasource, virtual_raw, virtual_ts)
 

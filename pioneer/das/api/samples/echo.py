@@ -5,6 +5,9 @@ from pioneer.das.api.samples.sample import Sample
 import numpy as np
 
 class Echo(Sample):
+    """Sample from a single data package provided by a LCAx sensor. 
+        See pioneer.common.clouds.to_echo_package() to create a similar data package from scratch.
+    """
 
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(Echo, self).__init__(index, datasource, virtual_raw, virtual_ts)
@@ -15,16 +18,6 @@ class Echo(Sample):
         if self._raw is None:
             r = super(Echo, self).raw
             r['das.sample'] = self
-            if 'indices' in r: # old package conversion
-                if not hasattr(self.datasource, '_warned_ech'):
-                    LoggingManager.instance().warning("Deprecated 'ech' format detected, please convert/re-export dataset {}".format(self.datasource.sensor.platform.dataset))
-                    self.datasource._warned_ech = True
-                try:
-                    if self.datasource.sensor.specs is None:
-                        cfg = self.datasource.sensor['cfg'][0].raw
-                        self.datasource.sensor.specs = banks.extract_specs(lambda n: cfg[n])
-                finally:
-                    r = clouds.convert_echo_package(r, specs = self.datasource.sensor.specs)
             if r['data']['timestamps'][-1] == 0:
                 try:
                     cfg = self.datasource.sensor['cfg'].get_at_timestamp(self.timestamp).raw

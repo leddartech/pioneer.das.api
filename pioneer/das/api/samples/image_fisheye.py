@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 class ImageFisheye(Image):
-    '''A derivation of a standard Flir Image, whenever the lens used is of type fisheye (from immervision)'''
+    '''A derivation the Image sample, to be used with fisheye lenses.'''
     
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(ImageFisheye, self).__init__(index, datasource, virtual_raw, virtual_ts) 

@@ -2,6 +2,7 @@ from pioneer.das.api.samples.image import Image
 
 
 class ImageCylinder(Image):
+    """Image derivation that was transformed by a cylindrical projection"""
     
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(ImageCylinder, self).__init__(index, datasource, virtual_raw, virtual_ts)

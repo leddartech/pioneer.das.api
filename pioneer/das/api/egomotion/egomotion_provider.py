@@ -3,6 +3,18 @@ from pioneer.common import linalg
 import numpy as np
 
 class EgomotionProvider(object):
+    """Computes the position and orientation of the ego vehicle. A Platform must have
+        an ego motion provider in order to use the 'world' referential.
+
+        A sub-class should be created and adapted to a motion sensing device. The sub-class
+        must override the get_Global_from_Ego_at() method, with gathers the motion sensing
+        device's raw data at a given timestamp, then computes and returns a 4x4 affine 
+        transformation matrix corresponding to the position and orientation of the ego vehicle.
+
+        The ego motion provider can be automatically added to a Platform if the motion sensing
+        device has a create_egomotion_provider() method.
+    """
+
     def __init__(self, referential_name:str, subsampling:int=100):
         self.subsampling = subsampling
         self._referential_name = referential_name

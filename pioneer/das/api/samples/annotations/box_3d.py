@@ -1,8 +1,8 @@
 from pioneer.common import platform, linalg, IoU3d
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.common import platform as platform_utils
+from pioneer.das.api import categories
 from pioneer.das.api.samples.sample import Sample
-from pioneer.das import categories
 
 from transforms3d import euler
 import numpy as np
@@ -14,9 +14,7 @@ class Box3d(Sample):
         super(Box3d, self).__init__(index, datasource, virtual_raw, virtual_ts)
 
     def label_names(self):
-        
-        '''mapping from label encoding to name of each annotation
-        '''
+        '''mapping from label encoding to name of each annotation'''
         label_source_name = categories.get_source(platform_utils.parse_datasource_name(self.datasource.label)[2])
         try:
             names = [categories.CATEGORIES[label_source_name][str(omega)]['name'] for omega in self.raw['data']['classes']]
@@ -25,13 +23,9 @@ class Box3d(Sample):
             return None
         return names
 
-    def _mapto(self, tf=None):
-        """Given a transformation matrix tf [4,4] (newreferential_from_localdatasource), 
-                will map the box3d to the new referential.
-        """
+    def _mapto(self, tf=np.eye(4)):
+        """Maps the box3d to the new referential, given a 4x4 matrix transformation"""
         bbox = np.copy(self.raw['data'])
-        if tf is None:
-            return bbox
 
         for i in range(len(bbox)):
             tf_Localds_from_Box = np.eye(4)
@@ -67,13 +61,13 @@ class Box3d(Sample):
         return None
 
     def num_pts_in(self, pt_cloud, margin=0):
-        """ Will return for each box, the mask of those points from pt_cloud that are inside the box.
+        """ Returns, for each box, the mask of those points from pt_cloud that are inside the box.
             Args:
-            pt_cloud - (M,3)
-            margin (optional) - positive float- increases the size of box
+                pt_cloud - (M,3)
+                margin (optional) - positive float- increases the size of box
 
-            Out:
-            mask - boolean (n_boxe,M)
+            Returns:
+                mask - boolean (n_boxe,M)
         """
         bbox = self.raw['data']
         nbpts = np.zeros((len(bbox), len(pt_cloud)), dtype=bool)

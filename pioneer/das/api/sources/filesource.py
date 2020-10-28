@@ -21,10 +21,9 @@ def try_all_patterns(name):
     return None, None
 
 class FileSource(DataSource):
-
     """Base class for loading files from a dataset. Will be used to
-    load a list of echoes from pickle files contained in a folder or a tar
-    archive. Subclases must be used.
+        load a list of echoes from pickle files contained in a folder or a tar
+        archive. Subclases must be used.
     """
 
     def __init__(self, path, pattern = None, sort=True, loader=None):

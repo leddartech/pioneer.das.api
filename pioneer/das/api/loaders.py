@@ -7,8 +7,7 @@ import six
 
 
 def load_files_from_folder(folder, pattern, sort=False, return_keys=False):
-    """Load files from a folder and sort them according to a regex pattern
-    """
+    """Load files from a folder and sort them according to a regex pattern"""
     if return_keys:
         assert sort, 'sort must be True when return_keys is True'
 

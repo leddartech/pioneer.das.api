@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 
 class Image(Sample):
+    """RGB data from a single camera image"""
 
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(Image, self).__init__(index, datasource, virtual_raw, virtual_ts)
