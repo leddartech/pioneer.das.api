@@ -75,8 +75,6 @@ class Sample(object):
         '''
         self.index = index
         self.datasource = datasource
-
-
         self.virtual_raw = virtual_raw
         self.virtual_ts = virtual_ts
         self._raw = None

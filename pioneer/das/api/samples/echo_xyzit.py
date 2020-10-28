@@ -3,6 +3,10 @@ from pioneer.das.api.samples.xyzit import XYZIT
 import numpy as np
 
 class EchoXYZIT(XYZIT):
+    """Similar data structure than XYZIT sample. However, this sub-class should be 
+        used instead if the sensor is a LCAx instance.
+    """
+
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(EchoXYZIT, self).__init__(index, datasource, virtual_raw, virtual_ts)
     

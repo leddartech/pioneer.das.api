@@ -2,12 +2,8 @@ from pioneer.das.api.sensors.sensor import Sensor
 from pioneer.das.api.sensors.pixell import Pixell
 from pioneer.das.api.sensors.motor_lidar import MotorLidar
 from pioneer.das.api.sensors.camera import Camera
-from pioneer.das.api.sensors.egomotion_provider import EgomotionProvider
-from pioneer.das.api.sensors.imu_egomotion_provider import IMUEgomotionProvider
 from pioneer.das.api.sensors.imu_sbg_ekinox import ImuSbgEkinox
 from pioneer.das.api.sensors.encoder import Encoder
-from pioneer.das.api.sensors.mti import MTi
-from pioneer.das.api.sensors.carla_gps import CarlaGPS 
 from pioneer.das.api.sensors.carla_imu import CarlaIMU 
 from pioneer.das.api.sensors.radar_ti import RadarTI
 from pioneer.das.api.sensors.lcax import LCAx
@@ -28,8 +24,6 @@ SENSOR_FACTORY = {
     'radarTI': RadarTI,
     'webcam': Camera,
     'encoder': Encoder,
-    'mti': MTi,
-    'carlagps': CarlaGPS,
     'carlaimu': CarlaIMU,
     'leddar': LCAx,
     'lidar': MotorLidar,

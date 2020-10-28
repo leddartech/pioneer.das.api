@@ -6,6 +6,8 @@ import copy
 import numpy as np
 
 class Trace(Sample):
+    """Trace (or waveform) data from a single LCAx package"""
+
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(Trace, self).__init__(index, datasource, virtual_raw, virtual_ts)
     

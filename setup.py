@@ -9,7 +9,6 @@ setuptools.setup(
         'pioneer', 
         'pioneer.das', 
         'pioneer.das.api', 
-        'pioneer.das.calibration',
         'pioneer.das.tests',
         'pioneer.das.api.samples', 
         'pioneer.das.api.sensors', 

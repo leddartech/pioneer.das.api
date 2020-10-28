@@ -1,6 +1,6 @@
+from pioneer.das.api.egomotion import IMUEgomotionProvider
 from pioneer.das.api.interpolators import linear_ndarray_interpolator, euler_imu_linear_ndarray_interpolator
 from pioneer.das.api.samples import Sample
-from pioneer.das.api.sensors import IMUEgomotionProvider
 from pioneer.das.api.sensors.sensor import Sensor
 
 class ImuSbgEkinox(Sensor):
