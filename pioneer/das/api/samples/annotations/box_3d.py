@@ -23,10 +23,13 @@ class Box3d(Sample):
             return None
         return names
 
-    def _mapto(self, tf=np.eye(4)):
+    def _mapto(self, tf=None):
         """Maps the box3d to the new referential, given a 4x4 matrix transformation"""
-        bbox = np.copy(self.raw['data'])
 
+        bbox = np.copy(self.raw['data'])
+        if tf is None:
+            return bbox
+        
         for i in range(len(bbox)):
             tf_Localds_from_Box = np.eye(4)
             tf_Localds_from_Box[:3, :3] = euler.euler2mat(bbox['r'][i,0], bbox['r'][i,1], bbox['r'][i,2])
