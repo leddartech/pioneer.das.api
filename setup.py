@@ -26,7 +26,7 @@ setuptools.setup(
     install_requires=[
         'numpy',
         'opencv-python',
-        'open3d',
+        'open3d==0.10',
         'transforms3d',
         'pioneer-common>=0.3',
         'six',
