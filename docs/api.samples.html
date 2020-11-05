@@ -184,86 +184,9 @@
 </div>
 <div class="section" id="module-api.samples.box_2d">
 <span id="api-samples-box-2d-module"></span><h2>api.samples.box_2d module<a class="headerlink" href="#module-api.samples.box_2d" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="api.samples.box_2d.Box2d">
-<em class="property">class </em><code class="sig-prename descclassname">api.samples.box_2d.</code><code class="sig-name descname">Box2d</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_2d.Box2d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
-<dl class="method">
-<dt id="api.samples.box_2d.Box2d.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_2d.Box2d.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>virtual_raw and virtual_ts are meant for samples which dont exist in
-a physical datasource. For example interpolated samples, or samples
-derived from other samples.</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-api.samples.box_3d">
 <span id="api-samples-box-3d-module"></span><h2>api.samples.box_3d module<a class="headerlink" href="#module-api.samples.box_3d" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="api.samples.box_3d.Box3d">
-<em class="property">class </em><code class="sig-prename descclassname">api.samples.box_3d.</code><code class="sig-name descname">Box3d</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_3d.Box3d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
-<dl class="method">
-<dt id="api.samples.box_3d.Box3d.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_3d.Box3d.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>virtual_raw and virtual_ts are meant for samples which dont exist in
-a physical datasource. For example interpolated samples, or samples
-derived from other samples.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="api.samples.box_3d.Box3d.attributes">
-<code class="sig-name descname">attributes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_3d.Box3d.attributes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="api.samples.box_3d.Box3d.compute_iou">
-<code class="sig-name descname">compute_iou</code><span class="sig-paren">(</span><em class="sig-param">box</em>, <em class="sig-param">return_max=False</em>, <em class="sig-param">map2yaw=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_3d.Box3d.compute_iou" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the iou score between all the elements of self and of box.</p>
-<p>Return a matrix len(self), len(box) when row,col are indexed in the same order as self, box.</p>
-<p>If return_max=True: return only a single number for each element of self (the max value).</p>
-<p>Important note: By default the computation is performed in the sbg ref where only one angle (yaw) is not zero, unless
-map2yaw is provided (a callable) which brings all the boxes in a referential where only one rotation (yaw).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="api.samples.box_3d.Box3d.confidences">
-<code class="sig-name descname">confidences</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_3d.Box3d.confidences" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="api.samples.box_3d.Box3d.label_names">
-<code class="sig-name descname">label_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_3d.Box3d.label_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>mapping from label encoding to name of each annotation</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="api.samples.box_3d.Box3d.mapto">
-<code class="sig-name descname">mapto</code><span class="sig-paren">(</span><em class="sig-param">referential_or_ds: str = None</em>, <em class="sig-param">ignore_orientation: bool = False</em>, <em class="sig-param">reference_ts: int = -1</em>, <em class="sig-param">dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_3d.Box3d.mapto" title="Permalink to this definition">¶</a></dt>
-<dd><p>Will map each box in another referential.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="api.samples.box_3d.Box3d.num_pts_in">
-<code class="sig-name descname">num_pts_in</code><span class="sig-paren">(</span><em class="sig-param">pt_cloud</em>, <em class="sig-param">margin=0</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_3d.Box3d.num_pts_in" title="Permalink to this definition">¶</a></dt>
-<dd><p>Will return for each box, the mask of those points from pt_cloud that are inside the box.
-Args:
-pt_cloud - (M,3)
-margin (optional) - positive float- increases the size of box</p>
-<p>Out:
-mask - boolean (n_boxe,M)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="api.samples.box_3d.Box3d.set_angle_to_domain">
-<code class="sig-name descname">set_angle_to_domain</code><span class="sig-paren">(</span><em class="sig-param">domain=[0, 6.283185307179586]</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.box_3d.Box3d.set_angle_to_domain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Will set the angles to a given domain</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-api.samples.echo">
 <span id="api-samples-echo-module"></span><h2>api.samples.echo module<a class="headerlink" href="#module-api.samples.echo" title="Permalink to this headline">¶</a></h2>
@@ -271,6 +194,8 @@ mask - boolean (n_boxe,M)</p>
 <dt id="api.samples.echo.Echo">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.echo.</code><code class="sig-name descname">Echo</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.echo.Echo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
+<p>Sample from a single data package provided by a LCAx sensor.
+See pioneer.common.clouds.to_echo_package() to create a similar data package from scratch.</p>
 <dl class="method">
 <dt id="api.samples.echo.Echo.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.echo.Echo.__init__" title="Permalink to this definition">¶</a></dt>
@@ -423,6 +348,8 @@ refer to compute_transform()’s documentation</p></li>
 <dt id="api.samples.echo_xyzit.EchoXYZIT">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.echo_xyzit.</code><code class="sig-name descname">EchoXYZIT</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.echo_xyzit.EchoXYZIT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.xyzit.XYZIT</span></code></p>
+<p>Similar data structure than XYZIT sample. However, this sub-class should be
+used instead if the sensor is a LCAx instance.</p>
 <dl class="method">
 <dt id="api.samples.echo_xyzit.EchoXYZIT.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.echo_xyzit.EchoXYZIT.__init__" title="Permalink to this definition">¶</a></dt>
@@ -458,6 +385,8 @@ refer to compute_transform()’s documentation</p></li>
 <dt id="api.samples.fast_trace.FastTrace">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.fast_trace.</code><code class="sig-name descname">FastTrace</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.fast_trace.FastTrace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.trace.Trace</span></code></p>
+<p>Derivation of Trace sample, for Pixell sensors.
+Two distinct sets of waveforms are contained in the raw data dictionnary, under the keys ‘high’ and ‘low’.</p>
 <dl class="method">
 <dt id="api.samples.fast_trace.FastTrace.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.fast_trace.FastTrace.__init__" title="Permalink to this definition">¶</a></dt>
@@ -474,6 +403,11 @@ derived from other samples.</p>
 <dl class="method">
 <dt id="api.samples.fast_trace.FastTrace.processed">
 <code class="sig-name descname">processed</code><span class="sig-paren">(</span><em class="sig-param">trace_processing: Callable</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.fast_trace.FastTrace.processed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.samples.fast_trace.FastTrace.processed_array">
+<code class="sig-name descname">processed_array</code><span class="sig-paren">(</span><em class="sig-param">trace_processing: Callable</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.fast_trace.FastTrace.processed_array" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -495,6 +429,7 @@ derived from other samples.</p>
 <dt id="api.samples.image.Image">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.image.</code><code class="sig-name descname">Image</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.image.Image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
+<p>RGB data from a single camera image</p>
 <dl class="method">
 <dt id="api.samples.image.Image.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.image.Image.__init__" title="Permalink to this definition">¶</a></dt>
@@ -560,6 +495,7 @@ derived from other samples.</p>
 <dt id="api.samples.image_cylinder.ImageCylinder">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.image_cylinder.</code><code class="sig-name descname">ImageCylinder</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.image_cylinder.ImageCylinder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.image.Image</span></code></p>
+<p>Image derivation that was transformed by a cylindrical projection</p>
 <dl class="method">
 <dt id="api.samples.image_cylinder.ImageCylinder.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.image_cylinder.ImageCylinder.__init__" title="Permalink to this definition">¶</a></dt>
@@ -606,7 +542,7 @@ mask (optionnal): returned if output_mask is True</p>
 <dt id="api.samples.image_fisheye.ImageFisheye">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.image_fisheye.</code><code class="sig-name descname">ImageFisheye</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.image_fisheye.ImageFisheye" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.image.Image</span></code></p>
-<p>A derivation of a standard Flir Image, whenever the lens used is of type fisheye (from immervision)</p>
+<p>A derivation the Image sample, to be used with fisheye lenses.</p>
 <dl class="method">
 <dt id="api.samples.image_fisheye.ImageFisheye.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.image_fisheye.ImageFisheye.__init__" title="Permalink to this definition">¶</a></dt>
@@ -642,57 +578,9 @@ derived from other samples.</p>
 </div>
 <div class="section" id="module-api.samples.lane">
 <span id="api-samples-lane-module"></span><h2>api.samples.lane module<a class="headerlink" href="#module-api.samples.lane" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="api.samples.lane.Lane">
-<em class="property">class </em><code class="sig-prename descclassname">api.samples.lane.</code><code class="sig-name descname">Lane</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.lane.Lane" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
-<dl class="method">
-<dt id="api.samples.lane.Lane.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.lane.Lane.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>virtual_raw and virtual_ts are meant for samples which dont exist in
-a physical datasource. For example interpolated samples, or samples
-derived from other samples.</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-api.samples.poly_2d">
 <span id="api-samples-poly-2d-module"></span><h2>api.samples.poly_2d module<a class="headerlink" href="#module-api.samples.poly_2d" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="api.samples.poly_2d.Poly2d">
-<em class="property">class </em><code class="sig-prename descclassname">api.samples.poly_2d.</code><code class="sig-name descname">Poly2d</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.poly_2d.Poly2d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
-<dl class="method">
-<dt id="api.samples.poly_2d.Poly2d.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.poly_2d.Poly2d.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>virtual_raw and virtual_ts are meant for samples which dont exist in
-a physical datasource. For example interpolated samples, or samples
-derived from other samples.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="api.samples.poly_2d.Poly2d.areas">
-<code class="sig-name descname">areas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.poly_2d.Poly2d.areas" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="api.samples.poly_2d.Poly2d.colored_image">
-<code class="sig-name descname">colored_image</code><span class="sig-paren">(</span><em class="sig-param">resolution: tuple = None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.poly_2d.Poly2d.colored_image" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="api.samples.poly_2d.Poly2d.mask_category">
-<code class="sig-name descname">mask_category</code><span class="sig-paren">(</span><em class="sig-param">category: str</em>, <em class="sig-param">resolution: tuple = None</em>, <em class="sig-param">mode: str = 'binary'</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.poly_2d.Poly2d.mask_category" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="api.samples.poly_2d.Poly2d.resize_mask">
-<em class="property">static </em><code class="sig-name descname">resize_mask</code><span class="sig-paren">(</span><em class="sig-param">mask</em>, <em class="sig-param">resolution</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.poly_2d.Poly2d.resize_mask" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-api.samples.rpm">
 <span id="api-samples-rpm-module"></span><h2>api.samples.rpm module<a class="headerlink" href="#module-api.samples.rpm" title="Permalink to this headline">¶</a></h2>
@@ -700,6 +588,7 @@ derived from other samples.</p>
 <dt id="api.samples.rpm.RPM">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.rpm.</code><code class="sig-name descname">RPM</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.rpm.RPM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
+<p>Rotations per minute measured by wheel encoders (left and right channels)</p>
 <dl class="method">
 <dt id="api.samples.rpm.RPM.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.rpm.RPM.__init__" title="Permalink to this definition">¶</a></dt>
@@ -874,79 +763,12 @@ undistorted points are projected back to the local referential
 </div>
 <div class="section" id="module-api.samples.seg_2d">
 <span id="api-samples-seg-2d-module"></span><h2>api.samples.seg_2d module<a class="headerlink" href="#module-api.samples.seg_2d" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="api.samples.seg_2d.Seg2d">
-<em class="property">class </em><code class="sig-prename descclassname">api.samples.seg_2d.</code><code class="sig-name descname">Seg2d</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_2d.Seg2d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
-<dl class="method">
-<dt id="api.samples.seg_2d.Seg2d.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_2d.Seg2d.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>virtual_raw and virtual_ts are meant for samples which dont exist in
-a physical datasource. For example interpolated samples, or samples
-derived from other samples.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="api.samples.seg_2d.Seg2d.poly2d">
-<code class="sig-name descname">poly2d</code><span class="sig-paren">(</span><em class="sig-param">confidence_threshold=0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_2d.Seg2d.poly2d" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-api.samples.seg_2d_image">
 <span id="api-samples-seg-2d-image-module"></span><h2>api.samples.seg_2d_image module<a class="headerlink" href="#module-api.samples.seg_2d_image" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="api.samples.seg_2d_image.Seg2dImage">
-<em class="property">class </em><code class="sig-prename descclassname">api.samples.seg_2d_image.</code><code class="sig-name descname">Seg2dImage</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_2d_image.Seg2dImage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
-<dl class="method">
-<dt id="api.samples.seg_2d_image.Seg2dImage.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_2d_image.Seg2dImage.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>virtual_raw and virtual_ts are meant for samples which dont exist in
-a physical datasource. For example interpolated samples, or samples
-derived from other samples.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="api.samples.seg_2d_image.Seg2dImage.poly2d">
-<code class="sig-name descname">poly2d</code><span class="sig-paren">(</span><em class="sig-param">confidence_threshold=0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_2d_image.Seg2dImage.poly2d" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="api.samples.seg_2d_image.Seg2dImage.seg2d">
-<code class="sig-name descname">seg2d</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_2d_image.Seg2dImage.seg2d" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-api.samples.seg_3d">
 <span id="api-samples-seg-3d-module"></span><h2>api.samples.seg_3d module<a class="headerlink" href="#module-api.samples.seg_3d" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="api.samples.seg_3d.Seg3d">
-<em class="property">class </em><code class="sig-prename descclassname">api.samples.seg_3d.</code><code class="sig-name descname">Seg3d</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_3d.Seg3d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
-<dl class="method">
-<dt id="api.samples.seg_3d.Seg3d.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_3d.Seg3d.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>virtual_raw and virtual_ts are meant for samples which dont exist in
-a physical datasource. For example interpolated samples, or samples
-derived from other samples.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="api.samples.seg_3d.Seg3d.colors">
-<code class="sig-name descname">colors</code><span class="sig-paren">(</span><em class="sig-param">mode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_3d.Seg3d.colors" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="api.samples.seg_3d.Seg3d.mask_category">
-<code class="sig-name descname">mask_category</code><span class="sig-paren">(</span><em class="sig-param">category</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.seg_3d.Seg3d.mask_category" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-api.samples.trace">
 <span id="api-samples-trace-module"></span><h2>api.samples.trace module<a class="headerlink" href="#module-api.samples.trace" title="Permalink to this headline">¶</a></h2>
@@ -954,6 +776,7 @@ derived from other samples.</p>
 <dt id="api.samples.trace.Trace">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.trace.</code><code class="sig-name descname">Trace</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.trace.Trace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
+<p>Trace (or waveform) data from a single LCAx package</p>
 <dl class="method">
 <dt id="api.samples.trace.Trace.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.trace.Trace.__init__" title="Permalink to this definition">¶</a></dt>
@@ -970,6 +793,11 @@ derived from other samples.</p>
 <dl class="method">
 <dt id="api.samples.trace.Trace.processed">
 <code class="sig-name descname">processed</code><span class="sig-paren">(</span><em class="sig-param">trace_processing: Callable</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.trace.Trace.processed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="api.samples.trace.Trace.processed_array">
+<code class="sig-name descname">processed_array</code><span class="sig-paren">(</span><em class="sig-param">trace_processing: Callable</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.trace.Trace.processed_array" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1006,6 +834,9 @@ derived from other samples.</p>
 <dt id="api.samples.xyvit.XYVIT">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.xyvit.</code><code class="sig-name descname">XYVIT</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.xyvit.XYVIT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.xyzit.XYZIT</span></code></p>
+<p>Point cloud in bird eye view plane provided by a radar sensor.
+For each data point, contains (x,y) coordinates, the relative radial velocity (v),
+the intensity (i) and a timestamp (t).</p>
 <dl class="method">
 <dt id="api.samples.xyvit.XYVIT.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.xyvit.XYVIT.__init__" title="Permalink to this definition">¶</a></dt>
@@ -1029,6 +860,8 @@ derived from other samples.</p>
 <dt id="api.samples.xyzit.XYZIT">
 <em class="property">class </em><code class="sig-prename descclassname">api.samples.xyzit.</code><code class="sig-name descname">XYZIT</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.xyzit.XYZIT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pioneer.das.api.samples.sample.Sample</span></code></p>
+<p>Point cloud provided by a mechanical lidar sensor.
+For each data point, contains (x,y,z) coordinates, the intensity (i) and a timestamp (t).</p>
 <dl class="method">
 <dt id="api.samples.xyzit.XYZIT.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">datasource</em>, <em class="sig-param">virtual_raw=None</em>, <em class="sig-param">virtual_ts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api.samples.xyzit.XYZIT.__init__" title="Permalink to this definition">¶</a></dt>
