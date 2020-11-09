@@ -150,7 +150,7 @@ CATEGORIES['detectron']['81'] = {'name':'road','color':(168, 130, 180)}
 
 CATEGORIES['toynet'] = {
     '0':{'name':'pedestrian','color':(242, 132, 48)},
-    '1':{'name':'vehicule','color':(241, 48, 242)},
+    '1':{'name':'vehicle','color':(241, 48, 242)},
 }
 
 CATEGORIES['carla'] = {

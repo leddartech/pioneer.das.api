@@ -1,4 +1,5 @@
-from pioneer.das.api import datatypes
+from pioneer.common import platform
+from pioneer.das.api import categories, datatypes
 from pioneer.das.api.samples.sample import Sample
 
 import copy
@@ -26,3 +27,24 @@ class Seg2d(Sample):
                 poly2d = np.append(poly2d, np.array([(poly,seg_data['classes'],0,0)], dtype=datatypes.poly2d()))
 
         return poly2d
+
+    def mask_category(self, category:str, resolution:tuple=None, confidence_threshold:float=0.5):
+
+        _,_,ds_type = platform.parse_datasource_name(self.datasource.label)
+        source = categories.get_source(ds_type)
+        
+        mask = np.zeros((self.raw['data']['confidences'][0].shape))
+
+        for seg_data in self.raw['data']:
+            name,_ = categories.get_name_color(source, seg_data['classes'])
+            if name == category:
+                above_threshold = np.where(seg_data['confidences'] >= confidence_threshold)
+                mask[above_threshold] = 1
+                break
+
+        return self.resize_mask(mask, resolution) if resolution is not None else mask
+
+    @staticmethod
+    def resize_mask(mask, resolution):
+        return cv2.resize(mask, (resolution[1],resolution[0]), interpolation = cv2.INTER_NEAREST)
+                

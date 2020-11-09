@@ -173,7 +173,7 @@ class Platform(object):
         self._sensors = Sensors(self, self.yml)
 
         if 'virtual_datasources' in self.yml:
-            self._add_virtual_datasources()
+            self.add_virtual_datasources(self.yml['virtual_datasources'])
 
     def to_nas_path(self, path:str) -> str:
         """Convert absolute yaml paths to path relative to os.environ['nas'] """
@@ -270,10 +270,35 @@ class Platform(object):
             ds_names.extend(s.datasource_names())
         return ds_names
 
-    def _add_virtual_datasources(self):
-        for virtual_ds_name in self.yml['virtual_datasources']:
+    def add_virtual_datasources(self, virtual_datasources_config):
+        """Add virtual datasources based upon the provided configuration dictionnary
+        
+            Args:
+                -virtual_datasources_config (dict): Each key must correspond to a key available in
+                    VIRTUAL_DATASOURCE_FACTORY (see api/datasources/virtual_datasources/__init__.py).
+                    Under each key, a dictionnary must be provided with the parameters necessary
+                    to create the corresponding virtual datasource. These parameters always contain at 
+                    least the 'reference_sensor' and 'dependencies' entries. Other entries depend upon
+                    the specific virtual datasource type.
 
-            args = self.yml['virtual_datasources'][virtual_ds_name]
+                    For exemple:
+                        virtual_datasources_config = {
+                            'echoes_from_traces': {
+                                'reference_sensor': 'pixell_bfc',
+                                'dependencies': ['pixell_bfc_ftrr'],
+                                'nb_detections_max': 3,
+                            }
+                        }
+
+            Note: To create multiple virtual datasources of the same type, you can do something like:
+                virtual_datasources_config = {
+                    'echoes_from_traces_bfc': {'reference_sensor': 'pixell_bfc', 'dependencies': ['pixell_bfc_ftrr']}
+                    'echoes_from_traces_tfc': {'reference_sensor': 'pixell_tfc', 'dependencies': ['pixell_tfc_ftrr']}
+                }
+        """
+
+        for virtual_ds_name in virtual_datasources_config:
+            args = virtual_datasources_config[virtual_ds_name]
 
             # If multiple instances of the same VirtualDatasource class, their keys has to be different
             # in the config file. So add a unique id such as: virtual_ds_name -> virtual_ds_name_id

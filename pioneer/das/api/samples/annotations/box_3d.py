@@ -14,14 +14,12 @@ class Box3d(Sample):
         super(Box3d, self).__init__(index, datasource, virtual_raw, virtual_ts)
 
     def label_names(self):
-        '''mapping from label encoding to name of each annotation'''
+        '''Converts the category numbers in their corresponding names (e.g. 0 -> 'pedestrian') and returns the list of names for all boxes in the sample'''
         label_source_name = categories.get_source(platform_utils.parse_datasource_name(self.datasource.label)[2])
         try:
-            names = [categories.CATEGORIES[label_source_name][str(omega)]['name'] for omega in self.raw['data']['classes']]
+            return [categories.CATEGORIES[label_source_name][str(category_number)]['name'] for category_number in self.raw['data']['classes']]
         except:
             LoggingManager.instance().warning(f"Can not find the CATEGORIES and NAMES of {label_source_name}.")
-            return None
-        return names
 
     def _mapto(self, tf=None):
         """Maps the box3d to the new referential, given a 4x4 matrix transformation"""
