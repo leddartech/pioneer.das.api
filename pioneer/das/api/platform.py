@@ -578,6 +578,8 @@ class SynchronizedGroup(Synchronized):
 
     def _get_dataset_lenght(self, dataset_index):
         sync = self.get_synchronized(dataset_index)
+        if not all([ds in sync.keys() for ds in self.sync_labels]):
+            return 0
         return len(sync)
 
     def _get_dataset_lenght_fast(self, dataset_index):
@@ -616,7 +618,7 @@ class SynchronizedGroup(Synchronized):
                 with open(path) as stream:
                     ts = pd.read_csv(stream, delimiter=" ", dtype='u8', header=None).values[:,0]
             else:
-                continue
+                return 0
 
             if ref_ts == []:
                 ref_ts = ts
