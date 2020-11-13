@@ -526,7 +526,7 @@ class SynchronizedGroup(Synchronized):
     """
 
     def __init__(self, datasets:Union[str,list], sync_labels:List[str]=[], interp_labels:List[str]=[], tolerance_us:Union[float, int]=None,
-                     include:Optional[list]=None, ignore:Optional[list]=[], preload:bool=False):
+                     include:Optional[list]=None, ignore:Optional[list]=[], preload:bool=False, virtual_datasources_config:dict=None):
                      
         if type(datasets) == str:
             datasets = glob.glob(f"{datasets}/*")
@@ -538,6 +538,7 @@ class SynchronizedGroup(Synchronized):
         self.include = include
         self.ignore = ignore
         self.preload = preload
+        self.virtual_datasources_config = virtual_datasources_config
 
         self.cached_synchronized = [None for d in self.datasets]
        
@@ -570,6 +571,8 @@ class SynchronizedGroup(Synchronized):
         if self.cached_synchronized[dataset_index] is None:
             try:
                 pf = Platform(self.datasets[dataset_index], include=self.include, ignore=self.ignore, progress_bar=progress_bar, default_cache_size=0)
+                if self.virtual_datasources_config is not None:
+                    pf.add_virtual_datasources(self.virtual_datasources_config)
                 sync = pf.synchronized(self.sync_labels, self.interp_labels, self.tolerance_us)
                 self.cached_synchronized[dataset_index] = sync
             except:
