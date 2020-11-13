@@ -8,5 +8,5 @@ from pioneer.das.api.samples.image_fisheye import ImageFisheye
 from pioneer.das.api.samples.rpm import RPM
 from pioneer.das.api.samples.sample import Sample
 from pioneer.das.api.samples.trace import Trace
-from pioneer.das.api.samples.xyvit import XYVIT
 from pioneer.das.api.samples.xyzit import XYZIT
+from pioneer.das.api.samples.xyzvcfar import XYZVCFAR

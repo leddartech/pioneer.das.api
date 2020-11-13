@@ -202,7 +202,7 @@ if __name__ == '__main__':
 
     # get the platform synchronized:
     sync_labels = ['*ech*', '*_img*', '*_trr*', '*_trf*',' *_ftrr*', '*xyzit-*']
-    interp_labels = ['*_xyzit', 'sbgekinox_*', 'peakcan_*', '*temp', '*_pos*', '*_agc*', '*_rad']
+    interp_labels = ['*_xyzit', 'sbgekinox_*', 'peakcan_*', '*temp', '*_pos*', '*_agc*']
 
     synch = pf.synchronized(sync_labels=sync_labels, interp_labels=interp_labels, tolerance_us=1e3)
 

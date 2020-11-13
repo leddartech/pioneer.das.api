@@ -1,14 +1,19 @@
-from pioneer.das.api.interpolators   import nearest_interpolator
-from pioneer.das.api.samples         import Sample, XYVIT
-from pioneer.das.api.sensors.sensor  import Sensor
+from pioneer.das.api.interpolators import nearest_interpolator
+from pioneer.das.api.samples import Sample, XYZVCFAR
+from pioneer.das.api.sensors.sensor import Sensor
+
 
 class RadarTI(Sensor):
     def __init__(self, name, platform):
-        super(RadarTI, self).__init__(name
-                                , platform
-                                , {  'rad': (XYVIT, nearest_interpolator)
-                                    ,'rec': (Sample, nearest_interpolator)
-                                    ,'rtr': (Sample, nearest_interpolator)})
+        super(RadarTI, self).__init__(name,
+                                      platform,
+                                      {'rec': (Sample, nearest_interpolator),
+                                       'rtr': (Sample, nearest_interpolator),
+                                       'xyzvcfar': (XYZVCFAR, nearest_interpolator)})
 
-    def get_corrected_cloud(self, timestamp, pts, dtype):
+        # XYZVCFAR sample use this parameter to determine the amplitude type to return in 'amplitudes'.
+        # Therefore, this sensor is not stateless
+        self.amplitude_type = 'signal'  # types = ['signal', 'cfar_snr', velocity]
+
+    def get_corrected_cloud(self, _timestamp, pts, _dtype):
         return pts

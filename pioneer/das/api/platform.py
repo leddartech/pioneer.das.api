@@ -675,7 +675,7 @@ class SynchronizedGroup(Synchronized):
                 list_index.append(i)
         except:
             if isinstance(index, slice):
-                list_index = list(slice_to_range(index, len(self)))
+                list_index = list(platform_utils.slice_to_range(index, len(self)))
             if isinstance(index, numbers.Integral):
                 list_index = [index]
         
