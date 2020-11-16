@@ -18,14 +18,8 @@ class XYZVCFAR(Sample):
     @property
     def amplitudes(self):
         amplitude_type = self.datasource.sensor.amplitude_type
-
-        if amplitude_type == "signal":
-            return self.raw[0]['cfar_snr'].astype('f4') * self.raw[0]['cfar_noise'].astype('f4')
-        if amplitude_type == "cfar_snr":
-            return self.raw[0]['cfar_snr'].astype('f4')
-        if amplitude_type == "velocity":
-            return self.raw[0]['velocity'].astype('f4')
-
+        if amplitude_type in ['cfar_snr', 'cfar_noise', 'velocity']:
+            return self.raw[0][amplitude_type].astype('f4')
         raise RuntimeError(f"Unexpected amplitude type {amplitude_type}")
 
     @property
