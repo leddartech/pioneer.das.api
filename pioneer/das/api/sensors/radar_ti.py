@@ -13,7 +13,7 @@ class RadarTI(Sensor):
 
         # XYZVCFAR sample use this parameter to determine the amplitude type to return in 'amplitudes'.
         # Therefore, this sensor is not stateless
-        self.amplitude_type = 'signal'  # types = ['signal', 'cfar_snr', velocity]
+        self.amplitude_type = 'cfar_snr'  # types = ['cfar_snr', 'cfar_noise', 'velocity']
 
     def get_corrected_cloud(self, _timestamp, pts, _dtype):
         return pts
