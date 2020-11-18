@@ -559,7 +559,7 @@ class SynchronizedGroup(Synchronized):
                     l = self._get_dataset_lenght(dataset_index)
                 else:
                     l = self._get_dataset_lenght_fast(dataset_index)
-            except:
+            except Exception:
                 l = 0
                 LoggingManager.instance().warning(f"The dataset {self.datasets[dataset_index]} could not be added to the SynchronizedGroup.")
 

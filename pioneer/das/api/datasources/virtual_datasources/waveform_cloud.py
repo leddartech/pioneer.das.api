@@ -1,5 +1,5 @@
 from pioneer.common import platform
-from pioneer.common.trace_processing import Desaturate, Realign, RemoveStaticNoise, TraceProcessingCollection, Smooth, ZeroBaseline
+from pioneer.common.trace_processing import Binning, Decimate, Desaturate, Realign, RemoveStaticNoise, TraceProcessingCollection, Smooth, ZeroBaseline
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.datatypes import datasource_xyzit_float_intensity
 from pioneer.das.api.samples import EchoXYZIT, FastTrace
@@ -11,7 +11,7 @@ import numpy as np
 class WaveformCloud(VirtualDatasource):
     """Makes a point cloud from each data point of each waveforms."""
 
-    def __init__(self, reference_sensor:str, dependencies:list, zero_baseline:bool=False, remove_negative_distances:bool=True):
+    def __init__(self, reference_sensor:str, dependencies:list, zero_baseline:bool=False, remove_negative_distances:bool=True, decimation:int=1, binning:int=1):
         """Constructor
             Args:
                 reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
@@ -19,18 +19,23 @@ class WaveformCloud(VirtualDatasource):
                     The only element should be a Trace datasource (e.g. 'pixell_bfc_ftrr')
                 zero_baseline (bool): If True, the baseline of the waveforms are re-calibrated to be around zero.
                 remove_negative_distances (bool): If True, the points behind the sensor are filtered out.
+                decimation (int): Must be an integer larger than 1. Downsample by this factor by decimation.
+                binning (int): Must be an integer larger than 1. Downsample by this factor by binning.
         """
         trr_ds_name = dependencies[0].split('_')[-1]
         super(WaveformCloud, self).__init__(f'xyzit-{trr_ds_name}', dependencies, None)
         self.reference_sensor = reference_sensor
         self.original_trace_datasource = dependencies[0]
-        self.zero_baseline = zero_baseline
         self.remove_negative_distances = remove_negative_distances
 
-        if self.zero_baseline:
-            self.trace_processing = TraceProcessingCollection([ZeroBaseline()])
-        else:
-            self.trace_processing = TraceProcessingCollection([])        
+        trace_processing_list = []
+        if zero_baseline:
+            trace_processing_list.append(ZeroBaseline())
+        if binning != 1:
+            trace_processing_list.append(Binning(binning))
+        if decimation != 1:
+            trace_processing_list.append(Decimate(decimation))
+        self.trace_processing = TraceProcessingCollection(trace_processing_list)       
 
     def get_extrema_positions(self, sensor, distances, ts, time_base_delays):
 
