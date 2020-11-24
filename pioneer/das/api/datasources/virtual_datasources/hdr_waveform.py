@@ -11,17 +11,19 @@ import numpy as np
 class HDRWaveform(VirtualDatasource):
     """High Dynamic Range waveforms are created by combining both sets of waveforms from FastTraces."""
 
-    def __init__(self, reference_sensor:str, dependencies:list):
+    def __init__(self, reference_sensor:str, dependencies:list, gain:float=1):
         """Constructor
             Args:
                 reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
                 dependencies (list): A list of the datasource names. 
                     The only element should be a FastTrace datasource (e.g. 'pixell_bfc_ftrr')
+                gain (float): factor by which the low intensity channel is multiplied before being added to the high intensity channel.
         """
         trr_ds_name = dependencies[0].split('_')[-1].split('-')[-1]
         super(HDRWaveform, self).__init__(f'trr-hdr', dependencies, None)
         self.reference_sensor = reference_sensor
         self.original_trace_datasource = dependencies[0]
+        self.gain = gain
 
         self.trace_processing = TraceProcessingCollection([ZeroBaseline(), Realign()])
         self.target_time_base_delay = None
@@ -48,6 +50,6 @@ class HDRWaveform(VirtualDatasource):
         raw = copy.deepcopy(processed_traces['high'])
 
         low_traces = processed_traces['low']['data']
-        raw['data'][:,:low_traces.shape[-1]] += low_traces
+        raw['data'][:,:low_traces.shape[-1]] += self.gain*low_traces
 
         return Trace(key, self, raw, timestamp)
