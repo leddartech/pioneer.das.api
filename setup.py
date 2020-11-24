@@ -1,5 +1,12 @@
 import setuptools
 
+def parse_requirements(filename):
+    """ load requirements from a pip requirements file """
+    lineiter = (line.strip() for line in open(filename))
+    return [line for line in lineiter if line and not line.startswith("#")]
+
+install_reqs = parse_requirements('requirements.txt')
+
 setuptools.setup(
     name="pioneer_das_api", # Replace with your own username
     version="0.4.0",
@@ -23,19 +30,6 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     dependency_links=["https://pioneer:yK6RUkhUCNHg3e1yxGT4@svleddar-gitlab.leddartech.local/api/v4/projects/481/packages/pypi/simple/pioneer-common"],
-    install_requires=[
-        'numpy',
-        'opencv-python',
-        'open3d==0.10',
-        'transforms3d',
-        'pioneer-common>=0.4',
-        'six',
-        'ruamel.std.zipfile',
-        'pandas',
-        'tqdm',
-        'sklearn',
-        'utm',
-        'pyyaml'
-    ],
+    install_requires=install_reqs,
     include_package_data=True
 )

@@ -1,0 +1,12 @@
+numpy
+opencv-python
+open3d==0.10
+transforms3d
+pioneer-common>=0.4
+six
+ruamel.std.zipfile
+pandas
+tqdm
+sklearn
+utm
+pyyaml
