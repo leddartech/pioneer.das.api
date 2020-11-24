@@ -41,6 +41,14 @@ def box3d():
         ('flags', 'u2'),
     ])
 
+def attributes():
+    return np.dtype([
+        ('occlusions', 'u2'),
+        ('truncations', 'u2'),
+        ('on the road','?'),
+        ('vehicle activities', 'O'),
+    ])
+
 def seg3d():
     '''Fields are: 
         'classes' (int): the object category number
