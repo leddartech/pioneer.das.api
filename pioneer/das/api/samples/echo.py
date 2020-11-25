@@ -2,6 +2,7 @@ from pioneer.common import banks, clouds, images, plane
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.samples.sample import Sample
 
+import copy
 import numpy as np
 
 class Echo(Sample):
@@ -244,21 +245,40 @@ class Echo(Sample):
 
         return self.transform_image(img)
 
-    def image_coord_to_channel_index(self, row, col):
-        #FIXME: this whould be cached
-        vv, hh = np.mgrid[0:self.v, 0:self.h]
-        coords_img = np.stack((vv,hh, np.arange(0, self.v*self.h).reshape(self.v, self.h)), axis=2)
-        coords_img_tf = self.transform_image(coords_img)
+    @property
+    def coords_img_tf(self):
+        if not hasattr(self, '_coords_img_tf'):
+            vv, hh = np.mgrid[0:self.v, 0:self.h]
+            coords_img = np.stack((vv,hh, np.arange(0, self.v*self.h).reshape(self.v, self.h)), axis=2)
+            self._coords_img_tf = self.transform_image(coords_img)
+        return self._coords_img_tf
 
-        return coords_img_tf[row, col, 2]
+    def image_coord_to_channel_index(self, row, col):
+        return self.coords_img_tf[row, col, 2]
 
     def channel_index_to_image_coord(self, index):
-        #FIXME: this should be cached
-        vv, hh = np.mgrid[0:self.v, 0:self.h]
-        coords_img = np.stack((vv,hh, np.arange(0, self.v*self.h).reshape(self.v, self.h)), axis=2)
-        coords_img_tf = self.transform_image(coords_img)
+        return np.argwhere(self.coords_img_tf[...,2] == index)[0]
 
-        return np.argwhere(coords_img_tf[...,2] == index)[0]
+    def image_stack(self, field:str, number_images:int=3, options='min_distance', dtype=np.float32):
+        """Returns multiple images to account for the multiple echoes per channel"""
+        image_stack = np.zeros((number_images, self.v, self.h))
+        remaining_data = copy.deepcopy(self.data)
+        for i in range(number_images):
+            if remaining_data.size == 0:
+                break
+            if options == 'min_distance':
+                mask = images.echoes_visibility_mask(remaining_data)
+            elif options == 'max_amplitude':
+                mask = images.maximum_amplitude_mask(remaining_data)
+            
+            image_stack[i] = self.transform_image(images.extrema_image(self.v, self.h
+                                                    , remaining_data[mask]
+                                                    , sort_direction = 1
+                                                    , other_fields = [field]
+                                                    , dtype=dtype)[1][field])
+            remaining_data = remaining_data[~mask]
+        return image_stack
+
 
     def clip_to_fov_mask(self, pts:np.ndarray) -> np.ndarray:
                 
