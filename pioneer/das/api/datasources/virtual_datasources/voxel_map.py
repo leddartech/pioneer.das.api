@@ -32,13 +32,16 @@ class VoxelMap(VirtualDatasource):
                     the frames N=0,-2,-4,-6,-8,-10 will be merged. The present frame (N=0) is always included.
                 voxel_size (float): If greater than 0, the merged point cloud will be voxelized.
         """
-        super(VoxelMap, self).__init__('xyzit-voxmap', dependencies, None)
+        self.has_rgb = 'xyzit-rgb' in dependencies[0]
+        ds_type = 'xyzit-voxmap' if not self.has_rgb else 'xyzit-voxmap-rgb'
+        super(VoxelMap, self).__init__(ds_type, dependencies, None)
         self.reference_sensor = reference_sensor
         self.original_point_cloud_datasource = dependencies[0]
         self.memory = memory
         self.skip = skip
         self.voxel_size = voxel_size
         self.local_cache = None
+        
 
     def get_at_timestamp(self, timestamp):
         sample = self.datasources[self.original_point_cloud_datasource].get_at_timestamp(timestamp)
@@ -66,10 +69,15 @@ class VoxelMap(VirtualDatasource):
         xyz_vox = np.asarray(down_sampled.points)
         int_vox = np.asarray(down_sampled.colors)[:,0]
 
-        pc_vox = np.empty((xyz_vox.shape[0],5))
+        pc_vox = np.empty((xyz_vox.shape[0], pc.shape[1]))
         pc_vox[:,[0,1,2]] = xyz_vox
         pc_vox[:,3] = int_vox
         pc_vox[:,4] = pc[:,4].max()
+
+        if self.has_rgb:
+            pc_open3d.colors = open3d.utility.Vector3dVector(pc[:,[6,7,8]])
+            down_sampled_rgb = pc_open3d.voxel_down_sample(voxel_size=self.voxel_size)
+            pc_vox[:,[6,7,8]] = np.asarray(down_sampled_rgb.colors)[:,[0,1,2]]
 
         return pc_vox
 
@@ -90,7 +98,9 @@ class VoxelMap(VirtualDatasource):
 
         samples = self.datasources[self.original_point_cloud_datasource][min_key:key+1]
 
-        pc_map = np.empty((0,6))
+        nb_features = 1 if not self.has_rgb else 4
+        pc_map = np.empty((0,5+nb_features))
+
         cached_indices = []
         if self.local_cache is not None:
             pc_map = self.local_cache
@@ -125,11 +135,17 @@ class VoxelMap(VirtualDatasource):
             if index in cached_indices:
                 continue #don't re-add what is already cached
 
-            pc = np.empty((sample.amplitudes.size,6))
+            pc = np.empty((sample.amplitudes.size,5+nb_features))
             pc[:,[0,1,2]] = sample.point_cloud(referential='world', undistort=False)
             pc[:,3] = sample.amplitudes
             pc[:,4] = sample.timestamp
             pc[:,5] = index
+
+            if self.has_rgb:
+                pc[:,6] = sample.raw['r']
+                pc[:,7] = sample.raw['g']
+                pc[:,8] = sample.raw['b']
+
             pc_map = self.stack_point_cloud(pc_map, pc)
 
         self.local_cache = copy.deepcopy(pc_map)
@@ -142,12 +158,18 @@ class VoxelMap(VirtualDatasource):
         pc_map[:,[0,1,2]] = map_points(to_sensor, pc_map[:,[0,1,2]])
 
         #package in das format
-        raw = np.empty((pc_map.shape[0]),dtype=datasource_xyzit())
+        dtype = datasource_xyzit() if not self.has_rgb else sample.raw.dtype
+        raw = np.empty((pc_map.shape[0]), dtype=dtype)
         raw['x'] = pc_map[:,0]
         raw['y'] = pc_map[:,1]
         raw['z'] = pc_map[:,2]
         raw['i'] = pc_map[:,3]
         raw['t'] = pc_map[:,4]
+
+        if self.has_rgb:
+            raw['r'] = pc_map[:,6]
+            raw['g'] = pc_map[:,7]
+            raw['b'] = pc_map[:,8]
 
         sample_object = self.sensor.factories['xyzit'][0]
 
