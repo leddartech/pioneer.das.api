@@ -102,16 +102,6 @@ def datasource_xyzit_float_intensity():
     '''
     return np.dtype([('x','f4'),('y','f4'),('z','f4'),('i','f4'),('t','u8')])
 
-def rad():
-    '''Fields are: 
-        'x' (float): x coordinate (forward)
-        'y' (float): y coordinate (left)
-        'v' (float): velocity
-        'i' (float): intensity (float)
-        't' (int): timestamp
-    '''
-    return np.dtype([('x','f4'),('y','f4'),('v','f4'),('i','f4'),('t','u8')])
-
 def lane():
     """Fields are: 
         'vertices': (N,3) numpy array of the 3D coordinates
