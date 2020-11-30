@@ -55,20 +55,7 @@ class EchoesWithPulses(VirtualDatasource):
         timestamp = echoes_sample.timestamp
         specs = echoes_sample.specs
 
-        trace_sample = self.datasources[self.original_trace_datasource].get_at_timestamp(timestamp)
-        if isinstance(trace_sample, FastTrace):
-            raw_traces = trace_sample.processed(self.trace_processing)['high']
-        else:
-            raw_traces = trace_sample.processed(self.trace_processing)
-
-        full_traces = raw_traces['data'][echoes_sample.indices]
-
-        echoes_positions_in_traces = (echoes_sample.distances - raw_traces['time_base_delays'][echoes_sample.indices])/raw_traces['distance_scaling']
-        echoes_positions_in_traces = echoes_positions_in_traces.astype(int)
-
-        ind = np.indices(echoes_positions_in_traces.shape)
-        padded_traces = np.pad(full_traces,((0,0),(self.pulse_sample_size,self.pulse_sample_size+1)))
-        pulses = np.vstack([padded_traces[ind,echoes_positions_in_traces+ind_pulse+self.pulse_sample_size] for ind_pulse in np.arange(-self.pulse_sample_size, self.pulse_sample_size+1, dtype=int)]).T
+        pulses, distance_scaling = echoes_sample.get_pulses(self.original_trace_datasource.split('_')[-1], self.pulse_sample_size, self.trace_processing, return_distance_scaling=True)
 
         if not self.pulses_as_echoes:
 
@@ -92,7 +79,7 @@ class EchoesWithPulses(VirtualDatasource):
         else:
 
             indices = np.repeat(echoes_sample.indices[...,None], pulses.shape[-1], axis=-1).flatten()
-            delta = self.pulse_sample_size*raw_traces['distance_scaling']
+            delta = self.pulse_sample_size*distance_scaling
             deltas = np.repeat(np.linspace(-delta, delta, pulses.shape[-1])[None,...], pulses.shape[0], axis=0)
             distances = (np.repeat(echoes_sample.distances[...,None], pulses.shape[-1], axis=-1) - deltas).flatten()
             amplitudes = pulses.flatten()

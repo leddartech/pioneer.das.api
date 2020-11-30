@@ -575,7 +575,7 @@ class SynchronizedGroup(Synchronized):
                     pf.add_virtual_datasources(self.virtual_datasources_config)
                 sync = pf.synchronized(self.sync_labels, self.interp_labels, self.tolerance_us)
                 self.cached_synchronized[dataset_index] = sync
-            except:
+            except Exception:
                 LoggingManager.instance().warning(f"There is an issue with the dataset {self.datasets[dataset_index]}.")
         return self.cached_synchronized[dataset_index]
 

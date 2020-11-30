@@ -331,3 +331,31 @@ class Echo(Sample):
             return rgb, mask
         return rgb
 
+
+    def get_pulses(self, trace_ds_type:str, pulse_sample_size:int=10, trace_processing=None, return_distance_scaling:bool=False):
+        """Returns the correspond pulse for each echo from a trace datasource.
+
+            Args:
+                trace_ds_type: (str) the type of trace datasource (ex: 'trr' or 'ftrr')
+                pulse_sample_size: (int) The number of data points to gather before and after each echo in the waveforms.
+                    For example, with pulse_sample_size=10, the pulses will be 21 points, because the highest point is
+                    taken in addition to the 10 points before and the 10 points after.
+                trace_processing: (callable) function applied to the traces.
+                return_distance_scaling: (bool) If True, also return the distance (meters) between trace data points.
+        """
+        trace_sample = self.datasource.sensor[trace_ds_type].get_at_timestamp(self.timestamp)
+        traces = trace_sample.raw if trace_processing is None else trace_sample.processed(trace_processing)
+        if 'high' in traces:
+            traces = traces['high']
+
+        full_traces = traces['data'][self.indices]
+
+        echoes_positions_in_traces = ((self.distances - traces['time_base_delays'][self.indices])/traces['distance_scaling']).astype(int)
+        ind = np.indices(echoes_positions_in_traces.shape)
+        padded_traces = np.pad(full_traces,((0,0),(pulse_sample_size,pulse_sample_size+1)))
+        
+        pulses = np.vstack([padded_traces[ind,echoes_positions_in_traces+ind_pulse+pulse_sample_size] for ind_pulse in np.arange(-pulse_sample_size, pulse_sample_size+1, dtype=int)]).T
+
+        if return_distance_scaling:
+            return pulses, traces['distance_scaling']
+        return pulses
