@@ -1,4 +1,4 @@
-from pioneer.common import banks, clouds, images, plane
+from pioneer.common import banks, clouds, images, plane, platform
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.samples.sample import Sample
 
@@ -303,4 +303,31 @@ class Echo(Sample):
                 & plane.plane_test(planes[2], pts)\
                 & plane.plane_test(planes[3], pts)
 
+
+    def get_rgb_from_camera_projection(self, camera:str, undistort:bool=False, return_mask:bool=False):
+        """Returns the rgb data for each point from its position in camera.
+        
+            Args:
+                camera: (str) name of the camera datasource (ex: 'flir_bbfc_flimg')
+                undistort: (bool) if True, motion compensation is applied to the points before the projection (default is False)
+                return_mask: (bool) if True, also returns the mask that only includes points inside the camera fov.
+
+            Returns:
+                rgb: A Nx3 array, where N is the number of points in the point cloud. RGB data is in the range [0,255]
+                mask (optional): a Nx1 array of booleans. Values are True where points are inside the camera fov. False elsewhere.
+        """
+
+        image_sample = self.datasource.sensor.pf[camera].get_at_timestamp(self.timestamp)
+
+        pcloud = self.point_cloud(referential=platform.extract_sensor_id(camera), undistort=undistort)
+        projection, mask = image_sample.project_pts(pcloud, mask_fov=True, output_mask=True)
+        projection = projection.astype(int)
+
+        rgb = np.zeros((pcloud.shape[0], 3))
+        image = image_sample.raw_image()
+        rgb[mask,:] = image[projection[:,1], projection[:,0]]
+
+        if return_mask:
+            return rgb, mask
+        return rgb
 

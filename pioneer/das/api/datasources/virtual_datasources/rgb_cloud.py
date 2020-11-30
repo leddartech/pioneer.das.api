@@ -37,15 +37,8 @@ class RGBCloud(VirtualDatasource):
             return [self[index] for index in key]
 
         pcloud_sample = self.datasources[self.original_pcloud_datasource][key]
-        timestamp = pcloud_sample.timestamp
-        image_sample = self.datasources[self.original_image_datasource].get_at_timestamp(timestamp)
-
         pcloud = pcloud_sample.point_cloud(referential=self.camera_name, undistort=self.undistort)
-        projection, mask = image_sample.project_pts(pcloud, mask_fov=True, output_mask=True)
-        projection = projection.astype(int)
-
-        image = image_sample.raw_image()
-        rgb_data = image[projection[:,1], projection[:,0]]
+        rgb_data, mask = pcloud_sample.get_rgb_from_camera_projection(self.original_image_datasource, undistort=self.undistort, return_mask=True)
 
         raw = np.empty(pcloud[mask].shape[0], dtype=self.dtype)
         if isinstance(pcloud_sample, XYZIT):
@@ -61,9 +54,9 @@ class RGBCloud(VirtualDatasource):
             raw['z'] = pcloud[:,2][mask]
             raw['i'] = pcloud_sample.amplitudes[mask]
             raw['t'] = pcloud_sample.timestamps[mask]
-        raw['r'] = rgb_data[:,0]
-        raw['g'] = rgb_data[:,1]
-        raw['b'] = rgb_data[:,2]
+        raw['r'] = rgb_data[mask,0]
+        raw['g'] = rgb_data[mask,1]
+        raw['b'] = rgb_data[mask,2]
 
         sample_object = self.sensor.factories['xyzit'][0]
-        return sample_object(key, self, raw, timestamp)
+        return sample_object(key, self, raw, pcloud_sample.timestamp)
