@@ -9,7 +9,6 @@ class Echo(Sample):
     """Sample from a single data package provided by a LCAx sensor. 
         See pioneer.common.clouds.to_echo_package() to create a similar data package from scratch.
     """
-
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(Echo, self).__init__(index, datasource, virtual_raw, virtual_ts)
         self._mask = None
@@ -63,7 +62,6 @@ class Echo(Sample):
             config = self.datasource.sensor.config
 
             vmask = np.bitwise_and(data['flags'], 0x01).astype(np.bool) #keep valid echoes only
-        
             fmask = np.isin(data['flags'], config['reject_flags'], invert = True) & vmask
 
             def get_mask(slices, values):
@@ -131,6 +129,7 @@ class Echo(Sample):
             reference_ts: (only used if referential == 'world' and/or undistort == True), refer to compute_transform()'s documentation
             dtype: the output numpy data type
         """
+
         pts_Local = self.datasource.sensor.get_corrected_cloud(self.timestamp, self.cache(), 'point_cloud', self.indices, self.distances, None, dtype)
         
         if undistort:
@@ -152,7 +151,7 @@ class Echo(Sample):
                           refer to compute_transform()'s documentation
             dtype: the output numpy data type
         """
-        
+
         pts_Local, quad_amplitudes, quad_indices = self.datasource.sensor.get_corrected_cloud(
             self.timestamp, self.cache(), 'quad_cloud', self.indices, self.distances, self.amplitudes, dtype)
 
@@ -175,72 +174,41 @@ class Echo(Sample):
             extrema = self.datasource.sensor.config['extrema_amp']
 
         if options == 'max_amplitude':
-            img = images.extrema_image(self.v, self.h, self.data
-                                                     , sort_field = 'amplitudes'
-                                                     , sort_direction = -1
-                                                     , dtype=dtype
-                                                     , extrema = extrema)
+            img = images.extrema_image(self.v, self.h, self.data, sort_field='amplitudes', sort_direction=-1, dtype=dtype, extrema=extrema)
         elif options == 'min_distance':
-            _, others = images.extrema_image(self.v, self.h
-                                                     , self.data
-                                                     , sort_field = 'distances'
-                                                     , sort_direction = 1
-                                                     , other_fields=['amplitudes']
-                                                     , dtype=dtype
-                                                     , extrema = extrema)
+            _, others = images.extrema_image(self.v, self.h, self.data, sort_field='distances', sort_direction=1, 
+                other_fields=['amplitudes'], dtype=dtype, extrema=extrema)
             img = others['amplitudes']
 
         elif options == 'amplitudes_sum':
-            img = images.accumulation_image(self.v, self.h
-                                                          , indices = self.data['indices']
-                                                          , weights = self.data['amplitudes']
-                                                          , dtype=dtype)
+            img = images.accumulation_image(self.v, self.h, indices=self.data['indices'], weights=self.data['amplitudes'], dtype=dtype)
         else:
             raise ValueError('Invalid options: {}'.format(options))
 
         return self.transform_image(img)
 
-    def distance_img(self, options='min_distance', dtype = np.float32, extrema = None):
+    def distance_img(self, options='min_distance', dtype=np.float32, extrema=None):
 
         if extrema is None:
             extrema = self.datasource.sensor.config['extrema_dist']
 
         if options == 'max_amplitude':
-            _, others = images.extrema_image(self.v, self.h
-                                                     , self.data
-                                                     , sort_field = 'amplitudes'
-                                                     , sort_direction = -1
-                                                     , other_fields = ['distances']
-                                                     , dtype=dtype
-                                                     , extrema = extrema)
+            _, others = images.extrema_image(self.v, self.h, self.data, sort_field='amplitudes', 
+                sort_direction=-1, other_fields=['distances'], dtype=dtype, extrema=extrema)
             img = others['distances']
 
         elif options == 'min_distance':
-            img = images.extrema_image(self.v, self.h
-                                                     , self.data
-                                                     , sort_field = 'distances'
-                                                     , sort_direction = 1
-                                                     , dtype = dtype
-                                                     , extrema = extrema)
+            img = images.extrema_image(self.v, self.h, self.data, sort_field='distances', sort_direction=1, dtype=dtype, extrema=extrema)
         elif options == 'distances_sum':
-            img = images.accumulation_image(self.v, self.h
-                                                          , indices = self.data['indices']
-                                                          , weights = self.data['distances']
-                                                          , dtype = dtype)
+            img = images.accumulation_image(self.v, self.h, indices=self.data['indices'], weights=self.data['distances'], dtype=dtype)
         else:
             raise ValueError('Invalid options: {}'.format(options))
 
         return self.transform_image(img)
 
     def other_field_img(self, field, dtype = np.float32):
-
-        amp, others = images.extrema_image(self.v, self.h
-                                                    , self.data
-                                                    , sort_field = 'amplitudes'
-                                                    , sort_direction = -1
-                                                    , other_fields = [field]
-                                                    , dtype=dtype
-                                                    , extrema = None)
+        amp, others = images.extrema_image(self.v, self.h, self.data, sort_field='amplitudes', 
+            sort_direction=-1, other_fields=[field], dtype=dtype, extrema=None)
         img = others[field]
 
         return self.transform_image(img)
@@ -271,11 +239,8 @@ class Echo(Sample):
             elif options == 'max_amplitude':
                 mask = images.maximum_amplitude_mask(remaining_data)
             
-            image_stack[i] = self.transform_image(images.extrema_image(self.v, self.h
-                                                    , remaining_data[mask]
-                                                    , sort_direction = 1
-                                                    , other_fields = [field]
-                                                    , dtype=dtype)[1][field])
+            image_stack[i] = self.transform_image(images.extrema_image(self.v, self.h, remaining_data[mask], 
+                sort_direction=1, other_fields=[field], dtype=dtype)[1][field])
             remaining_data = remaining_data[~mask]
         return image_stack
 
@@ -305,7 +270,7 @@ class Echo(Sample):
 
 
     def get_rgb_from_camera_projection(self, camera:str, undistort:bool=False, return_mask:bool=False):
-        """Returns the rgb data for each point from its position in camera.
+        """Returns the rgb data for each point from its projected position in camera.
         
             Args:
                 camera: (str) name of the camera datasource (ex: 'flir_bbfc_flimg')
@@ -333,7 +298,7 @@ class Echo(Sample):
 
 
     def get_pulses(self, trace_ds_type:str, pulse_sample_size:int=10, trace_processing=None, return_distance_scaling:bool=False):
-        """Returns the correspond pulse for each echo from a trace datasource.
+        """Returns the corresponding pulses for every echoes from a trace datasource.
 
             Args:
                 trace_ds_type: (str) the type of trace datasource (ex: 'trr' or 'ftrr')
