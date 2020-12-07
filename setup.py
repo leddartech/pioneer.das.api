@@ -9,7 +9,7 @@ install_reqs = parse_requirements('requirements.txt')
 
 setuptools.setup(
     name="pioneer_das_api", # Replace with your own username
-    version="0.5.0",
+    version="0.5.1",
     author="Leddartech",
     description="Pioneer's das api",
     packages=[
@@ -18,6 +18,7 @@ setuptools.setup(
         'pioneer.das.api', 
         'pioneer.das.tests',
         'pioneer.das.api.samples', 
+        'pioneer.das.api.samples.annotations',
         'pioneer.das.api.sensors', 
         'pioneer.das.api.sources',
         'pioneer.das.api.datasources',
