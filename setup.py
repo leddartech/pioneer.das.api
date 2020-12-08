@@ -22,7 +22,8 @@ setuptools.setup(
         'pioneer.das.api.sensors', 
         'pioneer.das.api.sources',
         'pioneer.das.api.datasources',
-        'pioneer.das.api.datasources.virtual_datasources'
+        'pioneer.das.api.datasources.virtual_datasources',
+        'pioneer.das.api.egomotion'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
