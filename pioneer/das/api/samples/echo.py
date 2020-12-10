@@ -339,8 +339,13 @@ class Echo(Sample):
 
         full_traces = traces['data'][self.indices]
 
+        if isinstance(traces['time_base_delays'], float):
+            time_base_delays = traces['time_base_delays'] 
+        else: 
+            traces['time_base_delays'][self.indices]
+
         echoes_positions_in_traces = (
-            (self.distances - traces['time_base_delays'][self.indices])/traces['distance_scaling']).astype(int)
+            (self.distances - time_base_delays)/traces['distance_scaling']).astype(int)
         ind = np.indices(echoes_positions_in_traces.shape)
         padded_traces = np.pad(
             full_traces, ((0, 0), (pulse_sample_size, pulse_sample_size+1)))

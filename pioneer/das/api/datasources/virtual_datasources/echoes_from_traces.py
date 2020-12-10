@@ -106,7 +106,7 @@ class Echoes_from_Traces(VirtualDatasource):
             distances = np.array(echoes['distances'], 'f4'), 
             amplitudes = np.array(echoes['amplitudes'], 'f4'),
             additionnal_fields = additionnal_fields,
-            timestamps = None, 
+            timestamps = np.full(echoes['indices'].shape, timestamp), 
             flags = None, 
             timestamp = timestamp,
             specs = {"v" : specs['v'], "h" : specs['h'], "v_fov" : specs['v_fov'], "h_fov" : specs['h_fov']},

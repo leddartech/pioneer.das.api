@@ -40,8 +40,8 @@ class HDRWaveform(VirtualDatasource):
 
         if self.target_time_base_delay is None:
             self.target_time_base_delay = max([
-                trace_sample.raw['high']['time_base_delays'].max(),
-                trace_sample.raw['low']['time_base_delays'].max(),
+                np.max(trace_sample.raw['high']['time_base_delays']),
+                np.max(trace_sample.raw['low']['time_base_delays']),
             ])
             self.trace_processing = TraceProcessingCollection([ZeroBaseline(), Realign(self.target_time_base_delay)])
 

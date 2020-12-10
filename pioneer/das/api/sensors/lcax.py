@@ -180,7 +180,7 @@ class LCAx(Sensor):
             cfg = self['cfg'][0].raw
             self.time_base_delays = banks.extract_intrinsics_timebase_delays(lambda n: cfg[n])
         except:
-            self.time_base_delays = 0
+            self.time_base_delays = 0 if not 'ftrr' in self else {'high':0, 'low':0}
             LoggingManager.instance().warning("Unable to read the time base delays from the sensor {}".format(self.name))
                 
     def load_static_noise_from_cfg(self):
