@@ -342,7 +342,7 @@ class Echo(Sample):
         if isinstance(traces['time_base_delays'], float):
             time_base_delays = traces['time_base_delays'] 
         else: 
-            traces['time_base_delays'][self.indices]
+            time_base_delays = traces['time_base_delays'][self.indices]
 
         echoes_positions_in_traces = (
             (self.distances - time_base_delays)/traces['distance_scaling']).astype(int)
