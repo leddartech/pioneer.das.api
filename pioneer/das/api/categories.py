@@ -166,7 +166,18 @@ CATEGORIES['carla'] = {
     '9':{'name':'vegetation','color':(107, 142, 35)}, 
     '10':{'name':'vehicle','color':(0, 0, 255)},     
     '11':{'name':'wall','color':(102, 102, 156)},  
-    '12':{'name':'traffic sign','color':(220, 220, 0)}
+    '12':{'name':'traffic sign','color':(220, 220, 0)},
+    '13':{'name':'sky','color':(70, 130, 180)},
+    '14':{'name':'ground','color':(81, 0, 81)},
+    '15':{'name':'bridge','color':(150, 100, 100)},
+    '16':{'name':'rail track','color':(230, 150, 140)},
+    '17':{'name':'guard rail','color':(180, 165, 180)},
+    '18':{'name':'traffic light','color':(250, 170, 30)},
+    '19':{'name':'static','color':(110, 190, 160)},
+    '20':{'name':'dynamic','color':(170, 120, 50)},
+    '21':{'name':'water','color':(45, 60, 150)},
+    '22':{'name':'terrain','color':(145, 170, 100)},
+    '23':{'name':'bike','color':(198, 238, 242)},
 }
 
 
