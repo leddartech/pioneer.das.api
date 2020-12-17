@@ -2,7 +2,7 @@ numpy
 opencv-python
 open3d==0.10
 transforms3d
-pioneer-common>=0.5
+pioneer-common>=1.0
 six
 ruamel.std.zipfile
 pandas
