@@ -47,6 +47,7 @@ def attributes():
         ('truncations', 'u2'),
         ('on the road','?'),
         ('vehicle activities', 'O'),
+        ('human activities', 'O')
     ])
 
 def seg3d():
