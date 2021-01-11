@@ -72,9 +72,9 @@ class Pixell(LCAx):
         '''Get cloud data (type_pts, type_amplitudes, type_indices) from a sensor.'''
 
         if type == 'point_cloud':
-            elevation, azimut = self.angles_from_heads(distances, cache['angles'][indices], cache['lcas_offsets'][indices])
-            y,z,x = clouds.direction_spherical(elevation, azimut)
-            pts = np.stack((distances * x, distances * y, -distances * z), axis=-1)
+            x,y,z = self.xyz_from_heads(distances, cache['angles'][indices], cache['lcas_offsets'][indices])
+            pts = np.stack(( x,  y, - z), axis=-1)
+
             pts = pts @ self.orientation
             return pts, amplitudes, indices
         
@@ -100,16 +100,30 @@ class Pixell(LCAx):
 
     @staticmethod
     def angles_from_heads(distances, angles, head_positions):
-        gamma_ = np.cos(angles[:,0]) * (head_positions[:,1] * np.sin(angles[:,1]) + head_positions[:,0] * np.cos(angles[:,1]))
-        arg = gamma_**2 + np.maximum(0.0, distances**2 - head_positions[:,0]**2 - head_positions[:,1]**2)
-        distances_ = - gamma_ + np.sqrt(arg)
+        distances_ = distances-np.cos(angles[:,0]) * (head_positions[:,1] * np.sin(angles[:,1]) + head_positions[:,0] * np.cos(angles[:,1])) 
+        distances_ -= head_positions[:,2] * np.sin(angles[:,0])
+
+        l = distances_ * np.cos(angles[:,0])
+        x,y,z = (l * np.cos(angles[:,1]), l * np.sin(-angles[:,1]), distances_ * np.sin(angles[:,0]))
+        
+        x += head_positions[:,0]
+        y += head_positions[:,1]  
+      
+        return np.arctan2(z, (x**2 + y**2)**0.5), np.arctan2(y, x)
+
+    @staticmethod
+    def xyz_from_heads(distances, angles, head_positions):
+       
+        distances_ = distances-np.cos(angles[:,0]) * (head_positions[:,1] * np.sin(angles[:,1]) + head_positions[:,0] * np.cos(angles[:,1])) 
+        distances_ -= head_positions[:,2] * np.sin(angles[:,0])
 
         l = distances_ * np.cos(angles[:,0])
         x,y,z = (l * np.cos(angles[:,1]), l * np.sin(angles[:,1]), distances_ * np.sin(angles[:,0]))
+        
         x += head_positions[:,0]
-        y += head_positions[:,1]
-
-        return np.arctan2(z, (x**2 + y**2)**0.5), np.arctan2(y, x)
+        y += head_positions[:,1]  
+       
+        return x,y,z
 
     def get_head_position_per_channel(self):
         head = np.zeros((3, self.specs['v'], self.specs['h']), dtype=np.float)
