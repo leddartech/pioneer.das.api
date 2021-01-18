@@ -104,7 +104,7 @@ class Pixell(LCAx):
         distances_ -= head_positions[:,2] * np.sin(angles[:,0])
 
         l = distances_ * np.cos(angles[:,0])
-        x,y,z = (l * np.cos(angles[:,1]), l * np.sin(-angles[:,1]), distances_ * np.sin(angles[:,0]))
+        x,y,z = (l * np.cos(angles[:,1]), l * np.sin(angles[:,1]), distances_ * np.sin(angles[:,0]))
         
         x += head_positions[:,0]
         y += head_positions[:,1]  
