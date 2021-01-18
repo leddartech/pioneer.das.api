@@ -12,7 +12,7 @@ import numpy as np
 class Echoes_from_Traces(VirtualDatasource):
     """Non official implementation of the peak detector. Also measures the widths and the skews for each echo."""
 
-    def __init__(self, reference_sensor:str, dependencies:list, nb_detections_max:int=3, min_amplitude:float=0):
+    def __init__(self, reference_sensor:str, dependencies:list, nb_detections_max:int=3, min_amplitude:float=0, amplitude_factor:float=1.0):
         """Constructor
             Args:
                 reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
@@ -20,6 +20,7 @@ class Echoes_from_Traces(VirtualDatasource):
                     The only element should be a Trace datasource (e.g. 'pixell_bfc_ftrr') 
                 nb_detections_max (int): The maximum number of echoes per waveform.
                 min_amplitude (float): Amplitude threshold under which the echoes are filtered out.
+                amplitude_factor (float): Multiply amplitudes by a constant. Default is 1.
         """
         trr_ds_name = dependencies[0].split('_')[-1].split('-')[-1]
         super(Echoes_from_Traces, self).__init__(f'ech-{trr_ds_name}', dependencies, None)
@@ -27,7 +28,7 @@ class Echoes_from_Traces(VirtualDatasource):
         self.original_trace_datasource = dependencies[0]
         self.nb_detections_max = nb_detections_max
         self.peak_detector = peak_detector.PeakDetector(nb_detections_max=self.nb_detections_max, min_amplitude=min_amplitude)
-        self.amplitude_scaling = 1
+        self.amplitude_factor = amplitude_factor
 
         self.trace_processing = None
 
@@ -57,7 +58,7 @@ class Echoes_from_Traces(VirtualDatasource):
                   'distance_scaling': self.local_cache['distance_scaling']}
 
         echoes = self.peak_detector(traces)
-        echoes['amplitudes'] *= self.amplitude_scaling
+        echoes['amplitudes'] *= self.amplitude_factor
 
         additionnal_fields = {}
         for key in echoes:
@@ -69,15 +70,17 @@ class Echoes_from_Traces(VirtualDatasource):
         # TODO: improve merging by replacing the saturated lines and columns
         sensor = self.datasources[self.dependencies[0]].sensor
         echoes_high, additionnal_fields_high = self.get_echoes(processed_fast_traces['high'])
-        echoes_low, additionnal_fields_low = self.get_echoes(processed_fast_traces['low'])
+        # echoes_low, additionnal_fields_low = self.get_echoes(processed_fast_traces['low'])
         echoes = {}
         for field in ['indices','distances','amplitudes']:
-            echoes[field] = np.hstack([echoes_high[field], echoes_low[field]])
+            # echoes[field] = np.hstack([echoes_high[field], echoes_low[field]])
+            echoes[field] = echoes_high[field]
         additionnal_fields = {}
         for field in additionnal_fields_high:
             if field not in ['indices','distances','amplitudes']:
-                additionnal_fields[field] = [np.hstack([additionnal_fields_high[field][0], additionnal_fields_low[field][0]])
-                                            , additionnal_fields_high[field][1]]
+                # additionnal_fields[field] = [np.hstack([additionnal_fields_high[field][0], additionnal_fields_low[field][0]])
+                #                             , additionnal_fields_high[field][1]]
+                additionnal_fields[field] = additionnal_fields_high[field]
         return echoes, additionnal_fields
 
     def get_at_timestamp(self, timestamp):
