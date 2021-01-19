@@ -3,8 +3,7 @@
 pioneer.das.api is a python library that provides an api to read and to transform the raw data of leddartech' datasets. 
 
 ## Pixset Dataset
-[Pixset](dataset.leddartech.com) is the first dataset using the leddartech Pixell sensor, a higher resolution lidar ... blabla. All the annotated frames of the dataset have been
-recorded in Montreal and Quebec city under various environmental conditions. 
+[Pixset](dataset.leddartech.com) is the first dataset using the leddartech Pixell sensor. A solid state flash LiDAR that can provide full wave-form data. All the annotated frames of the dataset have been recorded in Montreal and Quebec city under various environmental conditions. 
 
 A full description of the Pixset dataset can be found here: []()
 
@@ -14,16 +13,8 @@ The full documentation for the das.api can be found here: [https://leddartech.gi
 
 ## Installation
 
-Before installing, you should add to your pip.conf file the gitlab pypi server url to trust.
+You can install the pioneer.das.api with the package manager pip.
 
-```conf
-[global]
-extra-index-url = https://pioneer:yK6RUkhUCNHg3e1yxGT4@svleddar-gitlab.leddartech.local/api/v4/projects/481/packages/pypi/simple
-                  https://pioneer:yK6RUkhUCNHg3e1yxGT4@svleddar-gitlab.leddartech.local/api/v4/projects/487/packages/pypi/simple
-trusted-host = svleddar-gitlab.leddartech.local
-```
-
-Use the package manager [pip](https://pioneer:yK6RUkhUCNHg3e1yxGT4@svleddar-gitlab.leddartech.local/api/v4/projects/487/packages/pypi/simple) to install pioneer.das.api .
 
 ```bash
 pip install pioneer-das-api
@@ -54,4 +45,5 @@ echoes = pixell['ech']
 
 ```
 
+You can find more in-depth examples of different use of cases for the pioneer.das.api here: https://github.com/leddartech/pioneer.das.api/tree/master/docs/jupyterNotebooks
 
