@@ -22,7 +22,8 @@ class FastTrace(Trace):
             self._raw = super(Trace, self).raw
 
             for fast_trace_type in ['low', 'high']:
-                self._raw[fast_trace_type]['time_base_delays'] = self.datasource.sensor.time_base_delays[fast_trace_type]
+                if 'time_base_delays' not in self._raw[fast_trace_type]:
+                    self._raw[fast_trace_type]['time_base_delays'] = self.datasource.sensor.time_base_delays[fast_trace_type]
                 self._raw[fast_trace_type]['distance_scaling'] = self.datasource.sensor.distance_scaling
                 self._raw[fast_trace_type]['trace_smoothing_kernel'] = self.datasource.sensor.get_trace_smoothing_kernel()[
                     fast_trace_type]
