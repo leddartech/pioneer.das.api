@@ -169,6 +169,8 @@ class Platform(object):
             self.metadata = self.metadata.where(pd.notnull(self.metadata), None)
         else:
             self.metadata = None
+        if os.path.exists(f"{dataset}/manual_c_metadata.zip"):
+            self.yml["manual_c"] = ""
 
         self._sensors = Sensors(self, self.yml)
 

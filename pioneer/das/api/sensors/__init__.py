@@ -28,4 +28,5 @@ SENSOR_FACTORY = {
     'leddar': LCAx,
     'lidar': MotorLidar,
     'any': Sensor,
+    'manual': Sensor,
 }
