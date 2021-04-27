@@ -9,7 +9,6 @@ build-package:
     - pip3 install --upgrade keyrings.alt 
     - python3 setup.py bdist_wheel sdist
     - python3 -m twine upload --repository gitlab dist/pioneer_das_api-${CI_COMMIT_TAG}-py3-none-any.whl --config-file /tmp/.pypirc
-    - echo $PYPI_PWD
     - python3 -m twine upload ./dist/* -u leddartech -p $PYPI_PWD
   only:
     - tags
