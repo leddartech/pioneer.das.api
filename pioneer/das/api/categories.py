@@ -150,7 +150,14 @@ CATEGORIES['detectron']['81'] = {'name':'road','color':(168, 130, 180)}
 
 CATEGORIES['toynet'] = {
     '0':{'name':'pedestrian','color':(242, 132, 48)},
-    '1':{'name':'vehicle','color':(120, 48, 242)},
+    '1':{'name':'car','color':(120, 48, 242)},
+    '2':{'name':'cyclist', 'color':(198, 238, 242)},
+    '3':{'name':'van','color':(185, 55, 230)},
+    '4':{'name':'bus','color':(242, 48, 74)},
+    '5':{'name':'truck','color':(138, 48, 242)},
+    '6':{'name':'motorcycle','color':(183, 242, 48)},
+    '7':{'name':'traffic_cone','color':(230, 110, 60)},
+    '8':{'name':'trailer', 'color':(255, 150, 120)},
 }
 
 CATEGORIES['carla'] = {
