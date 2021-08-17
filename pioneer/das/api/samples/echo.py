@@ -20,8 +20,9 @@ class Echo(Sample):
         if self._raw is None:
             r = super(Echo, self).raw
             r['das.sample'] = self
-            if r['data']['timestamps'][-1] == 0:
-                try:
+            
+            try:
+                if r['data']['timestamps'][-1] == 0:
                     cfg = self.datasource.sensor['cfg'].get_at_timestamp(
                         self.timestamp).raw
                     if self.datasource.sensor.specs is None:
@@ -38,8 +39,8 @@ class Echo(Sample):
 
                     banks.add_timestamp_offsets(r, self.datasource.sensor.name, self.datasource.sensor.specs,
                                                 int(cfg['ID_ACCUMULATION_EXP']), int(cfg['ID_OVERSAMPLING_EXP']), int(cfg['ID_BASE_POINT_COUNT']))
-                except:
-                    pass
+            except:
+                pass
 
             self._raw = r
 
