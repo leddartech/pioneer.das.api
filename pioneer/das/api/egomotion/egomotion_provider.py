@@ -36,8 +36,7 @@ class EgomotionProvider(object):
         tf_Global_from_Ego = self.get_Global_from_Ego_at(reference_ts) 
         return linalg.tf_inv(self.tf_Global_from_EgoZero) @ tf_Global_from_Ego @ tf_Ego_from_Sensor 
 
-
-    def compute_trajectory(self, sorted_ts:np.ndarray, tf_Global_from_EgoZero:np.ndarray, dtype = np.float64) -> np.ndarray:
+    def compute_trajectory(self, sorted_ts:np.ndarray, tf_Global_from_EgoZero:np.ndarray=np.eye(4), dtype = np.float64) -> np.ndarray:
         """Trajectory of tf_EgoZero_from_Ego transforms """
         end = int(np.ceil(sorted_ts.shape[0]/self.subsampling))
         # use double precision for trajectory computation, due to utm big number
@@ -58,3 +57,7 @@ class EgomotionProvider(object):
             s, e = i * self.subsampling, min((i+1) * self.subsampling, n_points)
             corrected[s:e] = linalg.map_points(trajectory[i], points[s:e])
         return corrected
+    
+    def get_timestamps_range(self) -> np.ndarray:
+       """ return the timestamp range """
+       raise RuntimeError("Not Implemented") 
