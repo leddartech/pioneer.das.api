@@ -187,4 +187,17 @@ CATEGORIES['carla'] = {
     '23':{'name':'bike','color':(198, 238, 242)},
 }
 
-
+CATEGORIES['teslaDO'] = {
+    '0':{'name':'bicycle','color':(255, 255, 255)},
+    '1':{'name':'motorbike','color':(242, 132, 48)},
+    '2':{'name':'pedestrian','color':(48, 242, 183)},
+    '3':{'name':'car','color':(241, 48, 242)},
+    '4':{'name':'bus','color':(183, 242, 48)},
+    '5':{'name':'minivan','color':(48, 125, 242)},
+    '6':{'name':'small truck','color':(242, 48, 74)},
+    '7':{'name':'large truck','color':(48, 242, 80)},
+    '8':{'name':'other','color':(138, 48, 242)},
+    '9':{'name':'pickup truck','color':(242, 196, 48)},
+    '10':{'name':'animal','color':(48, 235, 242)},
+    '11':{'name':'trailer','color':(242, 48, 177)},
+   }
