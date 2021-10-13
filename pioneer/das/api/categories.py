@@ -201,3 +201,11 @@ CATEGORIES['teslaDO'] = {
     '10':{'name':'animal','color':(48, 235, 242)},
     '11':{'name':'trailer','color':(242, 48, 177)},
    }
+
+CATEGORIES['teslaSO'] = {
+    '0':{'name':'cone','color':(255, 255, 255)},
+    '1':{'name':'pole','color':(242, 132, 48)},
+    '2':{'name':'sign','color':(48, 242, 183)},
+    '3':{'name':'trash bin','color':(241, 48, 242)},
+    '4':{'name':'barrier','color':(183, 242, 48)},
+   }
