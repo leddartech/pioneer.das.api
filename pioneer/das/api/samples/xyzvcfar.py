@@ -13,7 +13,7 @@ class XYZVCFAR(Sample):
 
     @property
     def timestamps(self):
-        return np.asarray(self.raw[1])
+        return np.full(self.raw[0].shape[0], self.raw[1])
 
     @property
     def amplitudes(self):
