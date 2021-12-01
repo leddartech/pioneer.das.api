@@ -177,6 +177,10 @@ class Platform(object):
         if 'virtual_datasources' in self.yml:
             self.add_virtual_datasources(self.yml['virtual_datasources'])
 
+        if os.path.isfile(os.path.join(dataset, 'categories.yml')):
+            from pioneer.das.api import categories
+            categories.append_categories(os.path.join(dataset, 'categories.yml'))
+
     def to_nas_path(self, path:str) -> str:
         """Convert absolute yaml paths to path relative to os.environ['nas'] """
         nas_base = os.environ.get('nas', '')

@@ -21,6 +21,10 @@ def get_source(ds_type):
                 return part
     return 'deepen'
 
+def append_categories(path):
+    import yaml
+    platform_categories = yaml.load(open(path,'r'))
+    CATEGORIES.update(platform_categories)
 
 CATEGORIES['deepen'] = {
     '0':{'name':'pedestrian','color':(242, 132, 48)},
@@ -187,25 +191,32 @@ CATEGORIES['carla'] = {
     '23':{'name':'bike','color':(198, 238, 242)},
 }
 
-CATEGORIES['teslaDO'] = {
-    '0':{'name':'bicycle','color':(255, 255, 255)},
-    '1':{'name':'motorbike','color':(242, 132, 48)},
-    '2':{'name':'pedestrian','color':(48, 242, 183)},
-    '3':{'name':'car','color':(241, 48, 242)},
-    '4':{'name':'bus','color':(183, 242, 48)},
-    '5':{'name':'minivan','color':(48, 125, 242)},
-    '6':{'name':'small truck','color':(242, 48, 74)},
-    '7':{'name':'large truck','color':(48, 242, 80)},
-    '8':{'name':'other','color':(138, 48, 242)},
-    '9':{'name':'pickup truck','color':(242, 196, 48)},
-    '10':{'name':'animal','color':(48, 235, 242)},
-    '11':{'name':'trailer','color':(242, 48, 177)},
-   }
 
-CATEGORIES['teslaSO'] = {
-    '0':{'name':'cone','color':(255, 255, 255)},
-    '1':{'name':'pole','color':(242, 132, 48)},
-    '2':{'name':'sign','color':(48, 242, 183)},
-    '3':{'name':'trash bin','color':(241, 48, 242)},
-    '4':{'name':'barrier','color':(183, 242, 48)},
-   }
+CATEGORIES['vaya'] = {
+'4':{'name':'vehicle','color':(0, 0, 0)},
+'5':{'name':'humain','color':(0, 0, 0)},
+'6':{'name':'animal','color':(0, 0, 0)},
+'7':{'name':'obstacle','color':(0, 0, 0)},
+'9':{'name':'car','color':(241, 48, 242)},
+'10':{'name':'humain','color':(0, 0, 0)},
+'11':{'name':'truck','color':(138, 48, 242)},
+'12':{'name':'bus','color':(242, 48, 74)},
+'13':{'name':'emergency_car','color':(0, 0, 0)},
+'14':{'name':'train','color':(0, 0, 0)},
+'15':{'name':'trailer','color':(0, 0, 0)},
+'16':{'name':'other_vehicle','color':(0, 0, 0)},
+'17':{'name':'pedestrian','color':(242, 132, 48)},
+'18':{'name':'person','color':(0, 0, 0)},
+'19':{'name':'Cyclist','color':(48, 242, 183)},
+'20':{'name':'motorcycle','color':(183, 242, 48)},
+'22':{'name':'Bicycle(no rider)','color':(0, 0, 0)},
+'23':{'name':'Motocycle (no rider)','color':(0, 0, 0)},
+'24':{'name':'small stationary obstacle','color':(0, 0, 0)},
+'25':{'name':'small moving obstacle','color':(0, 0, 0)},
+'51':{'name':'traffic sign','color':(0, 0, 0)},
+'52':{'name':'traffic light','color':(0, 0, 0)},
+'77':{'name':'General_on_road','color':(255, 0, 0)},
+'79':{'name':'construction_vehicle','color':(0, 0, 0)},
+'81':{'name':'traffic cone','color':(0, 0, 0)},
+'82':{'name':'General object','color':(0, 0, 0)},
+}
