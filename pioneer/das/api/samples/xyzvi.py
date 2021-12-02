@@ -2,14 +2,13 @@ from pioneer.das.api.samples.sample import Sample
 
 import numpy as np
 
-class XYZVCFAR(Sample):
-    """Point cloud provided by a TI radar.
-        For each data point, contains (x,y,z) coordinates, CFAR SNR (cfar_snr) CFAR noise (cfar_noise) and the
-        velocity (velocity) at index 0, and the timestamp at index 1.
+class XYZVI(Sample):
+    """Point cloud provided by a radar.
+        For each data point, contains (x,y,z) coordinates, velocity (velocity) and intensity (i) at index 0,  and the timestamp at index 1.
     """
 
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
-        super(XYZVCFAR, self).__init__(index, datasource, virtual_raw, virtual_ts)
+        super(XYZVI, self).__init__(index, datasource, virtual_raw, virtual_ts)
 
     @property
     def timestamps(self):
@@ -18,7 +17,7 @@ class XYZVCFAR(Sample):
     @property
     def amplitudes(self):
         amplitude_type = self.datasource.sensor.amplitude_type
-        if amplitude_type in ['cfar_snr', 'cfar_noise', 'velocity']:
+        if amplitude_type in ['i', 'velocity']:
             return self.raw[0][amplitude_type].astype('f4')
         raise RuntimeError(f"Unexpected amplitude type {amplitude_type}")
 
