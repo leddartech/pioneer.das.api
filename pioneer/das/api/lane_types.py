@@ -76,6 +76,77 @@ LANE_TYPES = {
         'double': True,
         'dashed': [False, True],
     },
+
+    100: {
+        'name': 'solid_blue',
+        'color': (0x1f, 0x77, 0xb4),
+        'double': False,
+        'dashed': False,
+    },
+
+    101: {
+        'name': 'solid_orange',
+        'color': (0xff, 0x7f, 0x0e),
+        'double': False,
+        'dashed': False,
+    },
+
+    102: {
+        'name': 'solid_green',
+        'color': (0x2c, 0xa0, 0x2c),
+        'double': False,
+        'dashed': False,
+    },
+
+    103: {
+        'name': 'solid_red',
+        'color': (0xd6, 0x27, 0x28),
+        'double': False,
+        'dashed': False,
+    },
+
+    104: {
+        'name': 'solid_purple',
+        'color': (0x94, 0x67, 0xbd),
+        'double': False,
+        'dashed': False,
+    },
+
+    105: {
+        'name': 'solid_brown',
+        'color': (0x8c, 0x56, 0x4b),
+        'double': False,
+        'dashed': False,
+    },
+
+    106: {
+        'name': 'solid_pink',
+        'color': (0xe3, 0x77, 0xc2),
+        'double': False,
+        'dashed': False,
+    },
+
+    107: {
+        'name': 'solid_gray',
+        'color': (0x7f, 0x7f, 0x7f),
+        'double': False,
+        'dashed': False,
+    },
+
+    108: {
+        'name': 'solid_olive',
+        'color': (0xbc, 0xbd, 0x22),
+        'double': False,
+        'dashed': False,
+    },
+
+    109: {
+        'name': 'solid_cyan',
+        'color': (0x17, 0xbe, 0xcf),
+        'double': False,
+        'dashed': False,
+    },
+
 }
 
 
