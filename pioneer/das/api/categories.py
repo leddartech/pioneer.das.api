@@ -23,7 +23,7 @@ def get_source(ds_type):
 
 def append_categories(path):
     import yaml
-    platform_categories = yaml.load(open(path,'r'))
+    platform_categories = yaml.load(open(path,'r'),yaml.Loader)
     CATEGORIES.update(platform_categories)
 
 CATEGORIES['deepen'] = {

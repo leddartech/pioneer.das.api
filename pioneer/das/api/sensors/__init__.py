@@ -6,6 +6,7 @@ from pioneer.das.api.sensors.imu_sbg_ekinox import ImuSbgEkinox
 from pioneer.das.api.sensors.encoder import Encoder
 from pioneer.das.api.sensors.carla_imu import CarlaIMU 
 from pioneer.das.api.sensors.radar_ti import RadarTI
+from pioneer.das.api.sensors.radar_conti import RadarConti
 from pioneer.das.api.sensors.lcax import LCAx
 from pioneer.das.api.sensors.lca3 import LCA3
 
@@ -22,6 +23,7 @@ SENSOR_FACTORY = {
     'ouster64': MotorLidar,
     'peakcan': Sensor,
     'radarTI': RadarTI,
+    'radarConti': RadarConti,
     'webcam': Camera,
     'encoder': Encoder,
     'carlaimu': CarlaIMU,

@@ -10,3 +10,4 @@ from pioneer.das.api.samples.sample import Sample
 from pioneer.das.api.samples.trace import Trace
 from pioneer.das.api.samples.xyzit import XYZIT
 from pioneer.das.api.samples.xyzvcfar import XYZVCFAR
+from pioneer.das.api.samples.xyzvi import XYZVI
