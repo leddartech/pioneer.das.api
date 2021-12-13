@@ -14,7 +14,7 @@ build-package:
     - export TWINE_PASSWORD=${CI_JOB_TOKEN}
     - export TWINE_USERNAME=gitlab-ci-token
     - python3 -m twine upload --repository-url https://svleddar-gitlab.leddartech.local/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
-    - python3 -m twine upload ./dist/* -u leddartech -p $PYPI_PWD
+    - python3 -m twine upload dist/* -u leddartech -p $PYPI_PWD
   only:
     - tags
 
