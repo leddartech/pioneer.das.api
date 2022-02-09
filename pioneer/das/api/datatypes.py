@@ -50,6 +50,13 @@ def attributes():
         ('human activities', 'O')
     ])
 
+def box3d_dynamics():
+    return np.dtype([
+        ('vel', 'f4', (3)),
+        ('acc', 'f4', (3)),
+        ('angvel', 'f4'),
+    ])
+
 def seg3d():
     '''Fields are: 
         'classes' (int): the object category number

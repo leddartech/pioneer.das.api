@@ -61,6 +61,12 @@ class Box3d(Sample):
         LoggingManager.instance().warning(f"There are no 'confidences' for that sample {self.datasource.label}.")
         return None
 
+    def dynamics(self):
+        if 'dynamics' in self.raw:
+            return self.raw['dynamics']
+        LoggingManager.instance().warning(f"There are no 'dynamics' for that sample {self.datasource.label}.")
+        return None
+
     def num_pts_in(self, pt_cloud, margin=0):
         """ Returns, for each box, the mask of those points from pt_cloud that are inside the box.
             Args:
