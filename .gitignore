@@ -4,3 +4,5 @@
 /pioneer_das_api.egg-info/
 .idea
 Pipfile.lock
+.vscode/
+.venv/
