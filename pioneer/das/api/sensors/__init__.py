@@ -9,6 +9,7 @@ from pioneer.das.api.sensors.radar_ti import RadarTI
 from pioneer.das.api.sensors.radar_conti import RadarConti
 from pioneer.das.api.sensors.lcax import LCAx
 from pioneer.das.api.sensors.lca3 import LCA3
+from pioneer.das.api.sensors.gps_vaya import GPSVaya
 
 
 SENSOR_FACTORY = {  
@@ -29,6 +30,7 @@ SENSOR_FACTORY = {
     'carlaimu': CarlaIMU,
     'leddar': LCAx,
     'lidar': MotorLidar,
+    'gpsvaya': GPSVaya,
     'any': Sensor,
     'manual': Sensor,
 }
