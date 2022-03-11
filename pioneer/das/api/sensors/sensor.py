@@ -180,8 +180,7 @@ class Sensor(object):
             except:
                 continue # we will try another path...
 
-        LoggingManager.instance().warning(f'Could not find a way to project from {self.name} to {target}. Using identity.')
-        return np.eye(4)
+        raise Exception()
 
 
     def keys(self):

@@ -164,7 +164,7 @@ class Sample(object):
                 else:
                     tf_TargetRef_from_Local = np.copy(self.datasource.sensor.map_to(referential))
         except:
-            LoggingManager.instance().warning(f'Transformation matrix between {self.datasource.sensor.name} and {referential_or_ds} could not be computed.')
+            LoggingManager.instance().warning(f'Transformation matrix between {self.datasource.sensor.name} and {referential_or_ds} could not be computed. Using identity')
                     
         if self.orientation is not None and not ignore_orientation:
             tf_TargetRef_from_Local[:3, :3] = tf_TargetRef_from_Local[:3, :3] @ self.orientation
