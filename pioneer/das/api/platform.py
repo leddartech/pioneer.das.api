@@ -95,7 +95,8 @@ class Platform(object):
        live sensors, while an offline platform can be used to extract data from a recording. 
     """
 
-    def __init__(self, dataset:Optional[str]=None, configuration:Optional[str]=None, include:Optional[list]=None, ignore:Optional[list]=[], progress_bar:bool=True, default_cache_size:int=100):
+    def __init__(self, dataset:Optional[str]=None, configuration:Optional[str]=None, include:Optional[list]=None, ignore:Optional[list]=[],
+     progress_bar:bool=True, default_cache_size:int=100, activate_logger:bool=False):
         """Constructor
 
            Args:
@@ -117,6 +118,8 @@ class Platform(object):
             progress_bar:   If True, show the progress bars when initializing or synchronizing.
             default_cache_size: the default value for (offline) datasource cache size
         """
+
+        LoggingManager.instance().set_verbosity(activate_logger)
 
         self.dataset = dataset
         self.progress_bar = progress_bar
