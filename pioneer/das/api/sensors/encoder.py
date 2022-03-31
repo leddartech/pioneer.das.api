@@ -4,7 +4,7 @@ from pioneer.das.api.sensors.sensor import Sensor
 from pioneer.das.api.egomotion.encoder_egomotion_provider import EncoderEgomotionProvider
 
 class Encoder(Sensor):
-    def __init__(self, name, platform):
+    def __init__(self, name: str, platform: 'Platform'):
         if not platform.is_live():
             factories = {'rpm':(RPM, linear_ndarray_interpolator)}
         else:

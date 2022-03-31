@@ -13,7 +13,7 @@ class MotorLidar(Sensor):
         Activated = 0
         Deactivated = 1
     
-    def __init__(self, name, platform):
+    def __init__(self, name: str, platform: 'Platform'):
         super(MotorLidar, self).__init__(name
                                 , platform
                                 , {  'xyzit': (XYZIT, nearest_interpolator)

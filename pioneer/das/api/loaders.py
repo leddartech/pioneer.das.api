@@ -5,8 +5,7 @@ import pickle
 import re
 import six
 
-
-def load_files_from_folder(folder, pattern, sort=False, return_keys=False):
+def load_files_from_folder(folder, pattern, sort:bool=False, return_keys:bool=False):
     """Load files from a folder and sort them according to a regex pattern"""
     if return_keys:
         assert sort, 'sort must be True when return_keys is True'

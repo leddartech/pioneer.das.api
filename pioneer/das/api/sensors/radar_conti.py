@@ -4,7 +4,7 @@ from pioneer.das.api.sensors.sensor import Sensor
 
 
 class RadarConti(Sensor):
-    def __init__(self, name, platform):
+    def __init__(self, name: str, platform: 'Platform'):
         super(RadarConti, self).__init__(name,
                                       platform,
                                       {'xyzvi': (XYZVI, nearest_interpolator)})

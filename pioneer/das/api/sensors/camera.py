@@ -8,7 +8,7 @@ import numpy as np
 class Camera(Sensor):
     """Camera sensor, expects 'img' datasource, intrinsics matrix and distortion coefficients"""
 
-    def __init__(self, name, platform):
+    def __init__(self, name: str, platform: 'Platform'):
         super(Camera, self).__init__(name
                                    , platform
                                    , { 'img': (Image, nearest_interpolator),

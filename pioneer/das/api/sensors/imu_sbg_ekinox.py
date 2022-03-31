@@ -5,7 +5,7 @@ from pioneer.das.api.sensors.sensor import Sensor
 
 class ImuSbgEkinox(Sensor):
 
-    def __init__(self, name, platform):
+    def __init__(self, name: str, platform: 'Platform'):
         factories = {key: (Sample, linear_ndarray_interpolator) for key in \
         ['gps1vel', 'timeus', 'navposvel', 'status', 'gps1hdt', 'time', 'imudata', 'gps1pos']}
         factories['ekfeuler'] = (Sample, euler_imu_linear_ndarray_interpolator)

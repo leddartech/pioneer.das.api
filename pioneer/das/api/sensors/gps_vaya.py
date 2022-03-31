@@ -5,7 +5,7 @@ from pioneer.das.api.egomotion.vaya_egomotion_provider import VayaEgomotionProvi
 
 # From the vayavision egomotion export as raw 4x4 matrix
 class GPSVaya(Sensor):
-    def __init__(self, name, platform):
+    def __init__(self, name: str, platform: 'Platform'):
         factories = {'mat':(Sample, linear_ndarray_interpolator)}
         super(GPSVaya, self).__init__(name, platform, factories)
 

@@ -3,7 +3,7 @@ from pioneer.das.api.sensors.lcax import LCAx
 import numpy as np
         
 class LCA3(LCAx):
-    def __init__(self, name, platform):
+    def __init__(self, name: str, platform: 'Platform'):
         super(LCA3, self).__init__(name, platform)
         self.scan_direction = 'horizontal'
         #90 deg around 'z' axis

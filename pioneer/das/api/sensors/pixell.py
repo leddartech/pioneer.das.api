@@ -9,7 +9,7 @@ import numpy as np
 
 class Pixell(LCAx):
 
-    def __init__(self, name, platform):
+    def __init__(self, name: str, platform: 'Platform'):
         super(Pixell, self).__init__(name, platform)
         self.orientation = np.array([[ 0, 0, 1],
                                      [-1, 0, 0],

@@ -11,7 +11,7 @@ from typing import Callable, Union, Optional, List, Dict, Tuple, Any
 class LCAx(Sensor):
     """ LeddarTech LCAx family of sensors, expects 'ech', 'sta' and 'cfg' datasources"""
 
-    def __init__(self, name, platform):
+    def __init__(self, name: str, platform: 'Platform'):
         super(LCAx, self).__init__(name
                                    , platform
                                    , {  'ech': (Echo, nearest_interpolator)

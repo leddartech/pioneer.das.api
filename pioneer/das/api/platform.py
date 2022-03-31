@@ -71,7 +71,7 @@ closest_timestamps = closest_timestamps_np
 
 if HAVE_NUMBA:
     @numba.njit
-    def closest_timestamps_numba(ref_ts, target_ts, tol):
+    def closest_timestamps_numba(ref_ts:np.ndarray, target_ts:np.ndarray, tol:Union[float, int]):
         """ Numba-optimized version of closest_timestamps_np()"""
         n_ref = ref_ts.shape[0]
         ref_ts = ref_ts.astype(np.int64)
@@ -197,7 +197,7 @@ class Platform(object):
 
         return os.path.join(self.dataset, relative_path)
 
-    def try_absolute_or_relative(self, folder):
+    def try_absolute_or_relative(self, folder:str) -> str:
         """ tries for absolute or relative path """
 
         folder_path = self.to_nas_path(folder)
@@ -279,7 +279,7 @@ class Platform(object):
             ds_names.extend(s.datasource_names())
         return ds_names
 
-    def add_virtual_datasources(self, virtual_datasources_config):
+    def add_virtual_datasources(self, virtual_datasources_config:Dict[str, Dict]):
         """Add virtual datasources based upon the provided configuration dictionnary
         
             Args:
@@ -954,7 +954,7 @@ class Sensors(object):
     def __len__(self):
         return len(self._sensors)
 
-    def __getitem__(self, label):
+    def __getitem__(self, label:str):
         """Implement '[]' API"""
         return self._sensors[label]
 
