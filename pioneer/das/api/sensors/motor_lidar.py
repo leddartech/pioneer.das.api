@@ -3,15 +3,11 @@ from pioneer.das.api.sensors.sensor  import Sensor
 from pioneer.das.api.samples         import XYZIT, Sample
 from pioneer.das.api.interpolators   import nearest_interpolator
 
-from enum   import Enum
-from typing import Callable, Union, Optional, List, Dict, Tuple, Any
+from typing import Union
 
 import numpy as np
 
 class MotorLidar(Sensor):
-    class TemperatureCompensation(Enum):
-        Activated = 0
-        Deactivated = 1
     
     def __init__(self, name: str, platform: 'Platform'):
         super(MotorLidar, self).__init__(name
@@ -22,26 +18,30 @@ class MotorLidar(Sensor):
         self.temperature_slope = None
         self.temperature_reference = None
         self.temperature_coeffs = None
-        self.temperature_compensation = MotorLidar.TemperatureCompensation.Activated
+        self.temperature_compensation = False
         
         self.pcl_datasource = 'xyzit'
 
     def load_intrinsics(self, intrinsics_config: Union[str, dict]):
-        '''load data from yml platform
-        '''
-        temperature_config = intrinsics_config.get('temperature', None)
+        '''load data from yml platform '''
+        temperature_config = intrinsics_config.get('temperature')
         if temperature_config:
+            self.temperature_compensation = True
             self.temperature_slope = temperature_config['slope']
             self.temperature_reference = temperature_config['reference']
             self.temperature_coeffs = np.array([self.temperature_slope, 
                                             self.temperature_reference])
+        
+        orientation = intrinsics_config.get('orientation')
+        if orientation:
+            self.orientation = np.array(orientation)
 
     def apply_temperature_correction(self, timestamp, distances):
         """Applies temperature-related distance corrections"""
         if (self.temperature_slope is None and
             self.temperature_reference is None):
-            self.temperature_compensation = MotorLidar.TemperatureCompensation.Deactivated
-            print('MotorLidar Log: Temperature compensation mode is deactivated')
+            self.temperature_compensation = False
+            LoggingManager.instance().warning('MotorLidar Log: Temperature compensation mode is deactivated')
             return distances
         
         offsets_ = 0
@@ -61,7 +61,7 @@ class MotorLidar(Sensor):
     def get_corrected_cloud(self, timestamp, pts, dtype):
         '''It corrects the pts-cloud according to a temperature compensation (if any).
         '''
-        if self.temperature_compensation == MotorLidar.TemperatureCompensation.Deactivated:
+        if not self.temperature_compensation:
             return pts
         distances = np.linalg.norm(pts, axis=1, keepdims=True)
         directions = pts / distances
