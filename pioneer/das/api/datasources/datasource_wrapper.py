@@ -55,6 +55,7 @@ class DatasourceWrapper(AbstractDatasource):
 
     def to_timestamp(self, float_index:float) -> int:
         i, t = from_float_index(float_index)
+        if i == 0: i += 1
         ts_from = self.timestamps[i - 1]
         return int(ts_from + t * (self.timestamps[i] - ts_from))
 
