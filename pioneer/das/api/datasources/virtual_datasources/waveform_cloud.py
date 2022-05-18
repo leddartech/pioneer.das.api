@@ -1,12 +1,13 @@
 from pioneer.common import platform
-from pioneer.common.trace_processing import Binning, Decimate, Desaturate, Realign, RemoveStaticNoise, TraceProcessingCollection, Smooth, ZeroBaseline
+from pioneer.common.trace_processing import Binning, Decimate, TraceProcessingCollection, ZeroBaseline
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.datatypes import datasource_xyzit_float_intensity
-from pioneer.das.api.samples import EchoXYZIT, FastTrace
+from pioneer.das.api.samples import FastTrace, PointCloud
 
 from typing import Any
 
 import numpy as np
+
 
 class WaveformCloud(VirtualDatasource):
     """Makes a point cloud from each data point of each waveforms."""
@@ -97,4 +98,4 @@ class WaveformCloud(VirtualDatasource):
         virtual_raw['i'] = amplitudes[keep]
         virtual_raw['t'] = timestamps[keep]
 
-        return EchoXYZIT(key, self, virtual_raw, timestamp)
+        return PointCloud(key, self, virtual_raw, timestamp)

@@ -7,7 +7,7 @@ from pioneer.das.api.sensors import Sensor
 from pioneer.das.api.sensors import SENSOR_FACTORY
 from pioneer.das.api.sources import DirSource, ZipFileSource
 
-from typing import Callable, Iterator, Union, Optional, List, Dict, Mapping, Tuple, Any
+from typing import Iterator, Union, Optional, List, Dict, Mapping, Tuple, Any
 
 import ast
 import glob
@@ -821,10 +821,11 @@ class Sensors(object):
         for name, value in yml_items_tqdm:
 
             sensor_type, _ = platform_utils.parse_sensor_name(name)
-            if sensor_type in SENSOR_FACTORY:
-                self._sensors[name] = SENSOR_FACTORY[sensor_type](name, self.platform)
-            else:
-                self._sensors[name] = Sensor(name, self.platform)
+            self._sensors[name] = SENSOR_FACTORY.get(sensor_type, Sensor)(name, self.platform)
+            # if sensor_type in SENSOR_FACTORY:
+            #     self._sensors[name] = SENSOR_FACTORY[sensor_type](name, self.platform)
+            # else:
+            #     self._sensors[name] = Sensor(name, self.platform)
             self._ordered_names.append(name)
 
             self._load_offline_datasources(name)
@@ -853,17 +854,6 @@ class Sensors(object):
                     LoggingManager.instance().warning(f"Another 'egomotion_provider' found for sensor name {name}, ignoring it.")
                 else:
                     self._egomotion_provider = provider
-
-
-    def start(self):
-        """**Live platform only** starts the (live) sensors"""
-        for name, sensor in self._sensors.items():
-            sensor.start()
-
-    def stop(self):
-        """**Live platform only** starts the (live) sensors"""
-        for name, sensor in self._sensors.items():
-            sensor.stop()
     
     def _load_intrinsics(self, name, intrinsics_config):
         """Intrinsics config can be a string or a dict so complete the path,

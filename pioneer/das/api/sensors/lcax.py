@@ -2,11 +2,13 @@ from pioneer.common import clouds, banks, misc
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.common.types import calibration
 from pioneer.das.api.interpolators import nearest_interpolator, linear_dict_of_float_interpolator, floor_interpolator
+from pioneer.das.api.samples.point_cloud import PointCloud
 from pioneer.das.api.sensors.sensor import Sensor
-from pioneer.das.api.samples import Sample, Echo, Trace, FastTrace, EchoXYZIT
+from pioneer.das.api.samples import Sample, Echo, Trace, FastTrace
 
 import numpy as np
-from typing import Callable, Union, Optional, List, Dict, Tuple, Any
+from typing import Union, Dict
+
 
 class LCAx(Sensor):
     """ LeddarTech LCAx family of sensors, expects 'ech', 'sta' and 'cfg' datasources"""
@@ -19,7 +21,7 @@ class LCAx(Sensor):
                                       , 'cfg': (Sample, floor_interpolator)
                                       , 'trr': (Trace, nearest_interpolator)
                                       , 'ftrr': (FastTrace, nearest_interpolator)
-                                      , 'xyzit': (EchoXYZIT, nearest_interpolator)
+                                      , 'xyzit': (PointCloud, nearest_interpolator)
                                      }
                                    )
 

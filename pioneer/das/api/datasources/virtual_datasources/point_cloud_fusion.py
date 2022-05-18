@@ -1,5 +1,6 @@
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.datatypes import datasource_xyzit
+from pioneer.das.api.samples.point_cloud import PointCloud
 
 from typing import Any
 
@@ -37,15 +38,15 @@ class PointCloudFusion(VirtualDatasource):
 
         for ds_name in self.dependencies:
             sample = self.datasources[ds_name][key]
-            xyz = sample.point_cloud(referential=self.reference_sensor)
+            xyz = sample.get_point_cloud(referential=self.reference_sensor)
 
             if self.sensor.orientation is not None:
                 xyz = xyz @ self.sensor.orientation
 
             pcloud = np.empty((xyz.shape[0],5))
             pcloud[:,[0,1,2]] = xyz
-            pcloud[:,3] = sample.amplitudes
-            pcloud[:,4] = sample.timestamps
+            pcloud[:,3] = sample.get_field('i')
+            pcloud[:,4] = sample.get_field('t')
 
             pcloud_fused = self.stack_point_cloud(pcloud_fused, pcloud)
 
@@ -58,8 +59,6 @@ class PointCloudFusion(VirtualDatasource):
         raw['i'] = pcloud_fused[:,3]
         raw['t'] = pcloud_fused[:,4]
 
-        sample_object = self.sensor.factories['xyzit'][0]
         ts = self.datasources[self.dependencies[0]][key].timestamp
-
-        return sample_object(index=key, datasource=self, virtual_raw=raw, virtual_ts=ts)
+        return PointCloud(index=key, datasource=self, virtual_raw=raw, virtual_ts=ts)
 

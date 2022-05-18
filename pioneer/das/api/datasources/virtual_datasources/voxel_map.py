@@ -2,11 +2,14 @@ from pioneer.common.linalg import map_points, tf_inv
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.datatypes import datasource_xyzit
+from pioneer.das.api.samples.echo import Echo
+from pioneer.das.api.samples.point_cloud import PointCloud
 
-from typing import Any
+from typing import Any, Iterable
 
 import copy
 import numpy as np
+
 
 try :
     import open3d
@@ -24,9 +27,9 @@ class VoxelMap(VirtualDatasource):
     def __init__(self, reference_sensor:str, dependencies:list, memory:int=5, skip:int=1, voxel_size:float=0.0):
         """Constructor
             Args:
-                reference_sensor (str): The name of the sensor (e.g. 'pixell_bfc').
+                reference_sensor (str): The name of the sensor (e.g. 'ouster64_bfc').
                 dependencies (list): A list of the datasource names. 
-                    The only element should be an echo or point cloud datasource (e.g. 'pixell_bfc_ech')
+                    The only element should be a point cloud datasource (e.g. 'ouster64_bfc_xyzit')
                 memory (int): The number of past frames to merge.
                 skip (int): If higher than 1, frames will be skipped. For example, with memory=10 and skip=2, 
                     the frames N=0,-2,-4,-6,-8,-10 will be merged. The present frame (N=0) is always included.
@@ -81,22 +84,14 @@ class VoxelMap(VirtualDatasource):
 
         return pc_vox
 
-    @property
-    def _is_live(self):
-        return self.sensor.platform.is_live()
-
     def __getitem__(self, key:Any):
 
         #TODO: if multiple point cloud datasources in dependencies, we could merge them.
 
         min_key = key - self.memory
+        min_key = max([0, min_key])
 
-        if not self._is_live:
-            min_key = max([0, min_key])
-        else:
-            min_key = -min([-min_key, len(self.datasources[self.original_point_cloud_datasource])])
-
-        samples = self.datasources[self.original_point_cloud_datasource][min_key:key+1]
+        samples:Iterable[PointCloud] = self.datasources[self.original_point_cloud_datasource][min_key:key+1]
 
         nb_features = 1 if not self.has_rgb else 4
         pc_map = np.empty((0,5+nb_features))
@@ -105,46 +100,38 @@ class VoxelMap(VirtualDatasource):
         if self.local_cache is not None:
             pc_map = self.local_cache
 
-            if not self._is_live:
-                keep = np.where(
-                    (pc_map[:,5] >= min_key) &\
-                    (pc_map[:,5] <= key) &\
-                    (pc_map[:,5] % self.skip == 0)
-                )
-            else:
-                keep = np.where(
-                    (pc_map[:,5] >= samples[0].raw['absolute_index']) &\
-                    (pc_map[:,5] <= samples[-1].raw['absolute_index']) &\
-                    (pc_map[:,5] % self.skip == 0)
-                )
+            keep = np.where(
+                (pc_map[:,5] >= min_key) &\
+                (pc_map[:,5] <= key) &\
+                (pc_map[:,5] % self.skip == 0)
+            )
             pc_map = pc_map[keep]
             cached_indices = np.unique(pc_map[:,5])
 
         
         for sample in samples:
 
-            if not self._is_live:
-                index = sample.index
-                if index % self.skip and index != key:
-                    continue
-            else:
-                index = sample.raw['absolute_index']
-                if index % self.skip and index != samples[-1].raw['absolute_index']:
-                    continue
+            index = sample.index
+            if index % self.skip and index != key:
+                continue
 
             if index in cached_indices:
                 continue #don't re-add what is already cached
 
-            pc = np.empty((sample.amplitudes.size,5+nb_features))
-            pc[:,[0,1,2]] = sample.point_cloud(referential='world', undistort=False)
-            pc[:,3] = sample.amplitudes
-            pc[:,4] = sample.timestamp
+            pc = np.empty((sample.size,5+nb_features))
+            pc[:,[0,1,2]] = sample.get_point_cloud(referential='world', undistort=False)
+            if isinstance(sample, Echo):
+                pc[:,3] = sample.amplitudes
+                pc[:,4] = sample.timestamps
+            else:
+                pc[:,3] = sample.get_field('i')
+                pc[:,4] = sample.get_field('t')
             pc[:,5] = index
 
             if self.has_rgb:
-                pc[:,6] = sample.raw['r']
-                pc[:,7] = sample.raw['g']
-                pc[:,8] = sample.raw['b']
+                pc[:,6] = sample.get_field('r')
+                pc[:,7] = sample.get_field('g')
+                pc[:,8] = sample.get_field('b')
 
             pc_map = self.stack_point_cloud(pc_map, pc)
 
@@ -171,7 +158,5 @@ class VoxelMap(VirtualDatasource):
             raw['g'] = pc_map[:,7]
             raw['b'] = pc_map[:,8]
 
-        sample_object = self.sensor.factories['xyzit'][0]
-
-        return sample_object(index=key, datasource=self, virtual_raw=raw, virtual_ts=samples[-1].timestamp)
+        return PointCloud(index=key, datasource=self, virtual_raw=raw, virtual_ts=samples[-1].timestamp)
 

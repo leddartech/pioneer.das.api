@@ -13,8 +13,7 @@ class FastTrace(Trace):
     """
 
     def __init__(self, index, datasource, virtual_raw=None, virtual_ts=None):
-        super(FastTrace, self).__init__(
-            index, datasource, virtual_raw, virtual_ts)
+        super().__init__(index, datasource, virtual_raw, virtual_ts)
 
     @property
     def raw(self):

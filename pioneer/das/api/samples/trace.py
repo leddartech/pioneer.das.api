@@ -10,12 +10,12 @@ class Trace(Sample):
     """Trace (or waveform) data from a single LCAx package"""
 
     def __init__(self, index, datasource, virtual_raw=None, virtual_ts=None):
-        super(Trace, self).__init__(index, datasource, virtual_raw, virtual_ts)
+        super().__init__(index, datasource, virtual_raw, virtual_ts)
 
     @property
     def raw(self):
         if self._raw is None:
-            self._raw = super(Trace, self).raw
+            self._raw = super().raw
 
             for attribute in ['time_base_delays', 'distance_scaling', 'trace_smoothing_kernel']:
                 if attribute not in self._raw and hasattr(self.datasource.sensor, attribute):

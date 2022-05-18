@@ -4,9 +4,8 @@ from pioneer.das.api.datasources import DatasourceWrapper, VirtualDatasource
 from pioneer.das.api.interpolators import nearest_interpolator
 from pioneer.das.api.samples import Sample
 from pioneer.das.api.samples import annotations
-from pioneer.das.api.sources import FileSource
 
-from typing import Callable, Union, Optional, List, Dict, Tuple, Any
+from typing import Optional, List, Dict, Tuple, Any
 
 import glob
 import numpy as np
@@ -17,26 +16,19 @@ class Sensor(object):
     """A sensor encapsulate a sensor and its datasources. 
     *Important* when you add a new derivation of class Sensor, 
     don't forget to add it to platform.SENSOR_FACTORY.
-
     """
     class NoPathToReferential(Exception):
         pass
 
-    def __init__(self, name:str
-    , pf
-    , factories:Dict[str, Tuple[Any, Any]] = {}
-    , call_start:Optional[Callable] = None
-    , call_stop:Optional[Callable] = None):
+    def __init__(self, name:str, pf:'Platform', factories:Dict[str, Tuple[Any, Any]] = {}):
         """Constructor.
         
         Args:
             name: the sensor's name and position id, e.g. 'eagle_tfc'
             platform: the platform this sensor belongs to
             factories: a dict containing one entry per datasource type, each entry's value is a tuple containing 
-                \(Sample-derived, optional_interpolator_function\). For example, a factoryies dict could be 
-                {"ech"\:(Echo, None), "sta":(Sample, interpolators.linear_dict_of_float_interpolator)}
-            call_start: a callback to be called by Sensor.start() (e.g. to start an actual live sensor)
-            call_stop: similar to call_start
+                Sample-derived, optional_interpolator_function. For example, a factory dict could be 
+                {"ech":(Echo, None), "sta":(Sample, interpolators.linear_dict_of_float_interpolator)}
         """
         self.name = name
         self.datasources = {}
@@ -50,8 +42,6 @@ class Sensor(object):
         self.orientation = None
         self.extrinsics = {}
         self.intrinsics = None
-        self.call_start = call_start
-        self.call_stop = call_stop
         self.egomotion_provider = None
         self._extrinsics_dirty = misc.Signal()
         self.pcl_datasource = None
@@ -59,18 +49,6 @@ class Sensor(object):
     def datasource_names(self) -> List[str]:
         """Returns this sensor's datasource types"""
         return [ds.label for ds in self.datasources.values()]
-
-    def start(self):
-        """Starts the live sensor wrapped by this Sensor instance """
-        if self.call_start is None:
-            raise RuntimeError(f"{self.name} is not a live sensor")
-        self.call_start()
-
-    def stop(self):
-        """Stops the live sensor wrapped by this Sensor instance """
-        if self.call_stop is None:
-            raise RuntimeError(f"{self.name} is not a live sensor")
-        self.call_stop()
 
     @property
     def platform(self):
@@ -87,7 +65,7 @@ class Sensor(object):
             ds.invalidate_caches()
             
     def add_datasource(self, ds, ds_type:str, cache_size:int=100):
-        """Adds a datasouce to this sensor
+        """Adds a datasource to this sensor
 
         Args:
             ds: a Filesource-derived instance or VirtualDatasource
@@ -152,7 +130,7 @@ class Sensor(object):
         self.extrinsics = targets
 
     def create_egomotion_provider(self) -> Optional['EgomotionProvider']:
-        return None
+        return
 
     def map_to(self, target:str) -> np.ndarray:
         """Returns a 4x4 tranform matrix mapping a point from this sensor's referential to 'target' sensor's referential
@@ -192,26 +170,13 @@ class Sensor(object):
         return self.datasources.items()
 
     def __contains__(self, key:str):
-        """Returns wether 'key' is one of this sensor's datasources, implements 'in' API.
-
-        To use: 
-        >> 'ech' in LCAx('eagle_tfc', None)
-        >> True
-        """
         return key in self.datasources
 
     def __len__(self):
-        """Returns the number of datasources in this sensor. Implements len() API """
+        """Returns the number of datasources in this sensor."""
         return len(self.datasources)
 
     def __getitem__(self, key:str):
-        """Returns the datasource
-
-        Args:
-            key: the datasource type, e.g. 'ech'
-        """
-        
-        try:
-            return self.datasources[key]
+        try: return self.datasources[key]
         except KeyError:
             raise KeyError('This data source for sensor {} does not exist.'.format(self.name))

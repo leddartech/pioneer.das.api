@@ -5,7 +5,12 @@ from pioneer.das.api import categories
 from pioneer.das.api.samples.sample import Sample
 
 from transforms3d import euler
+from typing import Iterable, Optional
+
+import copy
 import numpy as np
+import warnings
+warnings.simplefilter('once', DeprecationWarning)
 
 
 class Box3d(Sample):
@@ -13,59 +18,90 @@ class Box3d(Sample):
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(Box3d, self).__init__(index, datasource, virtual_raw, virtual_ts)
 
-    def label_names(self):
-        '''Converts the category numbers in their corresponding names (e.g. 0 -> 'pedestrian') and returns the list of names for all boxes in the sample'''
+    def get_centers(self) -> np.ndarray:
+        return self.raw['data']['c']
+
+    def get_dimensions(self) -> np.ndarray:
+        return self.raw['data']['d']
+
+    def get_rotations(self) -> np.ndarray:
+        return self.raw['data']['r']
+
+    def get_confidences(self) -> Iterable[Optional[float]]:
+        return self.raw.get('confidence', [None for _ in range(len(self))])
+
+    def get_category_numbers(self) -> Iterable[int]:
+        return self.raw['data']['classes']
+
+    def get_categories(self) -> Iterable[str]:
         label_source_name = categories.get_source(platform_utils.parse_datasource_name(self.datasource.label)[2])
-        try:
-            return [categories.CATEGORIES[label_source_name][str(category_number)]['name'] for category_number in self.raw['data']['classes']]
-        except:
-            LoggingManager.instance().warning(f"Can not find the CATEGORIES and NAMES of {label_source_name}.")
+        return [categories.CATEGORIES[label_source_name][str(category_number)]['name'] for category_number in self.get_category_numbers()]
 
-    def _mapto(self, tf=None):
-        """Maps the box3d to the new referential, given a 4x4 matrix transformation"""
+    def get_ids(self) -> Iterable[Optional[int]]:
+        return self.raw['data']['id']
 
-        bbox = np.copy(self.raw['data'])
-        if tf is None:
-            return bbox
-        
-        for i in range(len(bbox)):
-            tf_Localds_from_Box = np.eye(4)
-            tf_Localds_from_Box[:3, :3] = euler.euler2mat(bbox['r'][i,0], bbox['r'][i,1], bbox['r'][i,2])
-            tf_Localds_from_Box[:3, 3] = bbox['c'][i,:]
-            tf_Referential_from_Box = tf @ tf_Localds_from_Box
-            bbox['c'][i,:] = tf_Referential_from_Box[:3, 3]
-            bbox['r'][i,:] = euler.mat2euler(tf_Referential_from_Box)
+    def __len__(self) -> int:
+        return self.get_centers().shape[0]
 
-        return bbox
+    def set_transform(self, transform:np.ndarray) -> 'Box3d':
+        if transform is None: return self
+
+        centers = self.get_centers()
+        rotations = self.get_rotations()
+
+        raw = copy.deepcopy(self.raw)
+
+        for i in range(len(self)):
+            box_transform = np.eye(4)
+            box_transform[:3, :3] = euler.euler2mat(*rotations[i])
+            box_transform[:3, 3] = centers[i,:]
+            box_to_transform = transform @ box_transform
+            raw['data']['c'][i,:] = box_to_transform[:3, 3]
+            raw['data']['r'][i,:] = euler.mat2euler(box_to_transform)
+
+        return Box3d(self.index, self.datasource, raw, self.timestamp)
+
+    def set_referential(self, referential:str, ignore_orientation:bool=False, reference_ts:int=-1, dtype=np.float64) -> 'Box3d':
+        referential = platform.referential_name(referential)
+        if self.datasource.sensor.name == referential: return self
+        transform = self.compute_transform(referential, ignore_orientation, reference_ts, dtype)
+        return self.set_transform(transform)
     
-    def mapto(self, referential_or_ds:str=None, ignore_orientation:bool=False, reference_ts:int=-1, dtype=np.float64):
-        """ Will map each box in another referential. """
 
-        referential = platform.referential_name(referential_or_ds)
-        if self.datasource.sensor.name == referential:
-            tf_Referential_from_Localds = None
-        else:
-            tf_Referential_from_Localds = self.compute_transform(referential_or_ds, ignore_orientation, reference_ts, dtype)
-
-        return self._mapto(tf_Referential_from_Localds)
+    ### Legacy section ###
 
     def attributes(self):
+        warnings.warn("Box3d.attributes() is deprecated.", DeprecationWarning)
         if 'attributes' in self.raw:
             return self.raw['attributes']
         LoggingManager.instance().warning(f"There are no 'attributes' for that sample {self.datasource.label}.")
         return None
     
-    def confidences(self):
-        if 'confidence' in self.raw:
-            return self.raw['confidence']
-        LoggingManager.instance().warning(f"There are no 'confidences' for that sample {self.datasource.label}.")
-        return None
-
     def dynamics(self):
+        warnings.warn("Box3d.dynamics() is deprecated.", DeprecationWarning)
         if 'dynamics' in self.raw:
             return self.raw['dynamics']
         LoggingManager.instance().warning(f"There are no 'dynamics' for that sample {self.datasource.label}.")
         return None
+
+    def confidences(self):
+        warnings.warn("Box3d.confidences() is deprecated, use Box3d.get_confidences() instead.", DeprecationWarning)
+        if 'confidence' not in self.raw: return
+        return self.get_confidences()
+
+    def label_names(self):
+        warnings.warn("Box3d.label_names() is deprecated, use Box3d.get_categories() instead.", DeprecationWarning)
+        return self.get_categories()
+
+    def _mapto(self, tf=None):
+        """Maps the box3d to the new referential, given a 4x4 matrix transformation"""
+        warnings.warn("Box3d._mapto() is deprecated, use Box3d.set_transform() instead.", DeprecationWarning)
+        return self.set_transform(tf).raw['data']
+    
+    def mapto(self, referential_or_ds:str=None, ignore_orientation:bool=False, reference_ts:int=-1, dtype=np.float64):
+        """ Will map each box in another referential. """
+        warnings.warn("Box3d.mapto() is deprecated, use Box3d.set_referential() instead.", DeprecationWarning)
+        return self.set_referential(referential_or_ds, ignore_orientation, reference_ts, dtype).raw['data']
 
     def num_pts_in(self, pt_cloud, margin=0):
         """ Returns, for each box, the mask of those points from pt_cloud that are inside the box.
@@ -76,6 +112,7 @@ class Box3d(Sample):
             Returns:
                 mask - boolean (n_boxe,M)
         """
+        warnings.warn("Box3d.num_pts_in() is deprecated.", DeprecationWarning)
         bbox = self.raw['data']
         nbpts = np.zeros((len(bbox), len(pt_cloud)), dtype=bool)
         for i in range(len(bbox)):
@@ -88,6 +125,7 @@ class Box3d(Sample):
 
     def set_angle_to_domain(self, domain=[0,2*np.pi]):
         """Will set the angles to a given domain"""
+        warnings.warn("Box3d.set_angle_to_domain() is deprecated.", DeprecationWarning)
 
         bbox = np.copy(self.raw['data'])
         for i in range(len(bbox)):
@@ -106,6 +144,7 @@ class Box3d(Sample):
             map2yaw is provided (a callable) which brings all the boxes in a referential where only one rotation (yaw).
 
         """
+        warnings.warn("Box3d.compute_iou() is deprecated.", DeprecationWarning)
         if map2yaw is not None:
             box0 = map2yaw(self)
             box1 = map2yaw(box)

@@ -66,7 +66,7 @@ class Pixell(LCAx):
             else:
                 raise KeyError('Can not compute the point cloud projection')
         else:
-            return super(Pixell, self).get_corrected_cloud(timestamp, cache, type, indices, distances, amplitudes, dtype)
+            return super().get_corrected_cloud(timestamp, cache, type, indices, distances, amplitudes, dtype)
 
     def get_cloud(self, cache, type, indices, distances, amplitudes=None, dtype=np.float64):
         '''Get cloud data (type_pts, type_amplitudes, type_indices) from a sensor.'''

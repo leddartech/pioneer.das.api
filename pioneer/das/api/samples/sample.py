@@ -11,6 +11,12 @@ def warn_if_less_than_64bit(dtype:np.dtype):
         LoggingManager.warning(f"{dtype} precision detected, performing computations in that context with less than 64bits precision is ill-advised")
 
 
+# TODO: Move all 3D stuff to Sensor3D class
+# TODO: Move all 2D image stuff to Image class
+# TODO: Refactor the transform methods
+# TODO: See if we can remove the weird LUT stuff
+
+
 class Sample(object):
 
     LUT = {}
@@ -46,13 +52,13 @@ class Sample(object):
             special_transformations = {
                 np.array([[1,  0,  0],
                  [0, 1,  0],
-                 [0,  0,  -1]], 'f4').tostring(): 'flipud({})',
+                 [0,  0,  -1]], 'f4').tobytes(): 'flipud({})',
                 np.array([[0, 0, 1],
                  [-1, 0, 0],
-                 [0, 1, 0]], 'f4').tostring(): '{}',
+                 [0, 1, 0]], 'f4').tobytes(): '{}',
                 np.array([[0, 0, 1],
                  [-1, 0, 0],
-                 [0, -1, 0]], 'f4').tostring(): 'fliplr({})',
+                 [0, -1, 0]], 'f4').tobytes(): 'fliplr({})',
 
             }
 
@@ -60,8 +66,8 @@ class Sample(object):
                 for refl_op, refl in reflexions.items():
                     comb = np.matmul(rot, refl)
                     inv_com = np.matmul(refl, rot)
-                    Sample.LUT[comb.tostring()] = rot_op.format(refl_op)
-                    Sample.LUT[inv_com.tostring()] = refl_op.format(rot_op)
+                    Sample.LUT[comb.tobytes()] = rot_op.format(refl_op)
+                    Sample.LUT[inv_com.tobytes()] = refl_op.format(rot_op)
 
             Sample.LUT.update(special_transformations)
 
@@ -240,8 +246,8 @@ class Sample(object):
         if self.orientation is not None:
             orientation_f4 = self.orientation.astype('f4')
             lut = Sample.__goc_lut()
-            if orientation_f4.tostring() in lut:
-                return lut[orientation_f4.tostring()]
+            if orientation_f4.tobytes() in lut:
+                return lut[orientation_f4.tobytes()]
 
             LoggingManager.instance().warning('orientation {} could not be mapped to any image transform'.format(self.orientation))
         return None

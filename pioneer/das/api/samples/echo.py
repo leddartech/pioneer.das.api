@@ -1,9 +1,11 @@
-from pioneer.common import banks, clouds, images, plane, platform
+from pioneer.common import banks, clouds, images, plane
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.samples.sample import Sample
 
 import copy
 import numpy as np
+import warnings
+warnings.simplefilter('once', DeprecationWarning)
 
 
 class Echo(Sample):
@@ -12,13 +14,13 @@ class Echo(Sample):
     """
 
     def __init__(self, index, datasource, virtual_raw=None, virtual_ts=None):
-        super(Echo, self).__init__(index, datasource, virtual_raw, virtual_ts)
+        super().__init__(index, datasource, virtual_raw, virtual_ts)
         self._mask = None
 
     @property
     def raw(self):
         if self._raw is None:
-            r = super(Echo, self).raw
+            r = super().raw
             r['das.sample'] = self
             
             try:
@@ -61,6 +63,10 @@ class Echo(Sample):
     @property
     def h(self):
         return self.raw['h']
+
+    @property
+    def size(self) -> int:
+        return self.indices.size
 
     @property
     def mask(self):
@@ -124,12 +130,7 @@ class Echo(Sample):
     def cache(self):
         return self.datasource.sensor.cache(self.specs)
 
-    def get_cloud(self, referential: str = None, ignore_orientation: bool = False, undistort: bool = False, reference_ts: int = -1, dtype: np.dtype = np.float64):
-        points, amplitudes, triangles = self.quad_cloud(
-            referential, ignore_orientation, undistort, reference_ts, dtype)
-        return points, amplitudes, triangles.reshape(-1, 3)
-
-    def point_cloud(self, referential: str = None, ignore_orientation: bool = False, undistort: bool = False, reference_ts: int = -1,
+    def get_point_cloud(self, referential: str = None, ignore_orientation: bool = False, undistort: bool = False, reference_ts: int = -1,
                     dtype: np.dtype = np.float64):
         """Compute a 3D point cloud from raw data
 
@@ -152,6 +153,15 @@ class Echo(Sample):
                 return pts_Local  # note that in that case, orientation has to be ignored
 
         return self.transform(pts_Local, referential, ignore_orientation, reference_ts, dtype=dtype)
+
+    def point_cloud(self, referential=None, ignore_orientation=False, undistort=False, reference_ts=-1, dtype=np.float64):
+        warnings.warn("Echo.point_cloud() is deprecated. Use Echo.get_point_cloud() instead.", DeprecationWarning)
+        return self.get_point_cloud(referential, ignore_orientation, undistort, reference_ts, dtype)
+
+    def get_cloud(self, referential: str = None, ignore_orientation: bool = False, undistort: bool = False, reference_ts: int = -1, dtype: np.dtype = np.float64):
+        points, amplitudes, triangles = self.quad_cloud(
+            referential, ignore_orientation, undistort, reference_ts, dtype)
+        return points, amplitudes, triangles.reshape(-1, 3)
 
     def quad_cloud(self, referential=None, ignore_orientation=False, undistort=False, reference_ts=-1, dtype=np.float64):
         """Compute a 3d surface cloud from raw data (quads made of 2 triangles)
@@ -289,36 +299,6 @@ class Echo(Sample):
             & plane.plane_test(planes[1], pts)\
             & plane.plane_test(planes[2], pts)\
             & plane.plane_test(planes[3], pts)
-
-    def get_rgb_from_camera_projection(self, camera: str, undistort: bool = False, return_mask: bool = False):
-        """Returns the rgb data for each point from its projected position in camera.
-
-            Args:
-                camera: (str) name of the camera datasource (ex: 'flir_bbfc_flimg')
-                undistort: (bool) if True, motion compensation is applied to the points before the projection (default is False)
-                return_mask: (bool) if True, also returns the mask that only includes points inside the camera fov.
-
-            Returns:
-                rgb: A Nx3 array, where N is the number of points in the point cloud. RGB data is in the range [0,255]
-                mask (optional): a Nx1 array of booleans. Values are True where points are inside the camera fov. False elsewhere.
-        """
-
-        image_sample = self.datasource.sensor.pf[camera].get_at_timestamp(
-            self.timestamp)
-
-        pcloud = self.point_cloud(
-            referential=platform.extract_sensor_id(camera), undistort=undistort)
-        projection, mask = image_sample.project_pts(
-            pcloud, mask_fov=True, output_mask=True)
-        projection = projection.astype(int)
-
-        rgb = np.zeros((pcloud.shape[0], 3))
-        image = image_sample.raw_image()
-        rgb[mask, :] = image[projection[:, 1], projection[:, 0]]
-
-        if return_mask:
-            return rgb, mask
-        return rgb
 
     def get_pulses(self, trace_ds_type: str, pulse_sample_size: int = 10, trace_processing=None, return_distance_scaling: bool = False):
         """Returns the corresponding pulses for every echoes from a trace datasource.

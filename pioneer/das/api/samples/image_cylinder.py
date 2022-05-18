@@ -1,11 +1,13 @@
 from pioneer.das.api.samples.image import Image
 
+import numpy as np
+
 
 class ImageCylinder(Image):
     """Image derivation that was transformed by a cylindrical projection"""
     
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
-        super(ImageCylinder, self).__init__(index, datasource, virtual_raw, virtual_ts)
+        super().__init__(index, datasource, virtual_raw, virtual_ts)
         self.cylindrical_projection = datasource.cylindrical_projection
 
     def project_pts(self, pts, mask_fov=False, output_mask=False, undistorted=False, margin=0):
@@ -23,6 +25,7 @@ class ImageCylinder(Image):
         '''
         return self.cylindrical_projection.project_pts(pts.T, mask_fov, output_mask, margin)
 
-    def undistort_image(self):
-        return self.raw_image()
+    def get_image(self, undistort: bool = False) -> np.ndarray:
+        return super().get_image(undistort=False) # ImageCylinder is always undistorted
+        
 

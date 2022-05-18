@@ -1,14 +1,34 @@
 from pioneer.das.api.samples.sample import Sample
 
+from typing import Tuple
+
 import cv2
 import numpy as np
+import warnings
+warnings.simplefilter('once', DeprecationWarning)
+
 
 class Image(Sample):
     """RGB data from a single camera image"""
 
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
-        super(Image, self).__init__(index, datasource, virtual_raw, virtual_ts)
+        super().__init__(index, datasource, virtual_raw, virtual_ts)
         self._und_camera_matrix = None
+
+    def get_image(self, undistort:bool=False) -> np.ndarray:
+        if type(self.raw) == dict: image = self.raw['image']
+        image = self.raw
+        if undistort:
+            image = cv2.undistort(image, 
+                cameraMatrix=self.camera_matrix, 
+                distCoeffs=self.distortion_coeffs, 
+                newCameraMatrix=self.und_camera_matrix,
+            )
+        return image
+
+    @property
+    def shape(self) -> Tuple[int, int, int]:
+        return self.get_image().shape
 
     @property
     def camera_matrix(self):
@@ -26,7 +46,7 @@ class Image(Sample):
         if self._und_camera_matrix is not None:
             return self._und_camera_matrix
         
-        v,h,_ = self.raw_image().shape
+        v,h,_ = self.shape
         self._und_camera_matrix, _ = cv2.getOptimalNewCameraMatrix(
             self.camera_matrix, self.distortion_coeffs, (h,v), 0.0, (h,v))
         return self._und_camera_matrix
@@ -68,20 +88,15 @@ class Image(Sample):
         return image_pts
         
     def raw_image(self):
-        if type(self.raw) == dict:
-            return self.raw['image']
-        return self.raw
+        warnings.warn("Image.raw_image() is deprecated. Use Image.get_image() instead.", DeprecationWarning)
+        return self.get_image()
     
     def undistort_image(self):
-        return cv2.undistort(
-            self.raw_image(), 
-            cameraMatrix=self.camera_matrix, 
-            distCoeffs=self.distortion_coeffs, 
-            newCameraMatrix=self.und_camera_matrix,
-        )
+        warnings.warn("Image.undistort_image() is deprecated. Use Image.get_image(undistort=True) instead.", DeprecationWarning)
+        return self.get_image(undistort=True)
 
     def projection_mask(self, pts, projection, margin=0):
-        v,h,_ = self.raw_image().shape
+        v,h,_ = self.shape
         mask = (pts[:,2] > 0)& \
             (projection[:,0] >= 0 - margin) & \
             (projection[:,0] <= h + margin) & \

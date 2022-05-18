@@ -43,7 +43,7 @@ class BoundingBoxMetadata(VirtualDatasource):
         for ds_name in self.dependencies:
             sample = self.datasources[ds_name][key]
 
-            for category_name in sample.label_names():
+            for category_name in sample.get_categories():
                 if category_name in self.category_counts: raw[category_name] += 1
 
         return Sample(index=key, datasource=self, virtual_raw=raw, virtual_ts=sample.timestamp)

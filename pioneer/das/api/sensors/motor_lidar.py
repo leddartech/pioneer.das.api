@@ -1,19 +1,20 @@
-from pioneer.common.logging_manager  import LoggingManager
-from pioneer.das.api.sensors.sensor  import Sensor
-from pioneer.das.api.samples         import XYZIT, Sample
-from pioneer.das.api.interpolators   import nearest_interpolator
+from pioneer.common.logging_manager import LoggingManager
+from pioneer.das.api.sensors.lidar  import Lidar
+from pioneer.das.api.samples        import Sample, XYZIT
+from pioneer.das.api.interpolators  import nearest_interpolator
 
-from typing import Union
+from typing import Any, Dict, Tuple, Union
 
 import numpy as np
 
-class MotorLidar(Sensor):
+class MotorLidar(Lidar):
     
-    def __init__(self, name: str, platform: 'Platform'):
-        super(MotorLidar, self).__init__(name
-                                , platform
-                                , {  'xyzit': (XYZIT, nearest_interpolator)
-                                    ,'temp': (Sample, nearest_interpolator)})
+    def __init__(self, name: str, platform: 'Platform', factories:Dict[str, Tuple[Any, Any]] = {}):
+        super().__init__(name, platform, 
+            factories = {**factories,
+                'xyzit': (XYZIT, nearest_interpolator), 
+                'temp': (Sample, nearest_interpolator),
+            })
         
         self.temperature_slope = None
         self.temperature_reference = None
@@ -59,8 +60,7 @@ class MotorLidar(Sensor):
         return distances + offsets_
         
     def get_corrected_cloud(self, timestamp, pts, dtype):
-        '''It corrects the pts-cloud according to a temperature compensation (if any).
-        '''
+        '''It corrects the pts-cloud according to a temperature compensation (if any).'''
         if not self.temperature_compensation:
             return pts
         distances = np.linalg.norm(pts, axis=1, keepdims=True)

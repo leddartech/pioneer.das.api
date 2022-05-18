@@ -8,7 +8,7 @@ class ImageFisheye(Image):
     '''A derivation the Image sample, to be used with fisheye lenses.'''
     
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
-        super(ImageFisheye, self).__init__(index, datasource, virtual_raw, virtual_ts) 
+        super().__init__(index, datasource, virtual_raw, virtual_ts) 
         if not hasattr(self.datasource.sensor, 'mercator_projection'):
             self.datasource.sensor.mercator_projection = mercator_projection.MercatorProjection(self.camera_matrix, self.distortion_coeffs) 
 
@@ -38,6 +38,7 @@ class ImageFisheye(Image):
             return image_pts, mask
         return image_pts
 
-    def undistort_image(self):
-        return self.datasource.sensor.mercator_projection.undistort(self.raw)
-
+    def get_image(self, undistort: bool = False) -> np.ndarray:
+        if undistort:
+            return self.datasource.sensor.mercator_projection.undistort(self.get_image(undistort=False))
+        return super().get_image()
