@@ -28,7 +28,7 @@ class Pixell(LCAx):
             cfg = self['cfg'][0].raw
             self.azimut = np.deg2rad(cfg['calibration']['ID_CHANNEL_ANGLE_AZIMUT'])
             self.elevation = np.deg2rad(cfg['calibration']['ID_CHANNEL_ANGLE_ELEVATION'])
-            self.calibrated_angles = np.c_[self.elevation, self.azimut].astype(np.float)
+            self.calibrated_angles = np.c_[self.elevation, self.azimut].astype(float)
             _time_base_delays = cfg['calibration']['ID_TIMEBASE_DELAY']
             self.time_base_delays = {
                 'low': _time_base_delays[:self.specs['v']*self.specs['h']][constants.ID_FROM_LCAS_CHAN_TO_SENSOR_CHAN],
@@ -87,9 +87,9 @@ class Pixell(LCAx):
                 elevation.extend(elevation_)
                 azimut.extend(azimut_)
 
-            distances_ = np.array(distances_, dtype=np.float)
-            elevation = np.array(elevation, dtype=np.float)
-            azimut = np.array(azimut, dtype=np.float)
+            distances_ = np.array(distances_, dtype=float)
+            elevation = np.array(elevation, dtype=float)
+            azimut = np.array(azimut, dtype=float)
             y,z,x = clouds.direction_spherical(elevation, azimut)
             pts = np.stack((distances_ * x, distances_ * y, -distances_ * z), axis=-1)
             pts = pts @ self.orientation
@@ -126,7 +126,7 @@ class Pixell(LCAx):
         return x,y,z
 
     def get_head_position_per_channel(self):
-        head = np.zeros((3, self.specs['v'], self.specs['h']), dtype=np.float)
+        head = np.zeros((3, self.specs['v'], self.specs['h']), dtype=float)
         head[:,:,:32] = self.head_positions['left'][:,None,None]
         head[:,:,32:64] = self.head_positions['center'][:,None,None]
         head[:,:,64:] = self.head_positions['right'][:,None,None]

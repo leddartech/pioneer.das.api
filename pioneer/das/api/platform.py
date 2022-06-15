@@ -70,7 +70,7 @@ def closest_timestamps_np(ref_ts:np.ndarray, target_ts:np.ndarray, tol:Union[flo
 closest_timestamps = closest_timestamps_np
 
 if HAVE_NUMBA:
-    @numba.njit
+    @numba.njit(cache=True)
     def closest_timestamps_numba(ref_ts:np.ndarray, target_ts:np.ndarray, tol:Union[float, int]):
         """ Numba-optimized version of closest_timestamps_np()"""
         n_ref = ref_ts.shape[0]
@@ -89,7 +89,7 @@ if HAVE_NUMBA:
         
     closest_timestamps = closest_timestamps_numba
 
-class Platform(object):
+class Platform:
     """A Platform is what encapsulate an instance (configuration) of some data acquisition platform. 
        It contains one or more sensors, each containing one or more datasources. A live platform interfaces
        live sensors, while an offline platform can be used to extract data from a recording. 
@@ -342,7 +342,7 @@ class Platform(object):
             raise IndexError('Invalid label: {}'.format(label))
 
 
-class Synchronized(object):
+class Synchronized:
     """Synchronized view over a Platform"""
 
     def __init__(self, platform:Platform, sync_labels:List[str], interp_labels:List[str], tolerance_us:Union[float, int], fifo:int):
@@ -438,7 +438,7 @@ class Synchronized(object):
 
             raise KeyError("Unsupported key type: {}".format(index))
     
-    class SynchGetter(object):
+    class SynchGetter:
         def __init__(self, index, synch):
             self.index = index
             self.synch = synch
@@ -483,15 +483,6 @@ class Synchronized(object):
             return iter(self.values())
 
     def __getitem__(self, index:Union[int, slice, Iterator[int]]) ->Dict[str, Sample]:
-        """Implements the '[]' API
-
-            Args:
-                index: the (complete) datasource name
-            Returns:
-                A Sample
-
-        """
-        
         return Synchronized.SynchGetter(index, self)
 
     def timestamps(self, index:int) -> np.ndarray:
@@ -704,7 +695,7 @@ class SynchronizedGroup(Synchronized):
 
 
 
-class Filtered(object):
+class Filtered:
 
     def __init__(self, synchronized:Synchronized, indices:List[int]):
         self.synchronized = synchronized
@@ -742,7 +733,7 @@ class Filtered(object):
         return self.synchronized[self.indices[index]]
         
 
-class Sliced(object):
+class Sliced:
     """Creates a view on a synchronized dataset using a list of intervals"""
 
     def __init__(self, synchronized:Synchronized, intervals:List[Tuple[int, int]], stride:int = 1):
@@ -802,7 +793,7 @@ class Sliced(object):
         return self.synchronized[self.indices[index]]
 
 
-class Sensors(object):
+class Sensors:
     """The collection of Sensor instances in a platform"""
     def __init__(self, pf:'Platform', yml:dict):
         """Constructor

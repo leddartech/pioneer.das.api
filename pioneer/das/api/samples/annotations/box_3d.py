@@ -17,6 +17,7 @@ class Box3d(Sample):
 
     def __init__(self, index, datasource, virtual_raw = None, virtual_ts = None):
         super(Box3d, self).__init__(index, datasource, virtual_raw, virtual_ts)
+        self._label_source = categories.get_source(platform_utils.parse_datasource_name(self.datasource.label)[2])
 
     def get_centers(self) -> np.ndarray:
         return self.raw['data']['c']
@@ -34,8 +35,12 @@ class Box3d(Sample):
         return self.raw['data']['classes']
 
     def get_categories(self) -> Iterable[str]:
-        label_source_name = categories.get_source(platform_utils.parse_datasource_name(self.datasource.label)[2])
-        return [categories.CATEGORIES[label_source_name][str(category_number)]['name'] for category_number in self.get_category_numbers()]
+        categorie_labels = []
+        for category_number in self.get_category_numbers():
+            labels = categories.CATEGORIES[self._label_source]
+            label = labels.get(str(category_number), {'name':'?'})['name']
+            categorie_labels.append(label)
+        return categorie_labels
 
     def get_ids(self) -> Iterable[Optional[int]]:
         return self.raw['data']['id']
