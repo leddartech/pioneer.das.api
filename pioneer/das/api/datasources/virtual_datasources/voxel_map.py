@@ -75,7 +75,8 @@ class VoxelMap(VirtualDatasource):
         pc_vox = np.empty((xyz_vox.shape[0], pc.shape[1]))
         pc_vox[:,[0,1,2]] = xyz_vox
         pc_vox[:,3] = int_vox
-        pc_vox[:,4] = pc[:,4].max()
+        if pc.shape[0] > 0:
+            pc_vox[:,4] = pc[:,4].max()
 
         if self.has_rgb:
             pc_open3d.colors = open3d.utility.Vector3dVector(pc[:,[6,7,8]])
