@@ -279,6 +279,11 @@ class Platform:
             ds_names.extend(s.datasource_names())
         return ds_names
 
+    def add_egomotion_provider(self, egomotion_provider:'EgomotionProvider'):
+        self[egomotion_provider._referential_name].egomotion_provider = egomotion_provider
+        self._sensors._egomotion_provider = egomotion_provider
+        egomotion_provider.sensor = self[egomotion_provider._referential_name]
+
     def add_virtual_datasources(self, virtual_datasources_config:Dict[str, Dict]):
         """Add virtual datasources based upon the provided configuration dictionnary
         
@@ -813,10 +818,6 @@ class Sensors:
 
             sensor_type, _ = platform_utils.parse_sensor_name(name)
             self._sensors[name] = SENSOR_FACTORY.get(sensor_type, Sensor)(name, self.platform)
-            # if sensor_type in SENSOR_FACTORY:
-            #     self._sensors[name] = SENSOR_FACTORY[sensor_type](name, self.platform)
-            # else:
-            #     self._sensors[name] = Sensor(name, self.platform)
             self._ordered_names.append(name)
 
             self._load_offline_datasources(name)
@@ -835,8 +836,12 @@ class Sensors:
             if 'extrinsics' in value:
                 self._load_extrinsics(name, value['extrinsics'])
 
+        self.__add_egomotion_provider()
+
+    def __add_egomotion_provider(self):
+        for name, sensor in self.items():
             try:
-                provider = self._sensors[name].create_egomotion_provider()
+                provider = sensor.create_egomotion_provider()
             except:
                 LoggingManager.instance().warning(f"The 'egomotion_provider' for sensor name {name} could not be created.")
 

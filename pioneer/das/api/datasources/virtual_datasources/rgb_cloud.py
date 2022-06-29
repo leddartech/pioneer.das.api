@@ -1,5 +1,4 @@
 from pioneer.common import platform
-from pioneer.das.api.samples.sample import Sample
 from pioneer.das.api.datasources.virtual_datasources.virtual_datasource import VirtualDatasource
 from pioneer.das.api.samples import Echo, PointCloud, Image
 
@@ -8,11 +7,11 @@ from typing import Any
 import numpy as np
 
 
-def get_rgb_from_camera_projection(pcloud_ds:Sample, camera_ds:str, undistort:bool=False, return_mask:bool=False):
+def get_rgb_from_camera_projection(pcloud_ds:PointCloud, camera_ds:str, undistort:bool=False, return_mask:bool=False):
     """Returns the rgb data for each point from its position in camera.
     
         Args:
-            pcloud_ds: (str) name of the pcloud datasource (ex: 'ouster64_bfc_xyzit')
+            pcloud_ds: (Pointcloud) Pointcloud sample (ex: pf["ouster64_bfc_xyzit"][0])
             camera_ds: (str) name of the camera datasource (ex: 'flir_bbfc_flimg')
             undistort: (bool) if True, motion compensation is applied to the points before the projection (default is False)
             return_mask: (bool) if True, also returns the mask that only includes points inside the camera fov.

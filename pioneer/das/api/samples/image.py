@@ -81,13 +81,9 @@ class Image(Sample):
             mask = self.projection_mask(pts, und_image_pts, margin)
 
         if mask_fov:
+            mask &= self.projection_mask(pts, image_pts, margin)
             image_pts = image_pts[mask]
-            v,h,_ = self.shape
-            image_pts = image_pts[((image_pts[:,0] >= 0 - margin) & \
-                (image_pts[:,0] < h + margin) & \
-                (image_pts[:,1] >= 0 - margin) & \
-                (image_pts[:,1] < v + margin))]
-
+            
         if output_mask:
             return image_pts, mask
         return image_pts

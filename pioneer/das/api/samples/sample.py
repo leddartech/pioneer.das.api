@@ -149,6 +149,8 @@ class Sample(object):
             The [4, 4] transformation matrix
         """
 
+        # TODO: This needs refactoring...
+
         tf_TargetRef_from_Local = np.eye(4, dtype = dtype)
        
         try:
@@ -164,7 +166,10 @@ class Sample(object):
                         reference_ts = self.timestamp
 
                     provider = self.datasource.sensor.platform.egomotion_provider
-                    tf_Ego_from_Local = self.datasource.sensor.map_to(provider.referential_name)
+                    try:
+                        tf_Ego_from_Local = self.datasource.sensor.map_to(provider.referential_name)
+                    except Exception:
+                        tf_Ego_from_Local = tf_TargetRef_from_Local
                     tf_TargetRef_from_Local = provider.compute_tf_EgoZero_from_Sensor(tf_Ego_from_Local, reference_ts)
 
                 else:
