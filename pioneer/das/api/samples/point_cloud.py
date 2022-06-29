@@ -73,3 +73,8 @@ class PointCloud(Sample):
     def point_cloud(self, referential=None, ignore_orientation=False, undistort=False, reference_ts=-1, dtype=np.float64):
         warnings.warn("PointCloud.point_cloud() is deprecated. Use PointCloud.get_point_cloud() instead.", DeprecationWarning)
         return self.get_point_cloud(referential, ignore_orientation, undistort, reference_ts, dtype)
+    
+    def get_rgb_from_camera_projection(pcloud_ds:Sample, camera_ds:str, undistort:bool=False, return_mask:bool=False):
+        from pioneer.das.api.datasources.virtual_datasources.rgb_cloud import get_rgb_from_camera_projection
+        warnings.warn("PointCloud.get_rgb_from_camera_projection() is deprecated. Use from pioneer.das.api.datasources.virtual_datasources.rgb_cloud import get_rgb_from_camera_projection instead.", DeprecationWarning)
+        return get_rgb_from_camera_projection(pcloud_ds, camera_ds, undistort, return_mask)
