@@ -74,8 +74,7 @@ class Echo(Sample):
             data = self.raw['data']
             config = self.datasource.sensor.config
 
-            vmask = np.bitwise_and(data['flags'], 0x01).astype(
-                np.bool)  # keep valid echoes only
+            vmask = np.bitwise_and(data['flags'], 0x01).astype(bool)  # keep valid echoes only
             fmask = np.isin(
                 data['flags'], config['reject_flags'], invert=True) & vmask
 
@@ -147,8 +146,7 @@ class Echo(Sample):
 
         if undistort:
             to_world = referential == 'world'
-            self.undistort_points(
-                [pts_Local], self.timestamps, reference_ts, to_world, dtype=dtype)
+            self.undistort_points(pts_Local, self.timestamps, reference_ts, to_world, dtype=dtype)
             if to_world:
                 return pts_Local  # note that in that case, orientation has to be ignored
 
@@ -183,8 +181,7 @@ class Echo(Sample):
 
             # four points per quad, 1 different direction per point, same distance for each
             to_world = referential == 'world'
-            self.undistort_points([pts_Local[0:sn], pts_Local[sn:2*sn], pts_Local[2*sn:3*sn],
-                                   pts_Local[3*sn:]], self.timestamps, reference_ts, to_world, dtype=dtype)
+            self.undistort_points(pts_Local, np.tile(self.timestamps, 4), reference_ts, to_world, dtype=dtype)
             if to_world:
                 # note that in that case, orientation has to be ignored
                 return pts_Local, quad_amplitudes, quad_indices

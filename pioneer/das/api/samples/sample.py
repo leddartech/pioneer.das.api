@@ -1,5 +1,7 @@
+from typing import Optional
 from pioneer.common import platform, linalg
 from pioneer.common.logging_manager import LoggingManager
+from pioneer.das.api.egomotion import EgomotionProvider
 
 import numpy as np
 from numpy import rot90, flipud, fliplr #for use with Sample.LUT
@@ -17,7 +19,7 @@ def warn_if_less_than_64bit(dtype:np.dtype):
 # TODO: See if we can remove the weird LUT stuff
 
 
-class Sample(object):
+class Sample:
 
     LUT = {}
 
@@ -165,12 +167,12 @@ class Sample(object):
                     if reference_ts < 0:
                         reference_ts = self.timestamp
 
-                    provider = self.datasource.sensor.platform.egomotion_provider
+                    provider:EgomotionProvider = self.datasource.sensor.platform.egomotion_provider
                     try:
                         tf_Ego_from_Local = self.datasource.sensor.map_to(provider.referential_name)
                     except Exception:
                         tf_Ego_from_Local = tf_TargetRef_from_Local
-                    tf_TargetRef_from_Local = provider.compute_tf_EgoZero_from_Sensor(tf_Ego_from_Local, reference_ts)
+                    tf_TargetRef_from_Local = provider.get_first_inverse_transform() @ provider.get_transform(reference_ts) @ tf_Ego_from_Local
 
                 else:
                     tf_TargetRef_from_Local = np.copy(self.datasource.sensor.map_to(referential))
@@ -207,12 +209,12 @@ class Sample(object):
 
         return pts
 
-    def undistort_points(self, pts_Local_batches:list, timestamps:np.ndarray, reference_ts:int = -1, to_world:bool = False, dtype = np.float64):
+    def undistort_points(self, points:np.ndarray, timestamps:np.ndarray, reference_ts:Optional[int] = -1, to_world:bool = False, dtype = np.float64):
         """Transform 3D points that have not been sampled simultaneously to their 'correct' place
         referential.
 
         Args:
-            pts_Local_batches: a list of arrays of [N, 3] points to be transformed
+            points: array [N, 3] of points to be transformed
             timestamps: the N timestamps (common for all point batches)
             to_world:   If 'True', leave undistorted points in 'world' referential, otherwise
                         project them back to local referential
@@ -227,25 +229,27 @@ class Sample(object):
 
         warn_if_less_than_64bit(dtype)
 
-        provider = self.datasource.sensor.platform.egomotion_provider        
-        tf_Ego_from_Local = self.compute_transform(provider.referential_name, False, dtype = dtype)
-        traj_EgoZero_from_Ego = provider.compute_trajectory(timestamps, provider.tf_Global_from_EgoZero, dtype = dtype)
+        provider:EgomotionProvider = self.datasource.sensor.platform.egomotion_provider        
+        to_egomotion_provider_referential = self.compute_transform(provider.referential_name, False, dtype = dtype)
+        subsampling = 100
+        trajectory = provider.get_trajectory(timestamps, subsampling=subsampling)
 
-        for pts_Local in pts_Local_batches:
+        point_ego_referential = linalg.map_points(to_egomotion_provider_referential, points)
 
-            pts_Ego = linalg.map_points(tf_Ego_from_Local, pts_Local)
+        corrected = np.empty_like(point_ego_referential)
+        n_points = point_ego_referential.shape[0]
+        for i in range(trajectory.shape[0]):
+            s, e = i * subsampling, min((i+1) * subsampling, n_points)
+            corrected[s:e] = linalg.map_points(trajectory[i], point_ego_referential[s:e])
 
-            pts_EgoZero = provider.apply_trajectory(traj_EgoZero_from_Ego, pts_Ego)
+        if to_world:
+            points[:] = corrected
+        else:
+            if reference_ts < 0: reference_ts = self.timestamp
+            to_world = provider.get_inverse_transform(reference_ts)
+            tf_Local_from_EgoZero = linalg.tf_inv(to_egomotion_provider_referential) @ to_world @ provider.get_first_transform()
+            points[:] = linalg.map_points(tf_Local_from_EgoZero, corrected)
 
-            if to_world:
-                pts_Local[:] = pts_EgoZero
-            else:
-                if reference_ts < 0:
-                    reference_ts = self.timestamp
-
-                tf_Global_from_Ego = provider.get_Global_from_Ego_at(reference_ts, dtype = dtype)
-                tf_Local_from_EgoZero = linalg.tf_inv(tf_Ego_from_Local) @ linalg.tf_inv(tf_Global_from_Ego) @ provider.tf_Global_from_EgoZero
-                pts_Local[:] = linalg.map_points(tf_Local_from_EgoZero, pts_EgoZero)
 
     def _get_orientation_lut(self):
         if self.orientation is not None:

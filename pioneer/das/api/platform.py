@@ -2,6 +2,7 @@ from pioneer.common import platform as platform_utils
 from pioneer.common.logging_manager import LoggingManager
 from pioneer.das.api.datasources import AbstractDatasource
 from pioneer.das.api.datasources import virtual_datasources
+from pioneer.das.api.egomotion import EgomotionProvider
 from pioneer.das.api.samples.sample import Sample
 from pioneer.das.api.sensors import Sensor
 from pioneer.das.api.sensors import SENSOR_FACTORY
@@ -269,7 +270,7 @@ class Platform:
             except: pass
     
     @property
-    def egomotion_provider(self) -> 'EgomotionProvider':
+    def egomotion_provider(self) -> EgomotionProvider:
         return self._sensors._egomotion_provider
 
     def datasource_names(self) -> List[str]:
@@ -279,7 +280,7 @@ class Platform:
             ds_names.extend(s.datasource_names())
         return ds_names
 
-    def add_egomotion_provider(self, egomotion_provider:'EgomotionProvider'):
+    def add_egomotion_provider(self, egomotion_provider:EgomotionProvider):
         self[egomotion_provider._referential_name].egomotion_provider = egomotion_provider
         self._sensors._egomotion_provider = egomotion_provider
         egomotion_provider.sensor = self[egomotion_provider._referential_name]

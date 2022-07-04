@@ -3,6 +3,8 @@ from pioneer.das.api.interpolators import linear_ndarray_interpolator, euler_imu
 from pioneer.das.api.samples import Sample
 from pioneer.das.api.sensors.sensor import Sensor
 
+
+
 class ImuSbgEkinox(Sensor):
 
     def __init__(self, name: str, platform: 'Platform'):
@@ -12,7 +14,6 @@ class ImuSbgEkinox(Sensor):
 
         super(ImuSbgEkinox, self).__init__(name, platform, factories)
         
-    
     def create_egomotion_provider(self):
         self.egomotion_provider = IMUEgomotionProvider(self.name, self['navposvel'], self['ekfeuler'])
         return self.egomotion_provider

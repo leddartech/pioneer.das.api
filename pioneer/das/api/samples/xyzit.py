@@ -31,7 +31,7 @@ class XYZIT(PointCloud):
 
         if undistort:
             to_world = referential == 'world'
-            self.undistort_points([pts_Local], self.get_field('t'), reference_ts, to_world, dtype = dtype)
+            self.undistort_points(pts_Local, self.get_field('t'), reference_ts, to_world, dtype = dtype)
             if to_world:
                 return pts_Local # note that in that case, orientation has to be ignored
         

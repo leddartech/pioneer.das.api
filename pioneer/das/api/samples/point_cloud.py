@@ -1,6 +1,6 @@
 from pioneer.das.api.samples.sample import Sample
 
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 import warnings
@@ -23,16 +23,19 @@ class PointCloud(Sample):
                            refer to compute_transform()'s documentation
             dtype: the output numpy data type
         """
-        pts_Local = np.concatenate([self.get_field('x').reshape(-1, 1),
-                            self.get_field('y').reshape(-1, 1),
-                            self.get_field('z').reshape(-1, 1),], axis=1).astype(dtype)
+
+        points = np.concatenate([self.get_field('x').reshape(-1, 1),
+                                 self.get_field('y').reshape(-1, 1),
+                                 self.get_field('z').reshape(-1, 1),
+            ], axis=1).astype(dtype)
+
         if undistort:
             to_world = referential == 'world'
-            self.undistort_points([pts_Local], self.get_field('t'), reference_ts, to_world, dtype = dtype)
+            self.undistort_points(points, self.get_field('t'), reference_ts, to_world, dtype = dtype)
             if to_world:
-                return pts_Local # note that in that case, orientation has to be ignored
+                return points # note that in that case, orientation has to be ignored
         
-        return self.transform(pts_Local, referential, ignore_orientation, reference_ts, dtype = dtype)
+        return self.transform(points, referential, ignore_orientation, reference_ts, dtype = dtype)
 
     @property
     def fields(self) -> Tuple[str]:
