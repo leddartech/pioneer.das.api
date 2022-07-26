@@ -17,7 +17,7 @@ def get_source(ds_type):
     parts = ds_type.split('-')
     for part in parts:
         for source in CATEGORIES:
-            if part.lower() == source.lower():
+            if part == source:
                 return part
     return 'deepen'
 
