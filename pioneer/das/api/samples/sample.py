@@ -1,7 +1,10 @@
 from typing import Optional
 from pioneer.common import platform, linalg
 from pioneer.common.logging_manager import LoggingManager
-from pioneer.das.api.egomotion import EgomotionProvider
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from pioneer.das.api.egomotion import EgomotionProvider
 
 import numpy as np
 from numpy import rot90, flipud, fliplr #for use with Sample.LUT
@@ -167,7 +170,7 @@ class Sample:
                     if reference_ts < 0:
                         reference_ts = self.timestamp
 
-                    provider:EgomotionProvider = self.datasource.sensor.platform.egomotion_provider
+                    provider:'EgomotionProvider' = self.datasource.sensor.platform.egomotion_provider
                     try:
                         tf_Ego_from_Local = self.datasource.sensor.map_to(provider.referential_name)
                     except Exception:
@@ -229,7 +232,7 @@ class Sample:
 
         warn_if_less_than_64bit(dtype)
 
-        provider:EgomotionProvider = self.datasource.sensor.platform.egomotion_provider        
+        provider:'EgomotionProvider' = self.datasource.sensor.platform.egomotion_provider        
         to_egomotion_provider_referential = self.compute_transform(provider.referential_name, False, dtype = dtype)
         subsampling = 100
         trajectory = provider.get_trajectory(timestamps, subsampling=subsampling)
